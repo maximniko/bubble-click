@@ -1,0 +1,25 @@
+version: "3"
+
+services:
+  nginx:
+    build:
+      context: .
+      dockerfile: .docker/nginx/Dockerfile
+    volumes:
+      - ./frontend/dist/frontend:/app:delegated
+    ports:
+      - "80:80"
+    networks:
+      - common
+  node:
+    build:
+      context: .
+      dockerfile: .docker/node/Dockerfile
+    ports:
+      - "4200:4200"
+    volumes:
+      - ./frontend:/app
+    command: yarn run start
+
+networks:
+  common:

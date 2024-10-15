@@ -1,0 +1,42 @@
+<header class="jcb p-3 pb-2">
+  <button class="navbar-toggler p-2" (click)="open(content)">
+    <svg class="bi">
+      <use [attr.xlink:href]="'#' + symbols.menu"/>
+    </svg>
+  </button>
+  <a class="navbar-toggler color-accent p-2 hstack accent-border accent-bg-shadow-bottom-left rounded-5" routerLink="{{routeCreator.wallet()}}">
+    <span class="pe-3">
+      <svg class="bi">
+        <use [attr.xlink:href]="'#' + symbols.coin"/>
+      </svg>
+    </span>
+    <div class="m-auto">{{ localisation.t.Chart ?? 'Coins' }} {{ coinsService.totalClicks }}</div>
+  </a>
+</header>
+
+<ng-template #content let-offcanvas>
+  <div class="offcanvas-header">
+    <h4 class="offcanvas-title" id="offcanvas-basic-title">{{ localisation.t.Menu ?? 'Menu' }}</h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="offcanvas.dismiss('Cross click')"></button>
+  </div>
+  <div class="offcanvas-body">
+    <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+      <li class="nav-item text-center">
+        <a class="nav-link" (click)="offcanvas.dismiss('Cross click')" routerLink="{{routeCreator.main()}}">
+          <span class="pe-3">
+            <svg class="bi">
+              <use [attr.xlink:href]="'#' + symbols.house"/>
+            </svg>
+          </span>
+          {{ localisation.t.Home ?? 'Home' }}
+        </a>
+      </li>
+      <li class="nav-item text-center">
+        <a class="nav-link" (click)="offcanvas.dismiss('Cross click')" routerLink="{{routeCreator.friends()}}">friends</a>
+      </li>
+      <li class="nav-item text-center">
+        <a class="nav-link" (click)="offcanvas.dismiss('Cross click')" routerLink="{{routeCreator.wallet()}}">wallet</a>
+      </li>
+    </ul>
+  </div>
+</ng-template>
