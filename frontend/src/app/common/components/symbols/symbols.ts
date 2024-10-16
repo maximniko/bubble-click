@@ -15,6 +15,8 @@ export const symbols = {
   // pencilFill: "pencil-fill",
   sliders: "sliders",
   coin: "coin",
+  wallet: "wallet",
+  arrowUpRight: "arrow-up-right",
   chartFill: "chart-fill",
   menu: "menu",
   // calendar3: "calendar3",

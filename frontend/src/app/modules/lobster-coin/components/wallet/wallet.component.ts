@@ -1,14 +1,18 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {CommonModule, Location} from '@angular/common';
-import {TwaService} from "../../../../common/services/twa.service";
+import {STORAGE_KEY_WALLET, TwaService} from "../../../../common/services/twa.service";
+import {symbols} from '../../../../common/components/symbols/symbols';
+import {WalletBalanceComponent} from './_inputs/wallet-balance.component';
 
 @Component({
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, WalletBalanceComponent],
   templateUrl: './wallet.component.html',
   host: {class: 'd-flex flex-column h-100'},
 })
 export class WalletComponent implements OnInit, OnDestroy {
+  protected walletBalance = 0
+
   constructor(
     protected twa: TwaService,
     protected location: Location,
@@ -17,6 +21,15 @@ export class WalletComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.twa.backButtonOnClick(() => this.goBack())
+    this.twa.cloudStorage.getItem(STORAGE_KEY_WALLET, (error?: string|null, result?: string) => {
+      if (error) {
+        this.twa.showAlert(error)
+        return
+      }
+      if (result) {
+        this.walletBalance = +result
+      }
+    })
   }
 
   ngOnDestroy(): void {
@@ -26,4 +39,6 @@ export class WalletComponent implements OnInit, OnDestroy {
   goBack() {
     this.location.back()
   }
+
+  protected readonly symbols = symbols;
 }

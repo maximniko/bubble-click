@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import WebApp from "@twa-dev/sdk";
-import {PopupParams, SecondaryButton} from "@twa-dev/types";
+import {CloudStorage, PopupParams, SecondaryButton} from "@twa-dev/types";
 
 @Injectable({providedIn: 'root'})
 export class TwaService {
@@ -116,6 +116,9 @@ export class TwaService {
     WebApp.close()
   }
 
+  get cloudStorage(): CloudStorage {
+    return WebApp.CloudStorage
+  }
 }
 
 type BottomButtonParams = {
@@ -132,3 +135,6 @@ interface ButtonVisible {
   show: VoidFunction;
   hide: VoidFunction;
 }
+type CloudStorageKey = string
+export const STORAGE_KEY_BALANCE: CloudStorageKey = '1'
+export const STORAGE_KEY_WALLET: CloudStorageKey = '2'
