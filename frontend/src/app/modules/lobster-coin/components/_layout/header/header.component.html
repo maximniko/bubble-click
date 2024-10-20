@@ -4,13 +4,13 @@
       <use [attr.xlink:href]="'#' + symbols.menu"/>
     </svg>
   </button>
-  <a class="navbar-toggler color-accent p-2 hstack accent-border accent-bg-shadow-bottom-left rounded-5" routerLink="{{routeCreator.wallet()}}">
+  <a class="navbar-toggler color-accent p-2 hstack accent-border accent-bg-shadow-bottom-left rounded-5" routerLink="{{routeCreator.bank()}}">
     <span class="pe-3">
       <svg class="bi">
         <use [attr.xlink:href]="'#' + symbols.coin"/>
       </svg>
     </span>
-    <div class="m-auto">{{ localisation.t.Chart ?? 'Coins' }} {{ coinsService.totalClicks }}</div>
+    <div class="m-auto">{{ localisation.t.Chart ?? 'Coins' }} {{ coinsService.balance }}</div>
   </a>
 </header>
 
@@ -35,7 +35,7 @@
         <a class="nav-link" (click)="offcanvas.dismiss('Cross click')" routerLink="{{routeCreator.friends()}}">friends</a>
       </li>
       <li class="nav-item text-center">
-        <a class="nav-link" (click)="offcanvas.dismiss('Cross click')" routerLink="{{routeCreator.wallet()}}">wallet</a>
+        <a class="nav-link" (click)="offcanvas.dismiss('Cross click')" routerLink="{{routeCreator.bank()}}">wallet</a>
       </li>
     </ul>
   </div>

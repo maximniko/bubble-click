@@ -16,6 +16,7 @@ export const symbols = {
   sliders: "sliders",
   coin: "coin",
   wallet: "wallet",
+  bank2: "bank2",
   arrowUpRight: "arrow-up-right",
   chartFill: "chart-fill",
   menu: "menu",
