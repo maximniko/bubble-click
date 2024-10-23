@@ -8,10 +8,10 @@ import {RouterOutlet} from '@angular/router';
 @Component({
   standalone: true,
   imports: [CommonModule, MainComponent, RouterOutlet],
-  templateUrl: './bank.component.html',
+  templateUrl: './balance.component.html',
   host: {class: 'd-flex flex-column h-100'},
 })
-export class BankComponent implements OnInit, OnDestroy {
+export class BalanceComponent implements OnInit, OnDestroy {
   constructor(
     protected twa: TwaService,
     protected location: Location,

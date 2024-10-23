@@ -42,3 +42,7 @@ export const DEPOSIT_PLANS: DepositPlan[] = [
     percents: 33,
   },
 ]
+
+export function planToLabel(plan: DepositPlan): string {
+  return `${plan.percents}% per ${plan.days} days`
+}

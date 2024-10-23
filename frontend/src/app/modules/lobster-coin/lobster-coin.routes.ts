@@ -31,27 +31,27 @@ export const lobsterCoinRoutes: Routes = [
       },
       {
         path: `${ROUTE_PARTS.bank}`,
-        loadComponent: () => import('./components/bank/bank.component').then(mod => mod.BankComponent),
+        loadComponent: () => import('./components/transfers/balance.component').then(mod => mod.BalanceComponent),
         children: [
           {
             path: '',
-            loadComponent: () => import('./components/bank/main/main.component').then(mod => mod.MainComponent)
+            loadComponent: () => import('./components/transfers/main/main.component').then(mod => mod.MainComponent)
           },
           {
             path: `${ROUTE_PARTS.withdraw}`,
-            loadComponent: () => import('./components/bank/withdraw/withdraw.component').then(mod => mod.WithdrawComponent)
+            loadComponent: () => import('./components/transfers/withdraw/withdraw.component').then(mod => mod.WithdrawComponent)
           },
           {
             path: `${ROUTE_PARTS.transfer}`,
-            loadComponent: () => import('./components/bank/transfer/transfer.component').then(mod => mod.TransferComponent)
+            loadComponent: () => import('./components/transfers/transfer/transfer.component').then(mod => mod.TransferComponent)
           },
           {
             path: `${ROUTE_PARTS.deposit}`,
-            loadComponent: () => import('./components/bank/deposit/deposit.component').then(mod => mod.DepositComponent)
+            loadComponent: () => import('./components/transfers/deposit/deposit.component').then(mod => mod.DepositComponent)
           },
           {
             path: `${ROUTE_PARTS.deposit}-add`,
-            loadComponent: () => import('./components/bank/deposit/deposit-add.component').then(mod => mod.DepositAddComponent)
+            loadComponent: () => import('./components/transfers/deposit/deposit-add.component').then(mod => mod.DepositAddComponent)
           },
         ]
       },

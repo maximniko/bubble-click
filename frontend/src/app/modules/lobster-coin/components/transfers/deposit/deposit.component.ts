@@ -1,12 +1,12 @@
 import {CommonModule, Location} from '@angular/common';
 import {Component, OnInit} from '@angular/core';
-import {symbols} from '../../../../../common/components/symbols/symbols';
-import {Deposit} from '../../../domains/bank/interfaces/deposit.interface';
+import {Deposit, planToLabel} from '../../../domains/bank/interfaces/deposit.interface';
 import {DepositService} from '../../../domains/bank/services/deposit/deposit.service';
 import {toLocalDate} from '../../../../../common/extensions/Date';
 import {TwaService} from '../../../../../common/services/twa.service';
 import {RouterLink} from '@angular/router';
 import {routeCreator} from '../../../lobster-coin.routes';
+import {symbols} from '../../../../../common/components/symbols/symbols';
 
 @Component({
   standalone: true,
@@ -17,8 +17,12 @@ import {routeCreator} from '../../../lobster-coin.routes';
       <ul class="list-group">
         @for (deposit of deposits; track deposits) {
           <li class="list-group-item d-flex justify-content-between align-items-center">
-            <p>C {{ toLocalDate(deposit.fromDate, twa.getUserLanguageCode() ?? 'en') }} на {{ deposit.plan.days }} дней</p>
-            <span class="badge text-bg-primary rounded-pill">{{ deposit.plan.percents }}%</span>
+            <p>C {{ toLocalDate(deposit.fromDate, twa.getUserLanguageCode() ?? 'en') }} ({{ planToLabel(deposit.plan) }})</p>
+            <span class="badge">
+              <svg class="bi">
+                <use [attr.xlink:href]="'#' + symbols.clockHistory"/>
+              </svg>
+            </span>
           </li>
         }
       </ul>
@@ -43,7 +47,8 @@ export class DepositComponent implements OnInit {
   goBack() {
     this.location.back()
   }
-  protected readonly symbols = symbols;
   protected readonly toLocalDate = toLocalDate;
   protected readonly routeCreator = routeCreator;
+  protected readonly planToLabel = planToLabel;
+  protected readonly symbols = symbols;
 }

@@ -6,7 +6,7 @@ import {symbols} from '../../../../../common/components/symbols/symbols';
   standalone: true,
   imports: [CommonModule],
   template: `
-    withdraw
+    withdraw bank to wallet
     <button (click)="goBack()">back</button>
   `,
 })

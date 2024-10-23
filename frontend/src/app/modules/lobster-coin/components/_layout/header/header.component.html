@@ -5,12 +5,10 @@
     </svg>
   </button>
   <a class="navbar-toggler color-accent p-2 hstack accent-border accent-bg-shadow-bottom-left rounded-5" routerLink="{{routeCreator.bank()}}">
-    <span class="pe-3">
-      <svg class="bi">
-        <use [attr.xlink:href]="'#' + symbols.coin"/>
-      </svg>
-    </span>
-    <div class="m-auto">{{ localisation.t.Chart ?? 'Coins' }} {{ coinsService.balance }}</div>
+    <div class="m-auto me-2">{{ coinsService.balance }}</div>
+    <svg class="bi">
+      <use [attr.xlink:href]="'#' + symbols.coin"/>
+    </svg>
   </a>
 </header>
 

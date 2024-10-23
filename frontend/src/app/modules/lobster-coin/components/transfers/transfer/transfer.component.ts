@@ -6,7 +6,7 @@ import {symbols} from '../../../../../common/components/symbols/symbols';
   standalone: true,
   imports: [CommonModule],
   template: `
-    transfer to bank
+    transfer from wallet to bank
     <button (click)="goBack()">back</button>
   `,
 })
@@ -15,6 +15,7 @@ export class TransferComponent implements OnChanges {
 
   constructor(private location: Location) {
   }
+
   ngOnChanges(changes: SimpleChanges) {
     if (changes['walletBalance']) {
       this.walletBalance = +changes['walletBalance'].currentValue
@@ -24,5 +25,6 @@ export class TransferComponent implements OnChanges {
   goBack() {
     this.location.back()
   }
+
   protected readonly symbols = symbols;
 }
