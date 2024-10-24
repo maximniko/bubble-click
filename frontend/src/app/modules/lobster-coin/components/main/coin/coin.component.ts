@@ -3,17 +3,20 @@ import {CommonModule} from '@angular/common';
 import {CoinsService} from '../../../domains/coins/services/coins.service';
 import {FormsModule} from '@angular/forms';
 import {getRandomInt} from '../../../../../common/extensions/Number';
+import {ClickAnimationDirective} from './click-animation.directive';
 
 @Component({
   selector: 'main-coin',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, ClickAnimationDirective],
   styleUrl: 'coin.component.scss',
   template: `
     <div class="clicker-container" (click)="onClick($event)" (mousemove)="log($event)"
          style="width:14rem;height:14rem;background-color:red;">
       @for (click of clicks; track click.id) {
-        <div class="click" [ngStyle]="{'top.px': click.top, 'left.px': click.left}">
+        <div class="click color-accent"
+             [appClickAnimation]="click.id"
+             [ngStyle]="{'top.px': click.top, 'left.px': click.left}">
           {{ coinsService.perClick }}
         </div>
       }
