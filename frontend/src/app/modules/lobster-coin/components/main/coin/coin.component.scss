@@ -1,4 +1,3 @@
-/* Контейнер с кликом */
 .clicker-container {
   display: flex;
   justify-content: center;
@@ -7,29 +6,8 @@
   border-radius: 50%;
 }
 
-/* Анимируем цифры */
 .click {
   position: fixed;
-  font-size: 24px;
-  color: #000;
-  animation: bubbleMove 1.5s ease-out forwards;
-  pointer-events: none; /* Отключаем возможность клика по цифре */
-}
-
-/* Анимация для движения цифры вверх и ее поворотов */
-@keyframes bubbleMove {
-  0% {
-    opacity: 1;
-    transform: translate(-50%, 0) scale(1);
-  }
-  35% {
-    transform: translate(50%, 50px) rotate(20deg) scale(1.1); /* Небольшое увеличение и поворот */
-  }
-  75% {
-    transform: translate(-50%, -50px) rotate(25deg) scale(1.1); /* Небольшое увеличение и поворот */
-  }
-  100% {
-    opacity: 0;
-    transform: translate(-50%, -120px) rotate(-30deg) scale(1.2); /* Увеличение и финальный поворот */
-  }
+  font-size: 2rem;
+  pointer-events: none;
 }
