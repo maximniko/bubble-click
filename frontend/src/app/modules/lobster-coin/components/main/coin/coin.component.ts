@@ -2,7 +2,6 @@ import {Component} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {CoinsService} from '../../../domains/coins/services/coins.service';
 import {FormsModule} from '@angular/forms';
-import {getRandomInt} from '../../../../../common/extensions/Number';
 import {ClickAnimationDirective} from './click-animation.directive';
 
 @Component({
@@ -11,8 +10,7 @@ import {ClickAnimationDirective} from './click-animation.directive';
   imports: [CommonModule, FormsModule, ClickAnimationDirective],
   styleUrl: 'coin.component.scss',
   template: `
-    <div class="clicker-container" (click)="onClick($event)" (mousemove)="log($event)"
-         style="width:14rem;height:14rem;background-color:red;">
+    <div class="clicker-container" (click)="onClick($event)" style="width:14rem;height:14rem;background-color:red;">
       @for (click of clicks; track click.id) {
         <div class="click color-accent"
              [appClickAnimation]="click.id"
@@ -21,18 +19,12 @@ import {ClickAnimationDirective} from './click-animation.directive';
         </div>
       }
     </div>
-    <input [(ngModel)]="coinsService.perClick" type="number" min="1">
   `,
   host: {class: 'm-auto'},
 })
 export class CoinComponent {
   clicks: Click[] = [];
   private clickCounter = 0;
-
-  public mousePosition: string = "Hover over test element to get mouse position";
-  public log(event: any) {
-    this.mousePosition = `Mouse X: ${event.x},  Mouse Y: ${event.y}`;
-  }
 
   constructor(
     protected coinsService: CoinsService,
@@ -61,8 +53,6 @@ export class CoinComponent {
       this.clicks = this.clicks.filter(click => click.id !== newClick.id);
     }, 1500);
   }
-
-  protected readonly getRandomInt = getRandomInt;
 }
 
 interface Click {
