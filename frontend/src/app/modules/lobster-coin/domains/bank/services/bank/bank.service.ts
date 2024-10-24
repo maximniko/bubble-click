@@ -11,6 +11,7 @@ export class BankService implements BankInterface {
   }
 
   get balance(): number {
+    this.loadBalance()
     return this._balance
   }
 
@@ -28,10 +29,11 @@ export class BankService implements BankInterface {
       if (!result) {
         this.twa.showAlert('Bank balance not updated.')
       }
+      this.loadBalance()
     })
   }
 
-  private loadBalance() {
+  loadBalance() {
     this.twa.cloudStorage.getItem(STORAGE_KEY_BANK, (error?: string | null, result?: string) => {
       if (error) {
         this.twa.showAlert(error)

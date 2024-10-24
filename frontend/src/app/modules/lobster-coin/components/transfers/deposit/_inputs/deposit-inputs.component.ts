@@ -10,24 +10,27 @@ import {
   Validators
 } from '@angular/forms';
 import {DateInputComponent} from './date-input.component';
-import {CoinsService} from '../../../../domains/coins/services/coins.service';
 import {DEPOSIT_PLANS, DepositPlan, planToLabel} from '../../../../domains/bank/interfaces/deposit.interface';
+import {CoinsService} from '../../../../domains/coins/services/coins.service';
+import {SumInputComponent} from '../../_inputs/sum/sum-input.component';
 
 @Component({
   selector: 'deposit-inputs',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, DateInputComponent],
+  imports: [CommonModule, ReactiveFormsModule, DateInputComponent, SumInputComponent],
   templateUrl: './deposit-inputs.component.html',
   viewProviders: [{provide: ControlContainer, useExisting: FormGroupDirective}]
 })
 export class DepositInputsComponent extends ReactiveForm implements OnInit {
   @Input() parentForm!: FormGroup
+  protected maxSum: number
 
   constructor(
     private formBuilder: FormBuilder,
     private coinsService: CoinsService,
   ) {
     super();
+    this.maxSum = this.coinsService.balance
   }
 
   protected comparePlan(a?: DepositPlan, b?: DepositPlan): boolean {
@@ -40,11 +43,6 @@ export class DepositInputsComponent extends ReactiveForm implements OnInit {
   ngOnInit() {
     this.parentForm.addControl('plan', this.formBuilder.control('', [Validators.required]))
     this.parentForm.addControl('fromDate', this.formBuilder.control(new Date(), [Validators.required]))
-    this.parentForm.addControl('sum', this.formBuilder.control(1, [
-      Validators.required,
-      Validators.min(1),
-      Validators.max(this.coinsService.balance),
-    ]))
   }
 
   private get plan() {
@@ -57,18 +55,6 @@ export class DepositInputsComponent extends ReactiveForm implements OnInit {
 
   get isInvalidPlan(): boolean | undefined {
     return this.isInvalid(this.plan)
-  }
-
-  private get sum() {
-    return this.parentForm.get('sum');
-  }
-
-  get sumErrors() {
-    return this.errors(this.sum);
-  }
-
-  get isInvalidSum(): boolean | undefined {
-    return this.isInvalid(this.sum)
   }
 
   protected readonly planToLabel = planToLabel;

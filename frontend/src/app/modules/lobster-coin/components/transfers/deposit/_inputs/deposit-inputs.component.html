@@ -12,13 +12,4 @@
     {{ validationErrors(planErrors, localisation.t.Plan ?? 'Plan') }}
   </div>
 </div>
-<div class="form-floating mb-3">
-  <input type="text" class="form-control" placeholder="Sum" id="form-sum" formControlName="sum" [ngClass]="{
-            'is-invalid': isInvalidSum,
-            'is-valid': parentForm.valid,
-          }">
-  <label for="form-sum">Sum</label>
-  <div class="invalid-feedback" *ngIf="isInvalidSum">
-    {{ validationErrors(sumErrors, 'Sum') }}
-  </div>
-</div>
+<sum-input [parentForm]="parentForm" [max]="maxSum"></sum-input>

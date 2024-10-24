@@ -15,18 +15,20 @@ export class CoinsService implements CoinsInterface {
   }
 
   get balance(): number {
+    this.loadBalance()
     return this._balance
   }
 
   set balance(balance: number) {
     this._balance = balance
+    this.saveBalance(this.balance)
   }
 
   private subscribeToClicks() {
     this.clickSubject
       .pipe(
         // Суммируем клики
-        scan((acc) => acc + this.perClick, 0),
+        scan(acc => acc + this.perClick, 0),
         // Ожидаем 500мс после последнего клика
         debounceTime(500)
       ).subscribe(clickCount => {
@@ -41,7 +43,7 @@ export class CoinsService implements CoinsInterface {
     this.clickSubject.next();
   }
 
-  private loadBalance() {
+  loadBalance() {
     this.twa.cloudStorage.getItem(STORAGE_KEY_BALANCE, (error?: string|null, result?: string) => {
       if (error) {
         this.twa.showAlert(error)
@@ -54,7 +56,6 @@ export class CoinsService implements CoinsInterface {
   }
 
   private saveBalance(balance: number) {
-    console.log(`Сохранен баланс ${balance}`);
     this.twa.cloudStorage.setItem(STORAGE_KEY_BALANCE, String(balance), (error?: string|null, result?: boolean) => {
       if (error) {
         this.twa.showAlert(error)
@@ -63,6 +64,7 @@ export class CoinsService implements CoinsInterface {
       if (!result) {
         this.twa.showAlert('Can\'t save balance');
       }
+      this.loadBalance()
     })
   }
 }
