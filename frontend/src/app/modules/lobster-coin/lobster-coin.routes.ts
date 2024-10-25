@@ -60,5 +60,6 @@ export const lobsterCoinRoutes: Routes = [
         loadComponent: () => import('./components/friends/friends.component').then(mod => mod.FriendsComponent)
       },
     ],
-  }
+  },
+  {path: '**', redirectTo: routeCreator.main(), pathMatch: 'full'},
 ]
