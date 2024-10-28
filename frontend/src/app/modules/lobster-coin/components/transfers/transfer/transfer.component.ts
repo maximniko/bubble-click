@@ -21,6 +21,7 @@ import {CoinsService} from '../../../domains/coins/services/coins.service';
 export class TransferComponent extends ReactiveForm implements OnInit, OnDestroy {
   protected form: FormGroup
   protected formSubscription?: Subscription
+  protected coinsSubscription?: Subscription
   protected maxSum: number
 
   constructor(
@@ -38,40 +39,45 @@ export class TransferComponent extends ReactiveForm implements OnInit, OnDestroy
   ngOnInit() {
     this.formSubscription = this.form.statusChanges
       .subscribe((status: FormControlStatus) => this.twa.mainButtonIsActive(status == "VALID"))
+    this.coinsSubscription = this.coinsService.balanceSubject
+      .subscribe({
+        next: this.onNextBalance,
+        error: () => this.goBack()
+      })
     this.twa.backButtonOnClick(() => this.goBack())
     this.twa.setMainButton({text: 'Add', is_active: true, is_visible: true}, () => this.transfer())
   }
 
   ngOnDestroy(): void {
     this.formSubscription?.unsubscribe()
+    this.coinsSubscription?.unsubscribe()
     this.twa.mainButtonIsActive(true)
     this.twa.offBackButton(() => this.goBack())
     this.twa.offMainButton(() => this.transfer())
   }
 
-  transfer() {
+  private onNextBalance(balance: number) {
+    if (balance !== this.maxSum) { // if balance updated or changed from another device
+      this.goBack()
+    }
+
     if (this.form.invalid) {
       return
     }
 
-    this.twa.mainButtonIsActive(false)
-    this.coinsService.loadBalance()
+    const form: { sum: number } = this.form.value
 
-    const timer = 500
+    if (form.sum > balance) {
+      this.twa.showAlert('Error balance')
+      return
+    }
 
-    setTimeout(() => {
-      const form: { sum: number } = this.form.value,
-        balance = this.coinsService.balance
+    this.bankService.saveBalance(this.bankService.balance + form.sum)
+    this.coinsService.saveBalance(balance - form.sum)
+  }
 
-      if (form.sum > balance) {
-        this.twa.showAlert('Error balance')
-        this.goBack()
-      }
-
-      this.coinsService.balance = balance - form.sum
-      this.bankService.balance = this.bankService.balance + form.sum
-      setTimeout(() => this.goBack(), timer)
-    }, timer * 2)
+  transfer() {
+    this.coinsService.loadBalance()  // see OnInit - if balance !== this.maxSum -> goBack
   }
 
   goBack() {

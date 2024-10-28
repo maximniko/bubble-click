@@ -1,39 +1,41 @@
 import {Injectable} from '@angular/core';
-import {debounceTime, scan, Subject} from 'rxjs';
+import {debounceTime, Observable, scan, Subject} from 'rxjs';
 import {STORAGE_KEY_BALANCE, TwaService} from '../../../../../common/services/twa.service';
 import {CoinsInterface} from './coins.interface';
+import {CloudStorage} from '../../../../../common/services/cloud-storage';
 
 @Injectable({providedIn: 'root'})
 export class CoinsService implements CoinsInterface {
   private clickSubject = new Subject<void>();
+  balanceSubject = new Subject<number>();
   _balance: number = 0;
   perClick: number = 1;
 
-  constructor(private twa: TwaService) {
+  constructor(
+    private cloudStorage: CloudStorage,
+    private twa: TwaService,
+  ) {
     this.loadBalance()
     this.subscribeToClicks()
   }
 
   get balance(): number {
-    this.loadBalance()
     return this._balance
   }
 
-  set balance(balance: number) {
+  private set balance(balance: number) {
     this._balance = balance
-    this.saveBalance(this.balance)
+    this.balanceSubject.next(this._balance)
   }
 
   private subscribeToClicks() {
     this.clickSubject
       .pipe(
-        // Суммируем клики
-        scan(acc => acc + this.perClick, 0),
-        // Ожидаем 500мс после последнего клика
-        debounceTime(500)
+        scan(acc => acc + this.perClick, 0), // Суммируем клики
+        debounceTime(500) // Ожидаем 500мс после последнего клика
       ).subscribe(clickCount => {
-      this.balance = clickCount;
-      this.saveBalance(clickCount);
+      this.balance += clickCount
+      this.saveBalance(this.balance)
     })
   }
 
@@ -43,28 +45,51 @@ export class CoinsService implements CoinsInterface {
     this.clickSubject.next();
   }
 
-  loadBalance() {
-    this.twa.cloudStorage.getItem(STORAGE_KEY_BALANCE, (error?: string|null, result?: string) => {
-      if (error) {
-        this.twa.showAlert(error)
-        return
-      }
-      if (result) {
-        this.balance = +result
-      }
-    })
+  loadBalance(onComplete?: (observable: Observable<void>) => void) {
+    this.cloudStorage.getItem(STORAGE_KEY_BALANCE)
+      .subscribe({
+        next: (x) => {
+          if (x) {
+            this.saveBalance(+x)
+          } else {
+            this.saveBalance(0)
+          }
+        },
+        error: (err) => {
+          if (err) {
+            this.twa.showAlert(err)
+          }
+        },
+        complete: () => {
+          if (!onComplete) {
+            return
+          }
+          onComplete(new Observable(subscriber => subscriber.next()))
+          console.log('balance loaded');
+        },
+      })
   }
 
-  private saveBalance(balance: number) {
-    this.twa.cloudStorage.setItem(STORAGE_KEY_BALANCE, String(balance), (error?: string|null, result?: boolean) => {
-      if (error) {
-        this.twa.showAlert(error)
-        return
-      }
-      if (!result) {
-        this.twa.showAlert('Can\'t save balance');
-      }
-      this.loadBalance()
-    })
+  saveBalance(balance: number, onComplete?: (observable: Observable<void>) => void) {
+    this.cloudStorage.setItem(STORAGE_KEY_BALANCE, String(balance))
+      .subscribe({
+        next: (x) => {
+          if (x) {
+            this.balance = balance
+          }
+        },
+        error: (err) => {
+          if (err) {
+            this.twa.showAlert(err.toString())
+          }
+        },
+        complete: () => {
+          if (!onComplete) {
+            return
+          }
+          onComplete(new Observable(subscriber => subscriber.next()))
+          console.log('Balance saved');
+        },
+      })
   }
 }

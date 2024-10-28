@@ -8,7 +8,6 @@ import {TwaService} from '../../../../../common/services/twa.service';
 import {BankService} from '../../../domains/bank/services/bank/bank.service';
 import {CoinsService} from '../../../domains/coins/services/coins.service';
 
-
 @Component({
   standalone: true,
   imports: [CommonModule, FormsModule, SumInputComponent, ReactiveFormsModule],
@@ -22,6 +21,7 @@ import {CoinsService} from '../../../domains/coins/services/coins.service';
 export class WithdrawComponent extends ReactiveForm implements OnInit, OnDestroy {
   protected form: FormGroup
   protected formSubscription?: Subscription
+  protected balanceSubscription?: Subscription
   protected maxSum: number
 
   constructor(
@@ -39,40 +39,45 @@ export class WithdrawComponent extends ReactiveForm implements OnInit, OnDestroy
   ngOnInit() {
     this.formSubscription = this.form.statusChanges
       .subscribe((status: FormControlStatus) => this.twa.mainButtonIsActive(status == "VALID"))
+    this.balanceSubscription = this.bankService.balanceSubject
+      .subscribe({
+        next: this.onNextBalance,
+        error: () => this.goBack()
+      })
     this.twa.backButtonOnClick(() => this.goBack())
     this.twa.setMainButton({text: 'Add', is_active: true, is_visible: true}, () => this.withdraw())
   }
 
   ngOnDestroy(): void {
     this.formSubscription?.unsubscribe()
+    this.balanceSubscription?.unsubscribe()
     this.twa.mainButtonIsActive(true)
     this.twa.offBackButton(() => this.goBack())
     this.twa.offMainButton(() => this.withdraw())
   }
 
   withdraw() {
+    this.bankService.loadBalance()
+  }
+
+  private onNextBalance(balance: number) {
+    if (balance !== this.maxSum) { // if balance updated or changed from another device
+      this.goBack()
+    }
+
     if (this.form.invalid) {
       return
     }
 
-    this.twa.mainButtonIsActive(false)
-    this.bankService.loadBalance()
+    const form: { sum: number } = this.form.value
 
-    const timer = 500
+    if (form.sum > balance) {
+      this.twa.showAlert('Error balance')
+      return
+    }
 
-    setTimeout(() => {
-      const form: { sum: number } = this.form.value,
-        balance = this.bankService.balance
-
-      if (form.sum > balance) {
-        this.twa.showAlert('Error balance')
-        this.goBack()
-      }
-
-      this.bankService.balance = balance - form.sum
-      this.coinsService.balance = this.bankService.balance + form.sum
-      setTimeout(() => this.goBack(), timer)
-    }, timer * 2)
+    this.coinsService.saveBalance(this.coinsService.balance + form.sum)
+    this.bankService.saveBalance(balance - form.sum)
   }
 
   goBack() {

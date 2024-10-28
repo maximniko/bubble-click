@@ -1,48 +1,76 @@
 import {Injectable} from '@angular/core';
 import {STORAGE_KEY_BANK, TwaService} from '../../../../../../common/services/twa.service';
 import {BankInterface} from './bank.interface';
+import {CloudStorage} from '../../../../../../common/services/cloud-storage';
+import {Observable, Subject} from 'rxjs';
 
 @Injectable({providedIn: 'root'})
 export class BankService implements BankInterface {
+  balanceSubject = new Subject<number>();
   private _balance: number = 0;
 
-  constructor(private twa: TwaService) {
+  constructor(
+    private twa: TwaService,
+    private cloudStorage: CloudStorage
+  ) {
     this.loadBalance()
   }
 
   get balance(): number {
-    this.loadBalance()
     return this._balance
   }
 
-  set balance(balance: number) {
+  private set balance(balance: number) {
     this._balance = balance
-    this.saveBalance()
+    this.balanceSubject.next(balance)
   }
 
-  private saveBalance() {
-    this.twa.cloudStorage.setItem(STORAGE_KEY_BANK, String(this.balance), (error?: string | null, result?: boolean) => {
-      if (error) {
-        this.twa.showAlert(error)
-        return
-      }
-      if (!result) {
-        this.twa.showAlert('Bank balance not updated.')
-      }
-      this.loadBalance()
-    })
+  loadBalance(onComplete?: (observable: Observable<void>) => void): void {
+    this.cloudStorage.getItem(STORAGE_KEY_BANK)
+      .subscribe({
+        next: (x) => {
+          if (x) {
+            this.saveBalance(+x)
+          } else {
+            this.saveBalance(0)
+          }
+        },
+        error: (err) => {
+          if (err) {
+            this.twa.showAlert(err)
+          }
+        },
+        complete: () => {
+          if (!onComplete) {
+            return
+          }
+          onComplete(new Observable(subscriber => subscriber.next()))
+          console.log('balance loaded');
+        },
+      })
   }
 
-  loadBalance() {
-    this.twa.cloudStorage.getItem(STORAGE_KEY_BANK, (error?: string | null, result?: string) => {
-      if (error) {
-        this.twa.showAlert(error)
-        return
-      }
-      if (result) {
-        this._balance = +result
-      }
-    })
+  saveBalance(balance: number, onComplete?: (observable: Observable<void>) => void) {
+    this.cloudStorage.setItem(STORAGE_KEY_BANK, String(balance))
+      .subscribe({
+        next: (x) => {
+          if (x) {
+            this.balance = balance
+          }
+        },
+        error: (err) => {
+          if (err) {
+            this.twa.showAlert(err.toString())
+          }
+        },
+        complete: () => {
+          if (!onComplete) {
+            return
+          }
+          onComplete(new Observable(subscriber => subscriber.next()))
+          console.log('Balance saved');
+        },
+      })
   }
 }
 

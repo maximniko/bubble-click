@@ -4,5 +4,5 @@ import {CoinsService} from './services/coins.service';
 import {CoinsDevService} from './services/coins-dev.service';
 
 export const coinsProviders: Array<Provider | EnvironmentProviders> = [
-  {provide: CoinsService, useClass: environment.production ? CoinsDevService : CoinsDevService},
+  {provide: CoinsService, useClass: environment.production ? CoinsService : CoinsDevService},
 ]
