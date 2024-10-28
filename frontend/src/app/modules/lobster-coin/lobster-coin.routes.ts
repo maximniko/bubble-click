@@ -7,7 +7,6 @@ const ROUTE_PARTS = {
   transfer: 'transfer',
   withdraw: 'withdraw',
   deposit: 'deposit',
-  friends: 'friends',
 }
 export const routeCreator = {
   main: () => `/${ROUTE_PARTS.lobsterCoin}/${ROUTE_PARTS.main}`,
@@ -16,7 +15,6 @@ export const routeCreator = {
   bankWithdraw: () => `/${ROUTE_PARTS.lobsterCoin}/${ROUTE_PARTS.bank}/${ROUTE_PARTS.withdraw}`,
   bankDeposit: () => `/${ROUTE_PARTS.lobsterCoin}/${ROUTE_PARTS.bank}/${ROUTE_PARTS.deposit}`,
   bankDepositAdd: () => `/${ROUTE_PARTS.lobsterCoin}/${ROUTE_PARTS.bank}/${ROUTE_PARTS.deposit}-add`,
-  friends: () => `/${ROUTE_PARTS.lobsterCoin}/${ROUTE_PARTS.friends}`,
 }
 
 export const lobsterCoinRoutes: Routes = [
@@ -54,10 +52,6 @@ export const lobsterCoinRoutes: Routes = [
             loadComponent: () => import('./components/transfers/deposit/deposit-add.component').then(mod => mod.DepositAddComponent)
           },
         ]
-      },
-      {
-        path: `${ROUTE_PARTS.friends}`,
-        loadComponent: () => import('./components/friends/friends.component').then(mod => mod.FriendsComponent)
       },
     ],
   },

@@ -25,7 +25,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
     protected localisation: Localisation,
     protected coinsService: CoinsService,
   ) {
-    this.balance = this.coinsService.balance
   }
 
   ngOnInit() {
