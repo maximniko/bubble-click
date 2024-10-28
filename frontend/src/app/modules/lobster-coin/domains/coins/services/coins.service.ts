@@ -1,14 +1,15 @@
 import {Injectable} from '@angular/core';
-import {debounceTime, Observable, scan, Subject} from 'rxjs';
+import {debounceTime, Observable, scan, startWith, Subject, switchMap, tap} from 'rxjs';
 import {STORAGE_KEY_BALANCE, TwaService} from '../../../../../common/services/twa.service';
 import {CoinsInterface} from './coins.interface';
 import {CloudStorage} from '../../../../../common/services/cloud-storage';
+import {fromSubscribable} from 'rxjs/internal/observable/fromSubscribable';
 
 @Injectable({providedIn: 'root'})
 export class CoinsService implements CoinsInterface {
   private clickSubject = new Subject<void>();
+  private trigger$ = new Subject<void>();
   balanceSubject = new Subject<number>();
-  _acc: number = 0;
   _balance: number = 0;
   perClick: number = 1;
 
@@ -30,14 +31,15 @@ export class CoinsService implements CoinsInterface {
   }
 
   private subscribeToClicks() {
-    this.clickSubject
+    this.trigger$
       .pipe(
-        scan(acc => acc + this.perClick, this._acc), // Суммируем клики
-        debounceTime(500), // Ожидаем 500мс после последнего клика
+        startWith(void 0),
+        switchMap(() => fromSubscribable(this.clickSubject).pipe(scan((acc) => acc + 1, 0))),
+        debounceTime(500),
+        tap(() => this.trigger$.next()),
       )
-      .subscribe(clickCount => {
-        this._acc = 0
-        this.saveBalance(this.balance + clickCount)
+      .subscribe(clicks => {
+        this.saveBalance(this.balance + clicks * this.perClick)
       })
   }
 
@@ -53,8 +55,6 @@ export class CoinsService implements CoinsInterface {
         next: (x) => {
           if (x) {
             this.saveBalance(+x)
-          } else {
-            this.saveBalance(0)
           }
         },
         error: (err) => {

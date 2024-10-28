@@ -1,13 +1,15 @@
 import {Injectable} from '@angular/core';
-import {debounceTime, scan, Subject} from 'rxjs';
+import {debounceTime, Observable, scan, startWith, Subject, switchMap, tap} from 'rxjs';
 import {CoinsInterface} from './coins.interface';
+import {fromSubscribable} from 'rxjs/internal/observable/fromSubscribable';
 
 @Injectable({providedIn: 'root'})
 export class CoinsDevService implements CoinsInterface {
   private clickSubject = new Subject<void>();
+  private trigger$ = new Subject<void>();
+  balanceSubject = new Subject<number>();
   _balance: number = 0;
   perClick: number = 1;
-  _acc: number = 0;
 
   constructor() {
     this.subscribeToClicks()
@@ -22,14 +24,15 @@ export class CoinsDevService implements CoinsInterface {
   }
 
   private subscribeToClicks() {
-    this.clickSubject
+    this.trigger$
       .pipe(
-        scan(acc => acc + this.perClick, this._acc), // Суммируем клики
-        debounceTime(500), // Ожидаем 500мс после последнего клика
+        startWith(void 0),
+        switchMap(() => fromSubscribable(this.clickSubject).pipe(scan((acc) => acc + 1, 0))),
+        debounceTime(500),
+        tap(() => this.trigger$.next())
       )
-      .subscribe(clickCount => {
-        this._acc = 0
-        this.saveBalance(this.balance + clickCount)
+      .subscribe(clicks => {
+        this.saveBalance(this.balance + clicks * this.perClick)
       })
   }
 
@@ -42,5 +45,9 @@ export class CoinsDevService implements CoinsInterface {
   private saveBalance(balance: number) {
     this.balance = balance
     console.log(`Сохранен баланс ${balance}`);
+  }
+
+  loadBalance(onComplete?: (observable: Observable<void>) => void) {
+
   }
 }
