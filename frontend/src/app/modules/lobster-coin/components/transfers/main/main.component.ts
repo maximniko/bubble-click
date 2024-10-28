@@ -1,10 +1,11 @@
 import {CommonModule} from '@angular/common';
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {symbols} from '../../../../../common/components/symbols/symbols';
 import {routeCreator} from '../../../lobster-coin.routes';
 import {Router, RouterLink} from '@angular/router';
 import {CoinsService} from '../../../domains/coins/services/coins.service';
 import {BankService} from '../../../domains/bank/services/bank/bank.service';
+import {Subscription} from 'rxjs';
 
 @Component({
   standalone: true,
@@ -15,7 +16,7 @@ import {BankService} from '../../../domains/bank/services/bank/bank.service';
     }`,
   template: `
     <div class="mx-2">
-      <p class="h1 text-center my-3">{{ ownBalance }} Coins</p>
+      <p class="h1 text-center my-3">{{ coinBalance }} Coins</p>
       <section class="tg-bg-secondary p-2 rounded-2 mb-3">
         <div class="row row-cols-2">
           <div class="col">
@@ -62,20 +63,29 @@ import {BankService} from '../../../domains/bank/services/bank/bank.service';
     </div>
   `,
 })
-export class MainComponent implements OnInit {
+export class MainComponent implements OnInit, OnDestroy {
   protected bankBalance: number = 0
-  protected ownBalance: number = 0
+  protected coinBalance: number = 0
+  private coinsSubscription?: Subscription
+  private bankSubscription?: Subscription
 
   constructor(
-    private coin: CoinsService,
-    private bank: BankService,
+    protected coinsService: CoinsService,
+    protected bankService: BankService,
     private router: Router,
   ) {
+    this.bankBalance = this.bankService.balance
+    this.coinBalance = this.coinsService.balance
   }
 
   ngOnInit() {
-    this.bankBalance = this.bank.balance
-    this.ownBalance = this.coin.balance
+    this.coinsSubscription = this.coinsService.balanceSubject.subscribe(balance => this.coinBalance = balance)
+    this.bankSubscription = this.bankService.balanceSubject.subscribe(balance => this.bankBalance = balance)
+  }
+
+  ngOnDestroy() {
+    this.coinsSubscription?.unsubscribe()
+    this.bankSubscription?.unsubscribe()
   }
 
   goBack() {
