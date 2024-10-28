@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {debounceTime, scan, Subject} from 'rxjs';
+import {debounceTime, scan, Subject, tap} from 'rxjs';
 import {CoinsInterface} from './coins.interface';
 
 @Injectable({providedIn: 'root'})
@@ -24,13 +24,17 @@ export class CoinsDevService implements CoinsInterface {
     this.clickSubject
       .pipe(
         // Суммируем клики
-        scan((acc) => acc + this.perClick, 0),
+        scan((acc) => acc * this.perClick, 0),
         // Ожидаем 500мс после последнего клика
-        debounceTime(500)
-      ).subscribe(clickCount => {
-      this.balance = clickCount;
-      this.saveBalance(this.balance)
-    })
+        debounceTime(500),
+        // сохраняем баланс
+        tap(clickCount => {
+          this.balance += clickCount;
+          this.saveBalance(this.balance)
+        }),
+        // Сбрасываем счетчик после отправки
+        scan(() => 0)
+      ).subscribe()
   }
 
   onClick(): void {
