@@ -26,13 +26,13 @@ export class CoinsService implements CoinsInterface {
 
   private set balance(balance: number) {
     this._balance = balance
-    this.balanceSubject.next(this._balance)
+    this.balanceSubject.next(balance)
   }
 
   private subscribeToClicks() {
     this.clickSubject
       .pipe(
-        scan(acc => acc * this.perClick, this._acc), // Суммируем клики
+        scan(acc => acc + this.perClick, this._acc), // Суммируем клики
         debounceTime(500), // Ожидаем 500мс после последнего клика
       )
       .subscribe(clickCount => {

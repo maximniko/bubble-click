@@ -24,7 +24,7 @@ export class CoinsDevService implements CoinsInterface {
   private subscribeToClicks() {
     this.clickSubject
       .pipe(
-        scan(acc => acc * this.perClick, this._acc), // Суммируем клики
+        scan(acc => acc + this.perClick, this._acc), // Суммируем клики
         debounceTime(500), // Ожидаем 500мс после последнего клика
       )
       .subscribe(clickCount => {
