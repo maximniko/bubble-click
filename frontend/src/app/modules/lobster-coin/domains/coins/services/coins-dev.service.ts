@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {debounceTime, Observable, scan, startWith, Subject, switchMap, tap} from 'rxjs';
+import {BehaviorSubject, debounceTime, Observable, scan, startWith, Subject, switchMap, tap} from 'rxjs';
 import {CoinsInterface} from './coins.interface';
 import {fromSubscribable} from 'rxjs/internal/observable/fromSubscribable';
 
@@ -7,13 +7,13 @@ import {fromSubscribable} from 'rxjs/internal/observable/fromSubscribable';
 export class CoinsDevService implements CoinsInterface {
   private clickSubject = new Subject<void>();
   private trigger$ = new Subject<void>();
-  message = new Subject<string>();
-  balanceSubject = new Subject<number>();
+  balanceSubject = new BehaviorSubject<number>(0);
   _balance: number = 0;
   perClick: number = 1;
 
   constructor() {
     this.subscribeToClicks()
+    this.loadBalance()
   }
 
   get balance(): number {
@@ -23,6 +23,7 @@ export class CoinsDevService implements CoinsInterface {
 
   set balance(balance: number) {
     this._balance = balance
+    this.balanceSubject.next(balance)
   }
 
   private subscribeToClicks() {
@@ -51,7 +52,6 @@ export class CoinsDevService implements CoinsInterface {
   }
 
   loadBalance(onComplete?: (observable: Observable<void>) => void) {
-    setTimeout(() => this.saveBalance(100), 500)
-    // this.saveBalance(100)
+    this.balance = 100
   }
 }

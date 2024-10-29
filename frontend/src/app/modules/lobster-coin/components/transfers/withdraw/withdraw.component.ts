@@ -18,6 +18,7 @@ import {CoinsService} from '../../../domains/coins/services/coins.service';
           <sum-input [parentForm]="form" [max]="max"></sum-input>
         }
       </div>
+      <button (click)="bankService.loadBalance()">Send</button>
     </form>
     <button (click)="goBack()">back</button>
   `,
