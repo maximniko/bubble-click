@@ -14,9 +14,7 @@ import {CoinsService} from '../../../domains/coins/services/coins.service';
   template: `
     <form [formGroup]="form">
       <div class="mx-2 my-4">
-        @if (bankService.balanceSubject | async; as max) {
-          <sum-input [parentForm]="form" [max]="max"></sum-input>
-        }
+        <sum-input [parentForm]="form" [max]="maxSum"></sum-input>
       </div>
       <button (click)="bankService.loadBalance()">Send</button>
     </form>
