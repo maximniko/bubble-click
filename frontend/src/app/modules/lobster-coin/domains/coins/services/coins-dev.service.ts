@@ -16,6 +16,7 @@ export class CoinsDevService implements CoinsInterface {
   }
 
   get balance(): number {
+    console.log('get balance ', this._balance)
     return this._balance
   }
 
@@ -44,10 +45,11 @@ export class CoinsDevService implements CoinsInterface {
 
   private saveBalance(balance: number) {
     this.balance = balance
+    this.balanceSubject.next(balance)
     console.log(`Сохранен баланс ${balance}`);
   }
 
   loadBalance(onComplete?: (observable: Observable<void>) => void) {
-
+    this.saveBalance(100)
   }
 }
