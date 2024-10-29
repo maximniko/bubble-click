@@ -60,7 +60,7 @@ export class BankService implements BankInterface {
         },
         error: (err) => {
           if (err) {
-            this.twa.showAlert(err.toString())
+            throw new Error(err)
           }
         },
         complete: () => {

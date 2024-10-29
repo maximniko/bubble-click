@@ -16,7 +16,7 @@ import {
   imports: [CommonModule, ReactiveFormsModule],
   template: `
     <div class="form-floating mb-3">
-      <input type="text" class="form-control" placeholder="Coins" id="form-sum" formControlName="sum" [ngClass]="{
+      <input [autofocus]="true" type="text" class="form-control" placeholder="Coins" id="form-sum" formControlName="sum" [ngClass]="{
             'is-invalid': isInvalidSum,
             'is-valid': parentForm.valid,
           }">

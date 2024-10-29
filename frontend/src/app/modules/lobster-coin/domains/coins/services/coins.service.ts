@@ -59,7 +59,7 @@ export class CoinsService implements CoinsInterface {
         },
         error: (err) => {
           if (err) {
-            this.twa.showAlert(err)
+            throw new Error(err)
           }
         },
         complete: () => {

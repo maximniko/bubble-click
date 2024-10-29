@@ -13,9 +13,10 @@ import {CoinsService} from '../../../domains/coins/services/coins.service';
   imports: [CommonModule, FormsModule, SumInputComponent, ReactiveFormsModule],
   template: `
     <form [formGroup]="form">
-      <sum-input [parentForm]="form" [max]="maxSum"></sum-input>
+      <div class="mx-2 my-4">
+        <sum-input [parentForm]="form" [max]="maxSum"></sum-input>
+      </div>
     </form>
-    <button (click)="goBack()">back</button>
   `,
 })
 export class TransferComponent extends ReactiveForm implements OnInit, OnDestroy {
@@ -45,7 +46,7 @@ export class TransferComponent extends ReactiveForm implements OnInit, OnDestroy
         error: () => this.goBack()
       })
     this.twa.backButtonOnClick(() => this.goBack())
-    this.twa.setMainButton({text: 'Add', is_active: true, is_visible: true}, () => this.transfer())
+    this.twa.setMainButton({text: 'Transfer', is_active: true, is_visible: true}, () => this.transfer())
   }
 
   ngOnDestroy(): void {
@@ -62,6 +63,7 @@ export class TransferComponent extends ReactiveForm implements OnInit, OnDestroy
     }
 
     if (this.form.invalid) {
+      this.twa.showAlert('Form invalid')
       return
     }
 
@@ -72,8 +74,16 @@ export class TransferComponent extends ReactiveForm implements OnInit, OnDestroy
       return
     }
 
-    this.bankService.saveBalance(this.bankService.balance + form.sum)
-    this.coinsService.saveBalance(balance - form.sum)
+    const bank = this.bankService.balance
+
+    try {
+      this.bankService.saveBalance(bank + form.sum)
+      this.coinsService.saveBalance(balance - form.sum)
+    } catch (error) {
+      this.twa.showAlert(error as string)
+      this.bankService.saveBalance(bank)
+      this.coinsService.saveBalance(balance)
+    }
   }
 
   transfer() {
