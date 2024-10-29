@@ -27,11 +27,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
     protected localisation: Localisation,
     protected coinsService: CoinsService,
   ) {
-    this.messages.push('HeaderComponent constructor')
+    this.messages.push('HeaderComponent constructor' + Date.now())
   }
 
   ngOnInit() {
-    this.messages.push('HeaderComponent ngOnInit')
+    this.messages.push('HeaderComponent ngOnInit ' + Date.now())
     this.coinsSubscription = this.coinsService.balanceSubject.subscribe(v => this.balance = v)
     this.coinsMessageSubscription = this.coinsService.message.subscribe(v => this.messages.push(v))
     // setTimeout(() => this.coinsService.loadBalance(), 1000)
