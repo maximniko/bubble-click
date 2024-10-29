@@ -78,6 +78,9 @@ export class CoinsService implements CoinsInterface {
   }
 
   saveBalance(balance: number, onComplete?: (observable: Observable<void>) => void) {
+    if (isNaN(balance)) {
+      this.twa.showAlert(`Can't save. ${balance} not a number`)
+    }
     this.cloudStorage.setItem(STORAGE_KEY_BALANCE, String(balance))
       .subscribe({
         next: (x) => {
