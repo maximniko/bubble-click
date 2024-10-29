@@ -76,15 +76,20 @@ export class TransferComponent extends ReactiveForm implements OnInit, OnDestroy
       return
     }
 
+    if (!form.sum || isNaN(form.sum)) {
+      return
+    }
+
     const bank = this.bankService.balance
 
     try {
       this.bankService.saveBalance(bank + form.sum)
       this.coinsService.saveBalance(balance - form.sum)
-    } catch (error) {
-      this.twa.showAlert(error as string)
+    } catch (e) {
+      this.twa.showAlert((<Error>e).message)
       this.bankService.saveBalance(bank)
       this.coinsService.saveBalance(balance)
+      this.goBack()
     }
   }
 

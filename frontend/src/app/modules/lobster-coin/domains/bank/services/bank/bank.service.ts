@@ -30,6 +30,10 @@ export class BankService implements BankInterface {
       .subscribe({
         next: (x) => {
           if (x) {
+            if (isNaN(+x)) {
+              this.balance = 0
+              return
+            }
             this.balance = +x
           } else {
             this.balance = 0
@@ -51,6 +55,9 @@ export class BankService implements BankInterface {
   }
 
   saveBalance(balance: number, onComplete?: (observable: Observable<void>) => void) {
+    if (isNaN(balance) || balance < 0) {
+      throw new Error('Wrong bank data')
+    }
     this.cloudStorage.setItem(STORAGE_KEY_BANK, String(balance))
       .subscribe({
         next: (x) => {

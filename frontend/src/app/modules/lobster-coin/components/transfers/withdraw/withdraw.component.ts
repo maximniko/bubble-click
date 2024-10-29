@@ -13,7 +13,11 @@ import {CoinsService} from '../../../domains/coins/services/coins.service';
   imports: [CommonModule, FormsModule, SumInputComponent, ReactiveFormsModule],
   template: `
     <form [formGroup]="form">
-      <sum-input [parentForm]="form" [max]="maxSum"></sum-input>
+      <div class="mx-2 my-4">
+        @if (bankService.balanceSubject| async; as max) {
+          <sum-input [parentForm]="form" [max]="max"></sum-input>
+        }
+      </div>
     </form>
     <button (click)="goBack()">back</button>
   `,
@@ -28,8 +32,8 @@ export class WithdrawComponent extends ReactiveForm implements OnInit, OnDestroy
     private formBuilder: FormBuilder,
     private location: Location,
     private twa: TwaService,
-    private bankService: BankService,
-    private coinsService: CoinsService,
+    protected bankService: BankService,
+    protected coinsService: CoinsService,
   ) {
     super()
     this.maxSum = this.bankService.balance
@@ -45,7 +49,7 @@ export class WithdrawComponent extends ReactiveForm implements OnInit, OnDestroy
         error: () => this.goBack()
       })
     this.twa.backButtonOnClick(() => this.goBack())
-    this.twa.setMainButton({text: 'Add', is_active: true, is_visible: true}, () => this.withdraw())
+    this.twa.setMainButton({text: 'Withdraw', is_active: true, is_visible: true}, () => this.withdraw())
   }
 
   ngOnDestroy(): void {
@@ -76,8 +80,20 @@ export class WithdrawComponent extends ReactiveForm implements OnInit, OnDestroy
       return
     }
 
-    this.coinsService.saveBalance(this.coinsService.balance + form.sum)
-    this.bankService.saveBalance(balance - form.sum)
+    if (!form.sum || isNaN(form.sum)) {
+      return
+    }
+    const coins = this.coinsService.balance
+
+    try {
+      this.coinsService.saveBalance(coins + form.sum)
+      this.bankService.saveBalance(balance - form.sum)
+    } catch (e) {
+      this.twa.showAlert((<Error>e).message)
+      this.coinsService.saveBalance(coins)
+      this.bankService.saveBalance(balance)
+      this.goBack()
+    }
   }
 
   goBack() {
