@@ -9,7 +9,6 @@ import {fromSubscribable} from 'rxjs/internal/observable/fromSubscribable';
 export class CoinsService implements CoinsInterface {
   private clickSubject = new Subject<void>();
   private trigger$ = new Subject<void>();
-  message = new Subject<string>();
   balanceSubject = new Subject<number>();
   perClick: number = 1;
   private _balance: number = 0;
@@ -23,7 +22,6 @@ export class CoinsService implements CoinsInterface {
   }
 
   get balance(): number {
-    this.message.next(`get balance return ${this._balance}`)
     return this._balance
   }
 
@@ -52,20 +50,15 @@ export class CoinsService implements CoinsInterface {
   }
 
   loadBalance(onComplete?: (observable: Observable<void>) => void) {
-    const now = Date.now()
-    this.message.next('start loadBalance at ' + now)
     this.cloudStorage.getItem(STORAGE_KEY_BALANCE)
       .subscribe({
         next: (x) => {
           if (x) {
-            this.message.next('loadBalance.x ' + String(Date.now() - now))
             this.saveBalance(+x)
           } else {
-            this.message.next('loadBalance.x empty ' + String(Date.now() - now))
           }
         },
         error: (err) => {
-          this.message.next('loadBalance.error ' + err)
           if (err) {
             throw new Error(err)
           }
@@ -84,18 +77,14 @@ export class CoinsService implements CoinsInterface {
   }
 
   saveBalance(balance: number, onComplete?: (observable: Observable<void>) => void) {
-    const now = Date.now()
-    this.message.next('start saveBalance ' + now)
     this.cloudStorage.setItem(STORAGE_KEY_BALANCE, String(balance))
       .subscribe({
         next: (x) => {
           if (x) {
-            this.message.next('start saveBalance.next.x ' + String(Date.now() - now))
             this.balance = balance
           }
         },
         error: (err) => {
-          this.message.next('start saveBalance.error ' + err)
           if (err) {
             this.twa.showAlert(err.toString())
           }

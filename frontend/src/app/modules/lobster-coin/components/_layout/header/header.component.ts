@@ -20,26 +20,19 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   private offcanvasService = inject(NgbOffcanvas)
   private coinsSubscription?: Subscription
-  private coinsMessageSubscription?: Subscription
-  protected messages: string[] = []
 
   constructor(
     protected localisation: Localisation,
     protected coinsService: CoinsService,
   ) {
-    this.messages.push('HeaderComponent constructor' + Date.now())
   }
 
   ngOnInit() {
-    this.messages.push('HeaderComponent ngOnInit ' + Date.now())
     this.coinsSubscription = this.coinsService.balanceSubject.subscribe(v => this.balance = v)
-    this.coinsMessageSubscription = this.coinsService.message.subscribe(v => this.messages.push(v))
-    // setTimeout(() => this.coinsService.loadBalance(), 1000)
   }
 
   ngOnDestroy() {
     this.coinsSubscription?.unsubscribe()
-    this.coinsMessageSubscription?.unsubscribe()
   }
 
   protected readonly routeCreator = routeCreator;

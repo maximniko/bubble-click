@@ -5,7 +5,7 @@
     </svg>
   </button>
   <a class="navbar-toggler color-accent p-2 hstack accent-border accent-bg-shadow-bottom-left rounded-5" routerLink="{{routeCreator.bank()}}">
-    <div class="m-auto me-2">{{ balance }}</div>
+    <div class="m-auto me-2">{{ coinsService.balanceSubject | async }}</div>
     <svg class="bi">
       <use [attr.xlink:href]="'#' + symbols.coin"/>
     </svg>
@@ -32,9 +32,6 @@
       <li class="nav-item text-center">
         <a class="nav-link" (click)="offcanvas.dismiss('Cross click')" routerLink="{{routeCreator.bank()}}">wallet</a>
       </li>
-      @for(message of messages; track message) {
-        <li class="nav-item text-center">{{ message }}</li>
-      }
     </ul>
   </div>
 </ng-template>
