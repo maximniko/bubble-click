@@ -30,9 +30,9 @@ export class BankService implements BankInterface {
       .subscribe({
         next: (x) => {
           if (x) {
-            this.saveBalance(+x)
+            this.balance = +x
           } else {
-            this.saveBalance(0)
+            this.balance = 0
           }
         },
         error: (err) => {

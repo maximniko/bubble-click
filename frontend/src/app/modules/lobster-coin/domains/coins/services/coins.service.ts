@@ -54,8 +54,9 @@ export class CoinsService implements CoinsInterface {
       .subscribe({
         next: (x) => {
           if (x) {
-            this.saveBalance(+x)
+            this.balance = +x
           } else {
+            this.balance = 0
           }
         },
         error: (err) => {
