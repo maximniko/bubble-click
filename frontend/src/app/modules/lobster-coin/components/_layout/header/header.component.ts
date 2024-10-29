@@ -29,7 +29,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.coinsSubscription = this.coinsService.balanceSubject.subscribe(v => this.balance = v)
-    setTimeout(() => this.coinsService.loadBalance(), 100)
+    setTimeout(() => this.coinsService.loadBalance(), 1000)
   }
 
   ngOnDestroy() {

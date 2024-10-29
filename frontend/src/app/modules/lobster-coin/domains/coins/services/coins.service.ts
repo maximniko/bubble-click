@@ -9,7 +9,7 @@ import {fromSubscribable} from 'rxjs/internal/observable/fromSubscribable';
 export class CoinsService implements CoinsInterface {
   private clickSubject = new Subject<void>();
   private trigger$ = new Subject<void>();
-  balanceSubject = new BehaviorSubject<number>(0);
+  balanceSubject = new Subject<number>();
   private _balance: number = 0;
   perClick: number = 1;
 

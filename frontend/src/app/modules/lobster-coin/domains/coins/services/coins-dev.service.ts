@@ -50,6 +50,7 @@ export class CoinsDevService implements CoinsInterface {
   }
 
   loadBalance(onComplete?: (observable: Observable<void>) => void) {
-    this.saveBalance(100)
+    setTimeout(() => this.saveBalance(100), 500)
+    // this.saveBalance(100)
   }
 }
