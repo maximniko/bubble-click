@@ -20,7 +20,7 @@ import {TwaService} from "../../common/services/twa.service";
 })
 export class LobsterCoinComponent implements OnInit {
   constructor(private twa: TwaService) {
-    // this.twa.ready()
+    this.twa.ready()
   }
 
   ngOnInit() {

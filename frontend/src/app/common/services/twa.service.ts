@@ -6,7 +6,7 @@ import {CloudStorage, PopupParams, SecondaryButton} from "@twa-dev/types";
 export class TwaService {
 
   constructor() {
-    this.ready()
+    console.log('TwaService.init')
     this.initTheme()
   }
 
