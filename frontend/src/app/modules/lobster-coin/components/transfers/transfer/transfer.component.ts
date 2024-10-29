@@ -44,7 +44,7 @@ export class TransferComponent extends ReactiveForm implements OnInit, OnDestroy
       .subscribe((status: FormControlStatus) => this.twa.mainButtonIsActive(status == "VALID"))
     this.coinsSubscription = this.coinsService.balanceSubject
       .subscribe({
-        next: this.onNextBalance,
+        next: (value) => this.onNextBalance(value),
         error: () => this.goBack()
       })
     this.twa.backButtonOnClick(() => this.goBack())

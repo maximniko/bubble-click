@@ -41,7 +41,7 @@ export class WithdrawComponent extends ReactiveForm implements OnInit, OnDestroy
       .subscribe((status: FormControlStatus) => this.twa.mainButtonIsActive(status == "VALID"))
     this.balanceSubscription = this.bankService.balanceSubject
       .subscribe({
-        next: this.onNextBalance,
+        next: (value) => this.onNextBalance(value),
         error: () => this.goBack()
       })
     this.twa.backButtonOnClick(() => this.goBack())
