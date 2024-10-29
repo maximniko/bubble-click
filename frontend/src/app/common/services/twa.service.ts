@@ -7,6 +7,7 @@ export class TwaService {
 
   constructor() {
     this.initTheme()
+    this.ready()
   }
 
   getInitData(): string {

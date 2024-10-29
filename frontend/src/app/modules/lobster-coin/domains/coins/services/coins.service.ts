@@ -66,7 +66,10 @@ export class CoinsService implements CoinsInterface {
           if (!onComplete) {
             return
           }
-          onComplete(new Observable(subscriber => subscriber.next()))
+          onComplete(new Observable(subscriber => {
+            subscriber.next()
+            subscriber.complete()
+          }))
           console.log('balance loaded');
         },
       })
