@@ -14,7 +14,9 @@ import {CoinsService} from '../../../domains/coins/services/coins.service';
   template: `
     <form [formGroup]="form">
       <div class="mx-2 my-4">
-        <sum-input [parentForm]="form" [max]="maxSum"></sum-input>
+        @if(coinsService.balanceSubject | async; as max) {
+          <sum-input [parentForm]="form" [max]="max"></sum-input>
+        }
       </div>
     </form>
   `,
@@ -30,7 +32,7 @@ export class TransferComponent extends ReactiveForm implements OnInit, OnDestroy
     private location: Location,
     private twa: TwaService,
     private bankService: BankService,
-    private coinsService: CoinsService,
+    protected coinsService: CoinsService,
   ) {
     super()
     this.maxSum = this.coinsService.balance
