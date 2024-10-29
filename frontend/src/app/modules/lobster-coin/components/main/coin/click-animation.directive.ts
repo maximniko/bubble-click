@@ -24,8 +24,8 @@ export class ClickAnimationDirective implements OnInit {
     // Генерируем случайные значения для движения и вращения
     const randomX1 = Math.random() * 50 - 25; // Смещение по X от -25 до 25
     const randomY1 = Math.random() * 50; // Смещение по Y от 0 до 50
-    const randomX2 = Math.random() * 75 - 25;
-    const randomY2 = Math.random() * 75;
+    const randomX2 = Math.random() * 25 - 25;
+    const randomY2 = Math.random() * 25;
     const rotation1 = Math.random() * 40 - 20; // Вращение от -20 до 20 градусов
     const rotation2 = Math.random() * 40 - 20;
 
