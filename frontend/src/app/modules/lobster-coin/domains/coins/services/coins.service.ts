@@ -23,6 +23,7 @@ export class CoinsService implements CoinsInterface {
   }
 
   get balance(): number {
+    this.message.next(`get balance return ${this._balance}`)
     return this._balance
   }
 
@@ -51,14 +52,20 @@ export class CoinsService implements CoinsInterface {
   }
 
   loadBalance(onComplete?: (observable: Observable<void>) => void) {
+    const now = Date.now()
+    this.message.next('start loadBalance at ' + now)
     this.cloudStorage.getItem(STORAGE_KEY_BALANCE)
       .subscribe({
         next: (x) => {
           if (x) {
+            this.message.next('loadBalance.x ' + String(Date.now() - now))
             this.saveBalance(+x)
+          } else {
+            this.message.next('loadBalance.x empty ' + String(Date.now() - now))
           }
         },
         error: (err) => {
+          this.message.next('loadBalance.error ' + err)
           if (err) {
             throw new Error(err)
           }
