@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {BehaviorSubject, debounceTime, Observable, scan, startWith, Subject, switchMap, tap} from 'rxjs';
+import {debounceTime, Observable, scan, startWith, Subject, switchMap, tap} from 'rxjs';
 import {STORAGE_KEY_BALANCE, TwaService} from '../../../../../common/services/twa.service';
 import {CoinsInterface} from './coins.interface';
 import {CloudStorage} from '../../../../../common/services/cloud-storage';
@@ -9,9 +9,10 @@ import {fromSubscribable} from 'rxjs/internal/observable/fromSubscribable';
 export class CoinsService implements CoinsInterface {
   private clickSubject = new Subject<void>();
   private trigger$ = new Subject<void>();
+  message = new Subject<string>();
   balanceSubject = new Subject<number>();
-  private _balance: number = 0;
   perClick: number = 1;
+  private _balance: number = 0;
 
   constructor(
     private cloudStorage: CloudStorage,
@@ -76,14 +77,18 @@ export class CoinsService implements CoinsInterface {
   }
 
   saveBalance(balance: number, onComplete?: (observable: Observable<void>) => void) {
+    const now = Date.now()
+    this.message.next('start saveBalance ' + now)
     this.cloudStorage.setItem(STORAGE_KEY_BALANCE, String(balance))
       .subscribe({
         next: (x) => {
           if (x) {
+            this.message.next('start saveBalance.next.x ' + String(Date.now() - now))
             this.balance = balance
           }
         },
         error: (err) => {
+          this.message.next('start saveBalance.error ' + err)
           if (err) {
             this.twa.showAlert(err.toString())
           }

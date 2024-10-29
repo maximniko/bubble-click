@@ -32,6 +32,9 @@
       <li class="nav-item text-center">
         <a class="nav-link" (click)="offcanvas.dismiss('Cross click')" routerLink="{{routeCreator.bank()}}">wallet</a>
       </li>
+      @for(message of messages; track message) {
+        <li class="nav-item text-center">{{ message }}</li>
+      }
     </ul>
   </div>
 </ng-template>

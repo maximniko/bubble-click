@@ -7,6 +7,7 @@ import {fromSubscribable} from 'rxjs/internal/observable/fromSubscribable';
 export class CoinsDevService implements CoinsInterface {
   private clickSubject = new Subject<void>();
   private trigger$ = new Subject<void>();
+  message = new Subject<string>();
   balanceSubject = new Subject<number>();
   _balance: number = 0;
   perClick: number = 1;
