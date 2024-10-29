@@ -47,7 +47,6 @@ export class CoinsDevService implements CoinsInterface {
 
   private saveBalance(balance: number) {
     this.balance = balance
-    this.balanceSubject.next(balance)
     console.log(`Сохранен баланс ${balance}`);
   }
 

@@ -55,7 +55,6 @@ export class TransferComponent extends ReactiveForm implements OnInit, OnDestroy
   ngOnDestroy(): void {
     this.formSubscription?.unsubscribe()
     this.coinsSubscription?.unsubscribe()
-    this.twa.mainButtonIsActive(true)
     this.twa.offBackButton(() => this.goBack())
     this.twa.offMainButton(() => this.transfer())
   }
@@ -63,6 +62,7 @@ export class TransferComponent extends ReactiveForm implements OnInit, OnDestroy
   private onNextBalance(balance: number) {
     if (balance !== this.maxSum) { // if balance updated or changed from another device
       this.goBack()
+      return
     }
 
     if (this.form.invalid) {
@@ -90,7 +90,6 @@ export class TransferComponent extends ReactiveForm implements OnInit, OnDestroy
       this.twa.showAlert((<Error>e).message)
       this.bankService.saveBalance(bank)
       this.coinsService.saveBalance(balance)
-      this.goBack()
     }
   }
 

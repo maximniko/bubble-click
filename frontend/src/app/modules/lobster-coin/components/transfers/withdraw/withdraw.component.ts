@@ -14,7 +14,7 @@ import {CoinsService} from '../../../domains/coins/services/coins.service';
   template: `
     <form [formGroup]="form">
       <div class="mx-2 my-4">
-        @if (bankService.balanceSubject| async; as max) {
+        @if (bankService.balanceSubject | async; as max) {
           <sum-input [parentForm]="form" [max]="max"></sum-input>
         }
       </div>
@@ -56,7 +56,6 @@ export class WithdrawComponent extends ReactiveForm implements OnInit, OnDestroy
   ngOnDestroy(): void {
     this.formSubscription?.unsubscribe()
     this.balanceSubscription?.unsubscribe()
-    this.twa.mainButtonIsActive(true)
     this.twa.offBackButton(() => this.goBack())
     this.twa.offMainButton(() => this.withdraw())
   }
@@ -93,7 +92,6 @@ export class WithdrawComponent extends ReactiveForm implements OnInit, OnDestroy
       this.twa.showAlert((<Error>e).message)
       this.coinsService.saveBalance(coins)
       this.bankService.saveBalance(balance)
-      this.goBack()
     }
   }
 

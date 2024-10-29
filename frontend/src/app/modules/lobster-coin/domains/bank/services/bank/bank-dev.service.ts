@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {BankInterface} from './bank.interface';
-import {BehaviorSubject, Observable, Subject} from 'rxjs';
+import {BehaviorSubject, Observable} from 'rxjs';
 
 @Injectable({providedIn: 'root'})
 export class BankDevService implements BankInterface {
@@ -18,7 +18,7 @@ export class BankDevService implements BankInterface {
 
   private saveBalance(balance: number) {
     this.balance = balance
-    console.log(`Сохранен баланс ${balance}`);
+    console.log(`Сохранен баланс банка ${balance}`);
   }
 
   loadBalance(onComplete?: (observable: Observable<void>) => void) {
