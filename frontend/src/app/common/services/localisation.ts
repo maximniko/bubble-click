@@ -9,7 +9,7 @@ export class Localisation {
   }
 
   load(): Promise<boolean> {
-    const locale = this.twa.getUserLanguageCode()
+    const locale = this.twa.getUserLanguageCode() ?? 'en'
 
     return fetch(`assets/messages/${locale}.json`)
       .then(res => res.json())
@@ -52,6 +52,8 @@ export type Key = "Transactions"
   | "requiredErr"
   | "minlengthErr"
   | "maxlengthErr"
+  | "minErr"
+  | "maxErr"
   | "emailErr"
   | "patternErr"
   | "invalidPhoneErr"

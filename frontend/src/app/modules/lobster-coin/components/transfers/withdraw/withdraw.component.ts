@@ -14,11 +14,10 @@ import {CoinsService} from '../../../domains/coins/services/coins.service';
   template: `
     <form [formGroup]="form">
       <div class="mx-2 my-4">
+        <h5 class="h5">Withdraw (max: {{ this.bankService.balanceSubject | async }})</h5>
         <sum-input [parentForm]="form" [max]="maxSum"></sum-input>
       </div>
-      <button (click)="bankService.loadBalance()">Send</button>
     </form>
-    <button (click)="goBack()">back</button>
   `,
 })
 export class WithdrawComponent extends ReactiveForm implements OnInit, OnDestroy {
@@ -65,6 +64,7 @@ export class WithdrawComponent extends ReactiveForm implements OnInit, OnDestroy
   private onNextBalance(balance: number) {
     if (balance !== this.maxSum) { // if balance updated or changed from another device
       this.goBack()
+      return
     }
 
     if (this.form.invalid) {
@@ -86,10 +86,11 @@ export class WithdrawComponent extends ReactiveForm implements OnInit, OnDestroy
     try {
       this.coinsService.saveBalance(coins + form.sum)
       this.bankService.saveBalance(balance - form.sum)
+      this.form.reset()
     } catch (e) {
-      this.twa.showAlert((<Error>e).message)
       this.coinsService.saveBalance(coins)
       this.bankService.saveBalance(balance)
+      this.twa.showAlert((<Error>e).message)
     }
   }
 

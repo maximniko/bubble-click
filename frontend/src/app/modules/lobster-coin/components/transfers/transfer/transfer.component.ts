@@ -14,6 +14,7 @@ import {CoinsService} from '../../../domains/coins/services/coins.service';
   template: `
     <form [formGroup]="form">
       <div class="mx-2 my-4">
+        <h5 class="h5">Transfer (max: {{ this.coinsService.balanceSubject | async }})</h5>
         <sum-input [parentForm]="form" [max]="maxSum"></sum-input>
       </div>
       <button (click)="coinsService.loadBalance()">Send</button>
@@ -84,10 +85,11 @@ export class TransferComponent extends ReactiveForm implements OnInit, OnDestroy
     try {
       this.bankService.saveBalance(bank + form.sum)
       this.coinsService.saveBalance(balance - form.sum)
+      this.form.reset()
     } catch (e) {
-      this.twa.showAlert((<Error>e).message)
       this.bankService.saveBalance(bank)
       this.coinsService.saveBalance(balance)
+      this.twa.showAlert((<Error>e).message)
     }
   }
 

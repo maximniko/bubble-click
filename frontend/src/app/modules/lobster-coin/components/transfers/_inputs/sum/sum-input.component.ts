@@ -36,7 +36,7 @@ export class SumInputComponent extends ReactiveForm implements OnInit {
   }
 
   ngOnInit() {
-    this.parentForm.addControl('sum', this.formBuilder.control(0, [
+    this.parentForm.addControl('sum', this.formBuilder.control('', [
       Validators.required,
       Validators.min(1),
       Validators.max(this.max),

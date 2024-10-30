@@ -4,8 +4,8 @@ import {BehaviorSubject, Observable} from 'rxjs';
 
 @Injectable({providedIn: 'root'})
 export class BankDevService implements BankInterface {
-  balanceSubject = new BehaviorSubject<number>(0);
-  private _balance: number = 0;
+  balanceSubject = new BehaviorSubject<number>(10);
+  private _balance: number = 10;
 
   get balance(): number {
     return this._balance
@@ -22,6 +22,6 @@ export class BankDevService implements BankInterface {
   }
 
   loadBalance(onComplete?: (observable: Observable<void>) => void) {
-    this.balance = 0
+    this.balance = 10
   }
 }
