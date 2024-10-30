@@ -1,4 +1,4 @@
-import {CommonModule, Location} from '@angular/common';
+import {CommonModule} from '@angular/common';
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormControlStatus, FormGroup, FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {SumInputComponent} from '../_inputs/sum/sum-input.component';
@@ -7,17 +7,19 @@ import {Subscription} from 'rxjs';
 import {TwaService} from '../../../../../common/services/twa.service';
 import {BankService} from '../../../domains/bank/services/bank/bank.service';
 import {CoinsService} from '../../../domains/coins/services/coins.service';
+import {routeCreator} from '../../../lobster-coin.routes';
+import {Router} from '@angular/router';
 
 @Component({
   standalone: true,
   imports: [CommonModule, FormsModule, SumInputComponent, ReactiveFormsModule],
   template: `
-    <form [formGroup]="form">
-      <div class="mx-2 my-4">
-        <h5 class="h5">Withdraw (max: {{ this.bankService.balanceSubject | async }})</h5>
+    <div class="mx-2 my-4">
+      <h5 class="h5">Withdraw (max: {{ this.bankService.balanceSubject | async }})</h5>
+      <form [formGroup]="form">
         <sum-input [parentForm]="form" [max]="maxSum"></sum-input>
-      </div>
-    </form>
+      </form>
+    </div>
   `,
 })
 export class WithdrawComponent extends ReactiveForm implements OnInit, OnDestroy {
@@ -28,7 +30,7 @@ export class WithdrawComponent extends ReactiveForm implements OnInit, OnDestroy
 
   constructor(
     private formBuilder: FormBuilder,
-    private location: Location,
+    private router: Router,
     private twa: TwaService,
     protected bankService: BankService,
     protected coinsService: CoinsService,
@@ -95,6 +97,6 @@ export class WithdrawComponent extends ReactiveForm implements OnInit, OnDestroy
   }
 
   goBack() {
-    this.location.back()
+    this.router.navigate([routeCreator.bank()])
   }
 }

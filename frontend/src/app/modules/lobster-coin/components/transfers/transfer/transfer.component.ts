@@ -1,4 +1,4 @@
-import {CommonModule, Location} from '@angular/common';
+import {CommonModule} from '@angular/common';
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormControlStatus, FormGroup, FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {SumInputComponent} from '../_inputs/sum/sum-input.component';
@@ -7,18 +7,20 @@ import {Subscription} from 'rxjs';
 import {TwaService} from '../../../../../common/services/twa.service';
 import {BankService} from '../../../domains/bank/services/bank/bank.service';
 import {CoinsService} from '../../../domains/coins/services/coins.service';
+import {Router} from '@angular/router';
+import {routeCreator} from '../../../lobster-coin.routes';
 
 @Component({
   standalone: true,
   imports: [CommonModule, FormsModule, SumInputComponent, ReactiveFormsModule],
   template: `
-    <form [formGroup]="form">
-      <div class="mx-2 my-4">
-        <h5 class="h5">Transfer (max: {{ this.coinsService.balanceSubject | async }})</h5>
+    <div class="mx-2 my-4">
+      <h5 class="h5">Transfer (max: {{ this.coinsService.balanceSubject | async }})</h5>
+      <form [formGroup]="form">
         <sum-input [parentForm]="form" [max]="maxSum"></sum-input>
-      </div>
-      <button (click)="coinsService.loadBalance()">Send</button>
-    </form>
+        <button (click)="coinsService.loadBalance()">Send</button>
+      </form>
+    </div>
   `,
 })
 export class TransferComponent extends ReactiveForm implements OnInit, OnDestroy {
@@ -29,7 +31,7 @@ export class TransferComponent extends ReactiveForm implements OnInit, OnDestroy
 
   constructor(
     private formBuilder: FormBuilder,
-    private location: Location,
+    private router: Router,
     private twa: TwaService,
     private bankService: BankService,
     protected coinsService: CoinsService,
@@ -97,6 +99,6 @@ export class TransferComponent extends ReactiveForm implements OnInit, OnDestroy
   }
 
   goBack() {
-    this.location.back()
+    this.router.navigate([routeCreator.bank()])
   }
 }

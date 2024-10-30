@@ -22,7 +22,7 @@ import {
           }">
       <label for="form-sum">Coins</label>
       <div class="invalid-feedback" *ngIf="isInvalidSum">
-        {{ validationErrors(sumErrors, 'Sum') }}
+        {{ validationErrors(sumErrors, 'Coins') }}
       </div>
     </div>`,
   viewProviders: [{provide: ControlContainer, useExisting: FormGroupDirective}]

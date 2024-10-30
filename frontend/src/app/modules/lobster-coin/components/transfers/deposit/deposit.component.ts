@@ -1,10 +1,10 @@
-import {CommonModule, Location} from '@angular/common';
-import {Component, OnInit} from '@angular/core';
-import {Deposit, planToLabel} from '../../../domains/bank/interfaces/deposit.interface';
+import {CommonModule} from '@angular/common';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {planToLabel} from '../../../domains/bank/interfaces/deposit.interface';
 import {DepositService} from '../../../domains/bank/services/deposit/deposit.service';
 import {toLocalDate} from '../../../../../common/extensions/Date';
 import {TwaService} from '../../../../../common/services/twa.service';
-import {RouterLink} from '@angular/router';
+import {Router, RouterLink} from '@angular/router';
 import {routeCreator} from '../../../lobster-coin.routes';
 import {symbols} from '../../../../../common/components/symbols/symbols';
 
@@ -12,43 +12,56 @@ import {symbols} from '../../../../../common/components/symbols/symbols';
   standalone: true,
   imports: [CommonModule, RouterLink],
   template: `
-    <a class="btn btn-outline-primary" [routerLink]="routeCreator.bankDepositAdd()">add</a>
-    @if (deposits.length > 0) {
-      <ul class="list-group">
-        @for (deposit of deposits; track deposits) {
-          <li class="list-group-item d-flex justify-content-between align-items-center">
-            <p>C {{ toLocalDate(deposit.fromDate, twa.getUserLanguageCode() ?? 'en') }} ({{ planToLabel(deposit.plan) }})</p>
-            <span class="badge">
+    <div class="m-2">
+      <h5 class="h5">Deposits</h5>
+    </div>
+    <div class="mb-2">
+      @if (depositService.depositsSubject| async; as deposits) {
+        <ul class="list-group">
+          @for (deposit of deposits; track deposits) {
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+              <p>C {{ toLocalDate(deposit.fromDate, twa.getUserLanguageCode() ?? 'en') }} ({{ planToLabel(deposit.plan) }})</p>
+              <span class="badge">
               <svg class="bi">
                 <use [attr.xlink:href]="'#' + symbols.clockHistory"/>
               </svg>
             </span>
-          </li>
-        }
-      </ul>
-    }
-    <button (click)="goBack()">back</button>
+            </li>
+          }
+        </ul>
+      } @else {
+        <p>No deposits yet.</p>
+      }
+    </div>
   `,
 })
-export class DepositComponent implements OnInit {
-  deposits: Deposit[] = []
-
+export class DepositComponent implements OnInit, OnDestroy {
   constructor(
-    private location: Location,
-    private depositService: DepositService,
+    private router: Router,
+    protected depositService: DepositService,
     protected twa: TwaService,
   ) {
   }
 
   ngOnInit() {
-    this.deposits = this.depositService.deposits
+    this.twa.setMainButton({text: 'Add Deposit', is_active: true, is_visible: true}, () => this.add())
+    this.twa.backButtonOnClick(() => this.goBack())
+  }
+
+  ngOnDestroy() {
+    this.twa.offBackButton(() => this.goBack())
+    this.twa.offMainButton(() => this.add())
   }
 
   goBack() {
-    this.location.back()
+    this.router.navigate([routeCreator.bank()])
   }
+
+  add() {
+    this.router.navigate([routeCreator.bankDepositAdd()])
+  }
+
   protected readonly toLocalDate = toLocalDate;
-  protected readonly routeCreator = routeCreator;
   protected readonly planToLabel = planToLabel;
   protected readonly symbols = symbols;
 }

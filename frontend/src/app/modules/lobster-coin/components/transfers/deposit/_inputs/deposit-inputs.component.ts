@@ -18,7 +18,23 @@ import {SumInputComponent} from '../../_inputs/sum/sum-input.component';
   selector: 'deposit-inputs',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, DateInputComponent, SumInputComponent],
-  templateUrl: './deposit-inputs.component.html',
+  template: `
+    <div class="form-floating mb-3">
+      <select type="text" class="form-select" id="form-plan" formControlName="plan" [ngClass]="{
+            'is-invalid': isInvalidPlan,
+            'is-valid': parentForm.valid,
+          }" [compareWith]="comparePlan">
+        @for (plan of planList; track plan.id) {
+          <option [ngValue]="plan">{{ planToLabel(plan) }}</option>
+        }
+      </select>
+      <label for="form-plan">{{ localisation.t.Plan ?? 'Plan' }}</label>
+      <div class="invalid-feedback" *ngIf="isInvalidPlan">
+        {{ validationErrors(planErrors, localisation.t.Plan ?? 'Plan') }}
+      </div>
+    </div>
+    <sum-input [parentForm]="parentForm" [max]="maxSum"></sum-input>
+  `,
   viewProviders: [{provide: ControlContainer, useExisting: FormGroupDirective}]
 })
 export class DepositInputsComponent extends ReactiveForm implements OnInit {
