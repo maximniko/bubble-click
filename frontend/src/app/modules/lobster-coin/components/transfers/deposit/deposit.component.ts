@@ -18,7 +18,7 @@ import {symbols} from '../../../../../common/components/symbols/symbols';
     <div class="mb-2">
       @if (depositService.depositsSubject| async; as deposits) {
         <ul class="list-group">
-          @for (deposit of deposits; track deposits) {
+          @for (deposit of deposits; track deposit) {
             <li class="list-group-item d-flex justify-content-between align-items-center">
               <p>C {{ toLocalDate(deposit.fromDate, twa.getUserLanguageCode() ?? 'en') }} ({{ planToLabel(deposit.plan) }})</p>
               <span class="badge">
