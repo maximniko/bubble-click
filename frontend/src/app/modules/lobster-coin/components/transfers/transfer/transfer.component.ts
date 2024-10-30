@@ -65,7 +65,6 @@ export class TransferComponent extends ReactiveForm implements OnInit, OnDestroy
     }
 
     if (this.form.invalid) {
-      this.twa.showAlert('Form invalid')
       return
     }
 

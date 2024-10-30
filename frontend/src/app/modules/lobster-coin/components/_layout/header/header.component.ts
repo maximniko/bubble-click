@@ -7,6 +7,7 @@ import {NgbOffcanvas} from "@ng-bootstrap/ng-bootstrap";
 import {Localisation} from "../../../../../common/services/localisation";
 import {CoinsService} from '../../../domains/coins/services/coins.service';
 import {Subscription} from 'rxjs';
+import {BankService} from '../../../domains/bank/services/bank/bank.service';
 
 @Component({
   selector: 'my-money-header',
@@ -24,6 +25,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   constructor(
     protected localisation: Localisation,
     protected coinsService: CoinsService,
+    protected bankService: BankService,
   ) {
   }
 
@@ -48,5 +50,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
     //   this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     // },
     // )
+  }
+
+  protected resetStorages() {
+    this.coinsService.saveBalance(0)
+    this.bankService.saveBalance(0)
   }
 }
