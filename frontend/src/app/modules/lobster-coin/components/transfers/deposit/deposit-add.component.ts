@@ -23,7 +23,6 @@ import {BankService} from '../../../domains/bank/services/bank/bank.service';
         <div class="mx-2 my-4">
           <form [formGroup]="form">
             <deposit-inputs [parentForm]="form"></deposit-inputs>
-            <button (click)="add()">Send</button>
           </form>
         </div>
       </div>
@@ -70,13 +69,13 @@ export class DepositAddComponent extends ReactiveForm implements OnInit, OnDestr
   }
 
   protected onNextBalance(deposits: Deposit[]) {
-    if (this.form.untouched) {
-      return
-    }
     if (deposits !== this.startDeposits) { // if updated or changed from another device
       this.goBack()
       return
     }
+
+    this.form.updateValueAndValidity()
+
     if (this.form.invalid) {
       return
     }
@@ -85,6 +84,10 @@ export class DepositAddComponent extends ReactiveForm implements OnInit, OnDestr
       formDeposit: Deposit = this.form.value,
       bank: number = this.bankService.balance
 
+    if (!formDeposit.plan || formDeposit.sum < 1) {
+      return
+    }
+
     newDeposits.push(formDeposit)
 
     try {
@@ -92,9 +95,9 @@ export class DepositAddComponent extends ReactiveForm implements OnInit, OnDestr
       this.bankService.saveBalance(bank - formDeposit.sum)
       this.form.reset()
     } catch (e) {
+      this.twa.showAlert((<Error>e).message)
       this.depositService.saveDeposits(deposits)
       this.bankService.saveBalance(bank)
-      this.twa.showAlert((<Error>e).message)
     }
   }
 

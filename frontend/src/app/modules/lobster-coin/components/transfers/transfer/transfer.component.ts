@@ -65,9 +65,6 @@ export class TransferComponent extends ReactiveForm implements OnInit, OnDestroy
   }
 
   private onNextBalance(balance: number) {
-    if (this.form.untouched) {
-      return
-    }
     if (balance !== this.maxSum) { // if balance updated or changed from another device
       this.goBack()
       return
@@ -94,9 +91,9 @@ export class TransferComponent extends ReactiveForm implements OnInit, OnDestroy
       this.coinsService.saveBalance(balance - form.sum)
       this.form.reset()
     } catch (e) {
+      this.twa.showAlert((<Error>e).message)
       this.bankService.saveBalance(bank)
       this.coinsService.saveBalance(balance)
-      this.twa.showAlert((<Error>e).message)
     }
   }
 
