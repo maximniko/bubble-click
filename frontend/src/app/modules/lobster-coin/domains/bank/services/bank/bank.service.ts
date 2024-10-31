@@ -2,11 +2,11 @@ import {Injectable} from '@angular/core';
 import {STORAGE_KEY_BANK, TwaService} from '../../../../../../common/services/twa.service';
 import {BankInterface} from './bank.interface';
 import {CloudStorage} from '../../../../../../common/services/cloud-storage';
-import {BehaviorSubject, Observable, Subject} from 'rxjs';
+import {Observable, Subject} from 'rxjs';
 
 @Injectable({providedIn: 'root'})
 export class BankService implements BankInterface {
-  balanceSubject = new BehaviorSubject<number>(0);
+  balanceSubject = new Subject<number>();
   private _balance: number = 0;
 
   constructor(

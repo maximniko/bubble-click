@@ -69,6 +69,7 @@ export class TransferComponent extends ReactiveForm implements OnInit, OnDestroy
       this.goBack()
       return
     }
+
     if (this.form.invalid) {
       return
     }

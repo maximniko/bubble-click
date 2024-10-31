@@ -19,27 +19,27 @@ export const routeCreator = {
 
 export const lobsterCoinRoutes: Routes = [
   {
-    path: `${ROUTE_PARTS.lobsterCoin}`,
+    path: ROUTE_PARTS.lobsterCoin,
     loadComponent: () => import('./lobster-coin.component').then(mod => mod.LobsterCoinComponent),
     children: [
       {
-        path: `${ROUTE_PARTS.main}`,
+        path: ROUTE_PARTS.main,
         loadComponent: () => import('./components/main/main.component').then(mod => mod.MainComponent)
       },
       {
-        path: `${ROUTE_PARTS.balance}`,
+        path: ROUTE_PARTS.balance,
         loadComponent: () => import('./components/balance/balance.component').then(mod => mod.BalanceComponent),
       },
       {
-        path: `${ROUTE_PARTS.withdraw}`,
+        path: ROUTE_PARTS.withdraw,
         loadComponent: () => import('./components/transfers/withdraw/withdraw.component').then(mod => mod.WithdrawComponent)
       },
       {
-        path: `${ROUTE_PARTS.transfer}`,
+        path: ROUTE_PARTS.transfer,
         loadComponent: () => import('./components/transfers/transfer/transfer.component').then(mod => mod.TransferComponent)
       },
       {
-        path: `${ROUTE_PARTS.deposit}`,
+        path: ROUTE_PARTS.deposit,
         loadComponent: () => import('./components/transfers/deposit/deposit.component').then(mod => mod.DepositComponent)
       },
       {

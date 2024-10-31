@@ -7,13 +7,13 @@ import {
 import {Deposit, DEPOSIT_PLANS, DepositPlan} from '../../interfaces/deposit.interface';
 import {toParamDate} from '../../../../../../common/extensions/Date';
 import {DepositInterface} from './deposit.interface';
-import {BehaviorSubject, Observable} from 'rxjs';
+import {Observable, Subject} from 'rxjs';
 import {CloudStorage} from '../../../../../../common/services/cloud-storage';
 import {jsonParse} from '../../../../../../common/extensions/String';
 
 @Injectable({providedIn: 'root'})
 export class DepositService implements DepositInterface {
-  depositsSubject = new BehaviorSubject<Deposit[]>([]);
+  depositsSubject = new Subject<Deposit[]>();
   private _deposits: Deposit[] = [];
 
   constructor(

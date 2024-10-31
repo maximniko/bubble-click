@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {BehaviorSubject, debounceTime, Observable, scan, startWith, Subject, switchMap, tap} from 'rxjs';
+import {debounceTime, Observable, scan, startWith, Subject, switchMap, tap} from 'rxjs';
 import {CoinsInterface} from './coins.interface';
 import {fromSubscribable} from 'rxjs/internal/observable/fromSubscribable';
 
@@ -7,7 +7,7 @@ import {fromSubscribable} from 'rxjs/internal/observable/fromSubscribable';
 export class CoinsDevService implements CoinsInterface {
   private clickSubject = new Subject<void>();
   private trigger$ = new Subject<void>();
-  balanceSubject = new BehaviorSubject<number>(0);
+  balanceSubject = new Subject<number>();
   _balance: number = 0;
   perClick: number = 1;
 

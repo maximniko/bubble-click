@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {BehaviorSubject, debounceTime, Observable, scan, startWith, Subject, switchMap, tap} from 'rxjs';
+import {debounceTime, Observable, scan, startWith, Subject, switchMap, tap} from 'rxjs';
 import {STORAGE_KEY_BALANCE, TwaService} from '../../../../../common/services/twa.service';
 import {CoinsInterface} from './coins.interface';
 import {CloudStorage} from '../../../../../common/services/cloud-storage';
@@ -9,7 +9,7 @@ import {fromSubscribable} from 'rxjs/internal/observable/fromSubscribable';
 export class CoinsService implements CoinsInterface {
   private clickSubject = new Subject<void>();
   private trigger$ = new Subject<void>();
-  balanceSubject = new BehaviorSubject<number>(0);
+  balanceSubject = new Subject<number>();
   perClick: number = 1;
   private _balance: number = 0;
 

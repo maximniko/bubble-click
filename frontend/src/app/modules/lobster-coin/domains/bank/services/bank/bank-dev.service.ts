@@ -1,10 +1,10 @@
 import {Injectable} from '@angular/core';
 import {BankInterface} from './bank.interface';
-import {BehaviorSubject, Observable} from 'rxjs';
+import {Observable, Subject} from 'rxjs';
 
 @Injectable({providedIn: 'root'})
 export class BankDevService implements BankInterface {
-  balanceSubject = new BehaviorSubject<number>(10);
+  balanceSubject = new Subject<number>();
   private _balance: number = 10;
 
   get balance(): number {
