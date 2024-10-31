@@ -9,15 +9,15 @@ import {
   ReactiveFormsModule,
   Validators
 } from '@angular/forms';
-import {DateInputComponent} from './date-input.component';
 import {DEPOSIT_PLANS, DepositPlan, planToLabel} from '../../../../domains/bank/interfaces/deposit.interface';
 import {CoinsService} from '../../../../domains/coins/services/coins.service';
 import {SumInputComponent} from '../../_inputs/sum/sum-input.component';
+import {BankService} from '../../../../domains/bank/services/bank/bank.service';
 
 @Component({
   selector: 'deposit-inputs',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, DateInputComponent, SumInputComponent],
+  imports: [CommonModule, ReactiveFormsModule, SumInputComponent],
   template: `
     <div class="form-floating mb-3">
       <select type="text" class="form-select" id="form-plan" formControlName="plan" [ngClass]="{
@@ -43,10 +43,10 @@ export class DepositInputsComponent extends ReactiveForm implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
-    private coinsService: CoinsService,
+    private bankService: BankService,
   ) {
     super();
-    this.maxSum = this.coinsService.balance
+    this.maxSum = this.bankService.balance
   }
 
   protected comparePlan(a?: DepositPlan, b?: DepositPlan): boolean {

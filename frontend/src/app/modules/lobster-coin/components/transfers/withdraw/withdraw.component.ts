@@ -14,12 +14,18 @@ import {Router} from '@angular/router';
   standalone: true,
   imports: [CommonModule, FormsModule, SumInputComponent, ReactiveFormsModule],
   template: `
-    <div class="mx-2 my-4">
-      <h5 class="h5">Withdraw (max: {{ this.bankService.balanceSubject | async }})</h5>
-      <form [formGroup]="form">
-        <sum-input [parentForm]="form" [max]="maxSum"></sum-input>
-      </form>
-    </div>
+    <section class="accent-border accent-border-top accent-bg-shadow card rounded-5 h-100">
+      <div class="hstack p-3 pb-0 color-accent">
+        <span class="m-auto text-center h5">Withdraw (amount: {{ this.bankService.balanceSubject | async }})</span>
+      </div>
+      <div class="d-flex flex-column h-100 mb-5">
+        <div class="mx-2 my-4">
+          <form [formGroup]="form">
+            <sum-input [parentForm]="form" [max]="maxSum"></sum-input>
+          </form>
+        </div>
+      </div>
+    </section>
   `,
 })
 export class WithdrawComponent extends ReactiveForm implements OnInit, OnDestroy {
@@ -64,11 +70,13 @@ export class WithdrawComponent extends ReactiveForm implements OnInit, OnDestroy
   }
 
   private onNextBalance(balance: number) {
+    if (this.form.untouched) {
+      return
+    }
     if (balance !== this.maxSum) { // if balance updated or changed from another device
       this.goBack()
       return
     }
-
     if (this.form.invalid) {
       return
     }
@@ -97,6 +105,6 @@ export class WithdrawComponent extends ReactiveForm implements OnInit, OnDestroy
   }
 
   goBack() {
-    this.router.navigate([routeCreator.bank()])
+    this.router.navigate([routeCreator.balance()])
   }
 }

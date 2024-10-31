@@ -7,21 +7,27 @@ import {Deposit} from '../../../domains/bank/interfaces/deposit.interface';
 import {TwaService} from '../../../../../common/services/twa.service';
 import {DepositInputsComponent} from './_inputs/deposit-inputs.component';
 import {Subscription} from 'rxjs';
-import {SumInputComponent} from '../_inputs/sum/sum-input.component';
 import {Router} from '@angular/router';
 import {routeCreator} from '../../../lobster-coin.routes';
 import {BankService} from '../../../domains/bank/services/bank/bank.service';
 
 @Component({
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, DepositInputsComponent, SumInputComponent],
+  imports: [CommonModule, ReactiveFormsModule, DepositInputsComponent],
   template: `
-    <div class="mx-2 my-4">
-      <h5 class="h5">New deposit:</h5>
-      <form [formGroup]="form">
-        <deposit-inputs [parentForm]="form"></deposit-inputs>
-      </form>
-    </div>
+    <section class="accent-border accent-border-top accent-bg-shadow card rounded-5 h-100">
+      <div class="hstack p-3 pb-0 color-accent">
+        <span class="m-auto text-center h5">New deposit (amount {{ bankService.balanceSubject | async }}):</span>
+      </div>
+      <div class="d-flex flex-column h-100 mb-5">
+        <div class="mx-2 my-4">
+          <form [formGroup]="form">
+            <deposit-inputs [parentForm]="form"></deposit-inputs>
+            <button (click)="add()">Send</button>
+          </form>
+        </div>
+      </div>
+    </section>
   `,
 })
 export class DepositAddComponent extends ReactiveForm implements OnInit, OnDestroy {
@@ -31,11 +37,11 @@ export class DepositAddComponent extends ReactiveForm implements OnInit, OnDestr
   protected startDeposits: Deposit[]
 
   constructor(
-    private router: Router,
+    protected bankService: BankService,
     private depositService: DepositService,
-    private bankService: BankService,
-    private formBuilder: FormBuilder,
     private twa: TwaService,
+    private router: Router,
+    private formBuilder: FormBuilder,
   ) {
     super()
     this.form = this.formBuilder.group({})
@@ -64,11 +70,13 @@ export class DepositAddComponent extends ReactiveForm implements OnInit, OnDestr
   }
 
   protected onNextBalance(deposits: Deposit[]) {
+    if (this.form.untouched) {
+      return
+    }
     if (deposits !== this.startDeposits) { // if updated or changed from another device
       this.goBack()
       return
     }
-
     if (this.form.invalid) {
       return
     }
@@ -91,6 +99,6 @@ export class DepositAddComponent extends ReactiveForm implements OnInit, OnDestr
   }
 
   private goBack() {
-    this.router.navigate([routeCreator.bankDeposit()])
+    this.router.navigate([routeCreator.deposit()])
   }
 }

@@ -7,6 +7,7 @@ import {CoinsService} from '../../../domains/coins/services/coins.service';
 import {BankService} from '../../../domains/bank/services/bank/bank.service';
 
 @Component({
+  selector: 'balance-main',
   standalone: true,
   imports: [CommonModule, RouterLink],
   styles: `
@@ -19,7 +20,7 @@ import {BankService} from '../../../domains/bank/services/bank/bank.service';
       <section class="tg-bg-secondary p-2 rounded-2 mb-3">
         <div class="row row-cols-2">
           <div class="col">
-            <a class="vstack jcc" [routerLink]="routeCreator.bankTransfer()">
+            <a class="vstack jcc" [routerLink]="routeCreator.transfer()">
               <div class="m-auto">
                 <svg class="bi" style="width: 2rem; height: 2rem">
                   <use [attr.xlink:href]="'#' + symbols.arrowUp"/>
@@ -29,7 +30,7 @@ import {BankService} from '../../../domains/bank/services/bank/bank.service';
             </a>
           </div>
           <div class="col">
-            <a class="vstack jcc" [routerLink]="routeCreator.bankWithdraw()">
+            <a class="vstack jcc" [routerLink]="routeCreator.withdraw()">
               <div class="m-auto">
                 <svg class="bi" style="width: 2rem; height: 2rem">
                   <use [attr.xlink:href]="'#' + symbols.arrowDown"/>
@@ -49,12 +50,13 @@ import {BankService} from '../../../domains/bank/services/bank/bank.service';
               <use [attr.xlink:href]="'#' + symbols.coin"/>
             </svg>
           </span>
-          <input class="form-control" type="text" value="{{ bankService.balanceSubject | async }}" aria-label="Wallet balance" disabled readonly>
+          <input class="form-control" type="text" value="{{ bankService.balanceSubject | async }}"
+                 aria-label="Wallet balance" disabled readonly>
         </div>
 
         <div class="jcc">
           @if (bankService.balanceSubject | async; as value) {
-            <a class="btn btn-lg" [routerLink]="routeCreator.bankDeposit()" [ngClass]="{
+            <a class="btn btn-lg" [routerLink]="routeCreator.deposit()" [ngClass]="{
               'btn-success': value > 0,
               'btn-warning disabled': value < 1,
               }">Deposit</a>

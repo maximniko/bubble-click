@@ -7,32 +7,38 @@ import {TwaService} from '../../../../../common/services/twa.service';
 import {Router, RouterLink} from '@angular/router';
 import {routeCreator} from '../../../lobster-coin.routes';
 import {symbols} from '../../../../../common/components/symbols/symbols';
+import {ReactiveFormsModule} from '@angular/forms';
+import {SumInputComponent} from '../_inputs/sum/sum-input.component';
 
 @Component({
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule],
   template: `
-    <div class="m-2">
-      <h5 class="h5">Deposits</h5>
-    </div>
-    <div class="mb-2">
-      @if (depositService.depositsSubject| async; as deposits) {
-        <ul class="list-group">
-          @for (deposit of deposits; track deposit) {
-            <li class="list-group-item d-flex justify-content-between align-items-center">
-              <p>C {{ toLocalDate(deposit.fromDate, twa.getUserLanguageCode() ?? 'en') }} ({{ planToLabel(deposit.plan) }})</p>
-              <span class="badge">
-              <svg class="bi">
-                <use [attr.xlink:href]="'#' + symbols.clockHistory"/>
-              </svg>
-            </span>
-            </li>
+    <section class="accent-border accent-border-top accent-bg-shadow card rounded-5 h-100">
+      <div class="hstack p-3 pb-0 color-accent">
+        <span class="m-auto text-center h5">Deposits</span>
+      </div>
+      <div class="d-flex flex-column h-100 mb-5">
+        <div class="mb-2">
+          @if (depositService.depositsSubject| async; as deposits) {
+            <ul class="list-group">
+              @for (deposit of deposits; track deposit) {
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                  <p>C {{ toLocalDate(deposit.fromDate, twa.getUserLanguageCode() ?? 'en') }} ({{ planToLabel(deposit.plan) }})</p>
+                  <span class="badge">
+                    <svg class="bi">
+                      <use [attr.xlink:href]="'#' + symbols.clockHistory"/>
+                    </svg>
+                  </span>
+                </li>
+              }
+            </ul>
+          } @else {
+            <p>No deposits yet.</p>
           }
-        </ul>
-      } @else {
-        <p>No deposits yet.</p>
-      }
-    </div>
+        </div>
+      </div>
+    </section>
   `,
 })
 export class DepositComponent implements OnInit, OnDestroy {
@@ -54,11 +60,11 @@ export class DepositComponent implements OnInit, OnDestroy {
   }
 
   goBack() {
-    this.router.navigate([routeCreator.bank()])
+    this.router.navigate([routeCreator.balance()])
   }
 
   add() {
-    this.router.navigate([routeCreator.bankDepositAdd()])
+    this.router.navigate([routeCreator.depositAdd()])
   }
 
   protected readonly toLocalDate = toLocalDate;

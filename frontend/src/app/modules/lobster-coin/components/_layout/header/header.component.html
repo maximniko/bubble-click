@@ -4,7 +4,7 @@
       <use [attr.xlink:href]="'#' + symbols.menu"/>
     </svg>
   </button>
-  <a class="navbar-toggler color-accent p-2 hstack accent-border accent-bg-shadow-bottom-left rounded-5" routerLink="{{routeCreator.bank()}}">
+  <a class="navbar-toggler color-accent p-2 hstack accent-border accent-bg-shadow-bottom-left rounded-5" routerLink="{{routeCreator.balance()}}">
     <div class="m-auto me-2">{{ coinsService.balanceSubject | async }}</div>
     <svg class="bi">
       <use [attr.xlink:href]="'#' + symbols.coin"/>
@@ -30,7 +30,7 @@
         </a>
       </li>
       <li class="nav-item text-center">
-        <a class="nav-link" (click)="offcanvas.dismiss('Cross click')" routerLink="{{routeCreator.bank()}}">wallet</a>
+        <a class="nav-link" (click)="offcanvas.dismiss('Cross click')" routerLink="{{routeCreator.balance()}}">wallet</a>
       </li>
     </ul>
   </div>
