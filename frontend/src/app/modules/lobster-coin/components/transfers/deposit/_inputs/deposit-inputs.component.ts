@@ -10,7 +10,6 @@ import {
   Validators
 } from '@angular/forms';
 import {DEPOSIT_PLANS, DepositPlan, planToLabel} from '../../../../domains/bank/interfaces/deposit.interface';
-import {CoinsService} from '../../../../domains/coins/services/coins.service';
 import {SumInputComponent} from '../../_inputs/sum/sum-input.component';
 import {BankService} from '../../../../domains/bank/services/bank/bank.service';
 
