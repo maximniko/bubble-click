@@ -1,6 +1,7 @@
 import {Injectable} from '@angular/core';
 import WebApp from "@twa-dev/sdk";
 import {CloudStorage, PopupParams, SecondaryButton} from "@twa-dev/types";
+import {environment} from '../../../environments/environment';
 
 @Injectable({providedIn: 'root'})
 export class TwaService {
@@ -56,7 +57,11 @@ export class TwaService {
   }
 
   showAlert(message: string, callback?: () => unknown) {
-    WebApp.showAlert(message, callback)
+    if (environment.production) {
+      WebApp.showAlert(message, callback)
+    } else {
+      console.log(message)
+    }
   }
 
   showPopup(params: PopupParams, callback?: (id?: string) => unknown) {
