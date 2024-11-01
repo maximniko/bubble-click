@@ -73,7 +73,7 @@ export class DepositAddComponent extends ReactiveForm implements OnInit, OnDestr
   }
 
   protected onNextBalance(deposits: Deposit[]) {
-    if (deposits !== this.startDeposits) { // if updated or changed from another device
+    if (this.startDeposits.length && deposits !== this.startDeposits) { // if updated or changed from another device
       this.twa.showAlert(`income count ${deposits.length} != start length ${this.startDeposits.length}`)
       this.goBack()
       return
@@ -82,7 +82,6 @@ export class DepositAddComponent extends ReactiveForm implements OnInit, OnDestr
     this.form.updateValueAndValidity()
 
     if (this.form.invalid) {
-      this.twa.showAlert('Please, fill in the data.')
       return
     }
 
@@ -90,8 +89,8 @@ export class DepositAddComponent extends ReactiveForm implements OnInit, OnDestr
       formDeposit: Deposit = this.form.value,
       bank: number = this.bankService.balance
 
-    if (!formDeposit.plan || formDeposit.sum < 1) {
-      this.twa.showAlert('Bad data.')
+    if (!formDeposit.plan || !formDeposit.fromDate || formDeposit.sum < 1) {
+      this.twa.showAlert('Invalid data')
       return
     }
 
