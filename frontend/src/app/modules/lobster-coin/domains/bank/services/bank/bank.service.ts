@@ -2,11 +2,11 @@ import {Injectable} from '@angular/core';
 import {STORAGE_KEY_BANK, TwaService} from '../../../../../../common/services/twa.service';
 import {BankInterface} from './bank.interface';
 import {CloudStorage} from '../../../../../../common/services/cloud-storage';
-import {Observable, Subject} from 'rxjs';
+import {BehaviorSubject, Observable} from 'rxjs';
 
 @Injectable({providedIn: 'root'})
 export class BankService implements BankInterface {
-  balanceSubject = new Subject<number>();
+  balanceSubject = new BehaviorSubject<number>(0);
   private _balance: number = 0;
 
   constructor(
@@ -20,7 +20,7 @@ export class BankService implements BankInterface {
     return this._balance
   }
 
-  private set balance(balance: number) {
+  protected set balance(balance: number) {
     this._balance = balance
     this.balanceSubject.next(balance)
   }
@@ -54,7 +54,7 @@ export class BankService implements BankInterface {
       })
   }
 
-  saveBalance(balance: number, onComplete?: (observable: Observable<void>) => void) {
+  saveBalance(balance: number, onComplete?: (observable: Observable<void>) => void): void {
     if (isNaN(balance) || balance < 0) {
       throw new Error('Wrong bank data')
     }

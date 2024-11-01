@@ -25,7 +25,7 @@ export class CoinsService implements CoinsInterface {
     return this._balance
   }
 
-  private set balance(balance: number) {
+  protected set balance(balance: number) {
     this._balance = balance
     this.balanceSubject.next(balance)
   }
@@ -49,7 +49,7 @@ export class CoinsService implements CoinsInterface {
     this.clickSubject.next();
   }
 
-  loadBalance(onComplete?: (observable: Observable<void>) => void) {
+  loadBalance(onComplete?: (observable: Observable<void>) => void): void {
     this.cloudStorage.getItem(STORAGE_KEY_BALANCE)
       .subscribe({
         next: (x) => {
@@ -77,7 +77,7 @@ export class CoinsService implements CoinsInterface {
       })
   }
 
-  saveBalance(balance: number, onComplete?: (observable: Observable<void>) => void) {
+  saveBalance(balance: number, onComplete?: (observable: Observable<void>) => void): void {
     if (isNaN(balance) || balance < 0) {
       throw new Error('Wrong coins data')
     }

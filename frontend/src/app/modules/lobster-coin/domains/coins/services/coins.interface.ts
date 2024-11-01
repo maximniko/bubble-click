@@ -1,5 +1,8 @@
+import {Observable} from 'rxjs';
+
 export interface CoinsInterface {
-  get balance(): number
-  set balance(balance: number)
+  balance: number
   onClick(): void
+  loadBalance(onComplete?: (observable: Observable<void>) => void): void
+  saveBalance(balance: number, onComplete?: (observable: Observable<void>) => void): void
 }

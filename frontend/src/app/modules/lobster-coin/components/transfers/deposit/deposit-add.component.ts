@@ -24,6 +24,7 @@ import {BankService} from '../../../domains/bank/services/bank/bank.service';
           <form [formGroup]="form">
             <deposit-inputs [parentForm]="form"></deposit-inputs>
           </form>
+<!--          <button (click)="add()">add</button>-->
         </div>
       </div>
     </section>
@@ -52,7 +53,10 @@ export class DepositAddComponent extends ReactiveForm implements OnInit, OnDestr
       .subscribe((status: FormControlStatus) => this.twa.mainButtonIsActive(status == "VALID"))
     this.depositsSubscription = this.depositService.depositsSubject.subscribe({
       next: (value) => this.onNextBalance(value),
-      error: () => this.goBack(),
+      error: (err) => {
+        this.twa.showAlert(err.toString())
+        this.goBack()
+      },
     })
     this.twa.setMainButton({text: 'Add', is_active: true, is_visible: true}, () => this.add())
     this.twa.backButtonOnClick(() => this.goBack())
@@ -70,6 +74,7 @@ export class DepositAddComponent extends ReactiveForm implements OnInit, OnDestr
 
   protected onNextBalance(deposits: Deposit[]) {
     if (deposits !== this.startDeposits) { // if updated or changed from another device
+      this.twa.showAlert(`income count ${deposits.length} != start length ${this.startDeposits.length}`)
       this.goBack()
       return
     }
@@ -77,6 +82,7 @@ export class DepositAddComponent extends ReactiveForm implements OnInit, OnDestr
     this.form.updateValueAndValidity()
 
     if (this.form.invalid) {
+      this.twa.showAlert('Please, fill in the data.')
       return
     }
 
@@ -85,6 +91,7 @@ export class DepositAddComponent extends ReactiveForm implements OnInit, OnDestr
       bank: number = this.bankService.balance
 
     if (!formDeposit.plan || formDeposit.sum < 1) {
+      this.twa.showAlert('Bad data.')
       return
     }
 

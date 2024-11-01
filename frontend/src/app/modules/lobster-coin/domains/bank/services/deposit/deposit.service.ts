@@ -7,13 +7,13 @@ import {
 import {Deposit, DEPOSIT_PLANS, DepositPlan} from '../../interfaces/deposit.interface';
 import {toParamDate} from '../../../../../../common/extensions/Date';
 import {DepositInterface} from './deposit.interface';
-import {Observable, Subject} from 'rxjs';
+import {BehaviorSubject, Observable} from 'rxjs';
 import {CloudStorage} from '../../../../../../common/services/cloud-storage';
 import {jsonParse} from '../../../../../../common/extensions/String';
 
 @Injectable({providedIn: 'root'})
 export class DepositService implements DepositInterface {
-  depositsSubject = new Subject<Deposit[]>();
+  depositsSubject = new BehaviorSubject<Deposit[]>([]);
   private _deposits: Deposit[] = [];
 
   constructor(
@@ -81,7 +81,7 @@ export class DepositService implements DepositInterface {
     })
   }
 
-  loadDeposits(onComplete?: (observable: Observable<void>) => void) {
+  loadDeposits(onComplete?: () => void) {
     this.cloudStorage.getItem(STORAGE_KEY_BANK_DEPOSIT).subscribe({
       next: (x) => {
         if (x) {
@@ -96,10 +96,7 @@ export class DepositService implements DepositInterface {
         }
       },
       complete: () => {
-        if (!onComplete) {
-          return
-        }
-        onComplete(new Observable(subscriber => subscriber.next()))
+        onComplete?.()
       }
     })
   }
