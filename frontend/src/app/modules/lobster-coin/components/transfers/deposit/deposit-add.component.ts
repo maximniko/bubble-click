@@ -29,6 +29,7 @@ import {BankService} from '../../../domains/bank/services/bank/bank.service';
       </div>
     </section>
   `,
+  host: {class: 'd-flex flex-column h-100'},
 })
 export class DepositAddComponent extends ReactiveForm implements OnInit, OnDestroy {
   protected form: FormGroup
@@ -106,7 +107,7 @@ export class DepositAddComponent extends ReactiveForm implements OnInit, OnDestr
     }
   }
 
-  private goBack() {
+  goBack() {
     this.router.navigate([routeCreator.deposit()])
   }
 }

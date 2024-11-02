@@ -27,6 +27,7 @@ import {Router} from '@angular/router';
       </div>
     </section>
   `,
+  host: {class: 'd-flex flex-column h-100'},
 })
 export class WithdrawComponent extends ReactiveForm implements OnInit, OnDestroy {
   protected form: FormGroup

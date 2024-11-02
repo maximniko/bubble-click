@@ -107,6 +107,7 @@ export class TwaService {
 
   ready(): void {
     WebApp.ready()
+    WebApp.disableVerticalSwipes()
   }
 
   initTheme(): void {

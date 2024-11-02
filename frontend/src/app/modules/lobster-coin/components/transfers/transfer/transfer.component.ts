@@ -26,6 +26,7 @@ import {routeCreator} from '../../../lobster-coin.routes';
         </div>
       </div>
     </section>`,
+  host: {class: 'd-flex flex-column h-100'},
 })
 export class TransferComponent extends ReactiveForm implements OnInit, OnDestroy {
   protected form: FormGroup

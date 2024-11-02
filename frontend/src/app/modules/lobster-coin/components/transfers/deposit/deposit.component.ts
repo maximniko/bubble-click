@@ -72,6 +72,7 @@ import {CoinsService} from '../../../domains/coins/services/coins.service';
       </div>
     </section>
   `,
+  host: {class: 'd-flex flex-column h-100'},
 })
 export class DepositComponent implements OnInit, OnDestroy {
   constructor(
