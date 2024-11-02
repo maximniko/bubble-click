@@ -75,7 +75,6 @@ export class DepositAddComponent extends ReactiveForm implements OnInit, OnDestr
 
   protected onNextBalance(deposits: Deposit[]) {
     if (this.startDeposits.length && deposits !== this.startDeposits) { // if updated or changed from another device
-      this.twa.showAlert(`income count ${deposits.length} != start length ${this.startDeposits.length}`)
       this.goBack()
       return
     }
