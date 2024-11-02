@@ -59,3 +59,7 @@ export function depositToBonus(deposit: Deposit): number {
 
   return Math.ceil(coefficient * profit)
 }
+
+export function depositToDate(deposit: Deposit): Date {
+  return new Date(deposit.fromDate.getTime() + (deposit.plan.days * 24 * 3600 * 1000))
+}

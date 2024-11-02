@@ -90,7 +90,6 @@ export class DepositAddComponent extends ReactiveForm implements OnInit, OnDestr
       bank: number = this.bankService.balance
 
     if (!formDeposit.plan || !formDeposit.fromDate || formDeposit.sum < 1) {
-      this.twa.showAlert('Invalid data')
       return
     }
 
