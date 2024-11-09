@@ -21,7 +21,7 @@ import {TwaService} from '../../../../../common/services/twa.service';
       <section class="tg-bg-secondary p-2 rounded-2">
         <article class="in-bank mb-3">
           <h5 class="h5 color-subtitle jcb">
-            <span class="my-auto mx-0">In Bank:</span>
+            <span class="my-auto mx-0">In Bank</span>
             <span class="p-2" (click)="bankInfo()">
               <svg class="bi">
                 <use [attr.xlink:href]="'#' + symbols.infoCircle"/>
@@ -62,7 +62,7 @@ import {TwaService} from '../../../../../common/services/twa.service';
         <hr>
         <article class="deposit">
           <h5 class="h5 color-subtitle jcb">
-            <span class="my-auto mx-0">Deposit:</span>
+            <span class="my-auto mx-0">Deposit</span>
             <span class="p-2" (click)="depositInfo()">
               <svg class="bi">
                 <use [attr.xlink:href]="'#' + symbols.infoCircle"/>
@@ -70,14 +70,7 @@ import {TwaService} from '../../../../../common/services/twa.service';
             </span>
           </h5>
           <div class="jcc">
-            @if (coinsService.balanceSubject | async; as value) {
-              <a class="btn btn-lg" [routerLink]="routeCreator.deposit()" [ngClass]="{
-              'btn-success': value > 0,
-              'btn-warning disabled': value < 1,
-              }">Deposit</a>
-            } @else {
-              <p class="text-center">Добывайте монеты, чтоб иметь возможность получить их еще больше!</p>
-            }
+            <a class="btn btn-lg btn-primary w-100" [routerLink]="routeCreator.deposit()">Check Deposits</a>
           </div>
         </article>
       </section>

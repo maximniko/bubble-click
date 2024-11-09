@@ -1,12 +1,12 @@
 import {Injectable} from '@angular/core';
-import {Observable, Subject} from 'rxjs';
+import {BehaviorSubject, Observable} from 'rxjs';
 import {STORAGE_KEY_BALANCE, TwaService} from '../../../../../common/services/twa.service';
 import {CoinsInterface} from './coins.interface';
 import {CloudStorage} from '../../../../../common/services/cloud-storage';
 
 @Injectable({providedIn: 'root'})
 export class CoinsService implements CoinsInterface {
-  balanceSubject = new Subject<number>();
+  balanceSubject = new BehaviorSubject<number>(0);
   perClick: number = 1;
   private _balance: number = 0;
 
