@@ -17,7 +17,7 @@ import {CoinsService} from '../../../domains/coins/services/coins.service';
   standalone: true,
   imports: [CommonModule],
   template: `
-    <section class="accent-border accent-border-top accent-bg-shadow rounded-5">
+    <section class="accent-border accent-border-top accent-bg-shadow rounded-5 tg-bg-secondary">
       <div class="hstack p-3 pb-0 color-accent">
         <span class="m-auto text-center h5">Deposits</span>
       </div>
