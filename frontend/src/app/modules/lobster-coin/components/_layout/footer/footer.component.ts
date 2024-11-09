@@ -10,7 +10,7 @@ import {symbols} from '../../../../../common/components/symbols/symbols';
   imports: [CommonModule, RouterLink],
   template: `
     <footer>
-      <div class="navbar-nav flex-row m-2 bg-blur">
+      <div class="navbar-nav flex-row m-2 tg-bg-secondary">
         <a class="nav-link w-100" [routerLink]="routeCreator.main()">
           <svg class="bi">
             <use [attr.xlink:href]="'#' + symbols.coin"/>
@@ -26,7 +26,7 @@ import {symbols} from '../../../../../common/components/symbols/symbols';
       </div>
     </footer>
   `,
-  host: {'class': 'footer'}
+  host: {'class': 'footer sticky-bottom bg-blur'}
 })
 export class FooterComponent {
   protected readonly routeCreator = routeCreator;

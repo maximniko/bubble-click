@@ -9,6 +9,7 @@ import {Router} from '@angular/router';
   standalone: true,
   imports: [CommonModule, MainComponent],
   templateUrl: './balance.component.html',
+  host: {class: 'd-flex flex-column h-100'},
 })
 export class BalanceComponent implements OnInit, OnDestroy {
   constructor(

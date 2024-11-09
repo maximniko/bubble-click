@@ -70,7 +70,7 @@ import {TwaService} from '../../../../../common/services/twa.service';
             </span>
           </h5>
           <div class="jcc">
-            <a class="btn btn-lg btn-primary w-100" [routerLink]="routeCreator.deposit()">Check Deposits</a>
+            <a class="btn btn-lg tg-btn w-100" [routerLink]="routeCreator.deposit()">Check Deposits</a>
           </div>
         </article>
       </section>
