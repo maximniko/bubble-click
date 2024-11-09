@@ -25,7 +25,7 @@ import {CoinsService} from '../../../domains/coins/services/coins.service';
         <div class="mx-2 my-4">
           @if (depositService.depositsSubject | async; as deposits) {
             @if (deposits.length) {
-              <ul class="list-group">
+              <ul class="list-group overflow-x-auto">
                 @for (deposit of deposits; track deposit; let index = $index) {
                   <li class="list-group-item align-items-center">
                     @let coefficient = _coefficient(deposit) ;
@@ -72,7 +72,7 @@ import {CoinsService} from '../../../domains/coins/services/coins.service';
       </div>
     </section>
   `,
-  host: {class: 'd-flex flex-column h-100'},
+  host: {class: 'd-flex flex-column h-100 overflow-auto'},
 })
 export class DepositComponent implements OnInit, OnDestroy {
   constructor(

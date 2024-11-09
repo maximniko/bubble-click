@@ -12,7 +12,7 @@ import {fromSubscribable} from 'rxjs/internal/observable/fromSubscribable';
   imports: [CommonModule, FormsModule, ClickAnimationDirective],
   styleUrl: 'coin.component.scss',
   template: `
-    <div class="clicker-container" (touchend)="onClick($event)" style="width:14rem;height:14rem;background-color:red;">
+    <div class="clicker-container" (touchend)="onClick($event)" style="width:16rem;height:16rem;background-color:red;">
       @for (click of clicks; track click.id) {
         <div class="click color-accent"
              [appClickAnimation]="click.id"
