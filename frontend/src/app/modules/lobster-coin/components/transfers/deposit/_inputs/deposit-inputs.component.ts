@@ -11,7 +11,7 @@ import {
 } from '@angular/forms';
 import {DEPOSIT_PLANS, DepositPlan, planToLabel} from '../../../../domains/bank/interfaces/deposit.interface';
 import {SumInputComponent} from '../../_inputs/sum/sum-input.component';
-import {BankService} from '../../../../domains/bank/services/bank/bank.service';
+import {CoinsService} from '../../../../domains/coins/services/coins.service';
 
 @Component({
   selector: 'deposit-inputs',
@@ -42,10 +42,10 @@ export class DepositInputsComponent extends ReactiveForm implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
-    private bankService: BankService,
+    private coinsService: CoinsService,
   ) {
     super();
-    this.maxSum = this.bankService.balance
+    this.maxSum = this.coinsService.balance
   }
 
   protected comparePlan(a?: DepositPlan, b?: DepositPlan): boolean {

@@ -9,7 +9,7 @@ import {DepositInputsComponent} from './_inputs/deposit-inputs.component';
 import {Subscription} from 'rxjs';
 import {Router} from '@angular/router';
 import {routeCreator} from '../../../lobster-coin.routes';
-import {BankService} from '../../../domains/bank/services/bank/bank.service';
+import {CoinsService} from '../../../domains/coins/services/coins.service';
 
 @Component({
   standalone: true,
@@ -17,7 +17,7 @@ import {BankService} from '../../../domains/bank/services/bank/bank.service';
   template: `
     <section class="accent-border accent-border-top accent-bg-shadow card rounded-5 h-100">
       <div class="hstack p-3 pb-0 color-accent">
-        <span class="m-auto text-center h5">New deposit (amount {{ bankService.balanceSubject | async }}):</span>
+        <span class="m-auto text-center h5">New deposit (amount {{ coinsService.balanceSubject | async }}):</span>
       </div>
       <div class="d-flex flex-column h-100 mb-5">
         <div class="mx-2 my-4">
@@ -38,7 +38,7 @@ export class DepositAddComponent extends ReactiveForm implements OnInit, OnDestr
   protected startDeposits: Deposit[]
 
   constructor(
-    protected bankService: BankService,
+    protected coinsService: CoinsService,
     private depositService: DepositService,
     private twa: TwaService,
     private router: Router,
@@ -87,7 +87,7 @@ export class DepositAddComponent extends ReactiveForm implements OnInit, OnDestr
 
     const newDeposits: Deposit[] = deposits,
       formDeposit: Deposit = this.form.value,
-      bank: number = this.bankService.balance
+      bank: number = this.coinsService.balance
 
     if (!formDeposit.plan || !formDeposit.fromDate || formDeposit.sum < 1) {
       return
@@ -97,12 +97,12 @@ export class DepositAddComponent extends ReactiveForm implements OnInit, OnDestr
 
     try {
       this.depositService.saveDeposits(newDeposits)
-      this.bankService.saveBalance(bank - formDeposit.sum)
+      this.coinsService.saveBalance(bank - formDeposit.sum)
       this.form.reset()
     } catch (e) {
       this.twa.showAlert((<Error>e).message)
       this.depositService.saveDeposits(deposits)
-      this.bankService.saveBalance(bank)
+      this.coinsService.saveBalance(bank)
     }
   }
 
