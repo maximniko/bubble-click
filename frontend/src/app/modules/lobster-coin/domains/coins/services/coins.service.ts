@@ -1,14 +1,11 @@
 import {Injectable} from '@angular/core';
-import {debounceTime, Observable, scan, startWith, Subject, switchMap, tap} from 'rxjs';
+import {Observable, Subject} from 'rxjs';
 import {STORAGE_KEY_BALANCE, TwaService} from '../../../../../common/services/twa.service';
 import {CoinsInterface} from './coins.interface';
 import {CloudStorage} from '../../../../../common/services/cloud-storage';
-import {fromSubscribable} from 'rxjs/internal/observable/fromSubscribable';
 
 @Injectable({providedIn: 'root'})
 export class CoinsService implements CoinsInterface {
-  private clickSubject = new Subject<void>();
-  private trigger$ = new Subject<void>();
   balanceSubject = new Subject<number>();
   perClick: number = 1;
   private _balance: number = 0;
@@ -18,7 +15,6 @@ export class CoinsService implements CoinsInterface {
     private twa: TwaService,
   ) {
     this.loadBalance()
-    this.subscribeToClicks()
   }
 
   get balance(): number {
@@ -28,25 +24,6 @@ export class CoinsService implements CoinsInterface {
   protected set balance(balance: number) {
     this._balance = balance
     this.balanceSubject.next(balance)
-  }
-
-  private subscribeToClicks() {
-    this.trigger$
-      .pipe(
-        startWith(void 0),
-        switchMap(() => fromSubscribable(this.clickSubject).pipe(scan((acc) => acc + 1, 0))),
-        debounceTime(500),
-        tap(() => this.trigger$.next()),
-      )
-      .subscribe(clicks => {
-        this.saveBalance(this.balance + clicks * this.perClick)
-      })
-  }
-
-  onClick(): void {
-    // Добавляем событие в поток при каждом клике
-    console.log('onClick')
-    this.clickSubject.next();
   }
 
   loadBalance(onComplete?: (observable: Observable<void>) => void): void {
@@ -75,6 +52,10 @@ export class CoinsService implements CoinsInterface {
           console.log('balance loaded');
         },
       })
+  }
+
+  saveClicks(clicks: number): void {
+    this.saveBalance(this.balance + clicks * this.perClick)
   }
 
   saveBalance(balance: number, onComplete?: (observable: Observable<void>) => void): void {

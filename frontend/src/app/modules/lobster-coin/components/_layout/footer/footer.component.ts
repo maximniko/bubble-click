@@ -26,7 +26,7 @@ import {symbols} from '../../../../../common/components/symbols/symbols';
       </div>
     </footer>
   `,
-  host: {'class': 'footer mt-auto py-3'}
+  host: {'class': 'footer'}
 })
 export class FooterComponent {
   protected readonly routeCreator = routeCreator;
