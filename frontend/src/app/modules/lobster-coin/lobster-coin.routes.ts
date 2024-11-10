@@ -11,6 +11,7 @@ const ROUTE_PARTS = {
 export const routeCreator = {
   main: () => `/${ROUTE_PARTS.lobsterCoin}/${ROUTE_PARTS.main}`,
   balance: () => `/${ROUTE_PARTS.lobsterCoin}/${ROUTE_PARTS.balance}`,
+  testFeedback: () => `/${ROUTE_PARTS.lobsterCoin}/test-feedback`,
   transfer: () => `/${ROUTE_PARTS.lobsterCoin}/${ROUTE_PARTS.transfer}`,
   withdraw: () => `/${ROUTE_PARTS.lobsterCoin}/${ROUTE_PARTS.withdraw}`,
   deposit: () => `/${ROUTE_PARTS.lobsterCoin}/${ROUTE_PARTS.deposit}`,
@@ -25,6 +26,10 @@ export const lobsterCoinRoutes: Routes = [
       {
         path: ROUTE_PARTS.main,
         loadComponent: () => import('./components/main/main.component').then(mod => mod.MainComponent)
+      },
+      {
+        path: 'test-feedback',
+        loadComponent: () => import('./components/main/feedback.component').then(mod => mod.FeedbackComponent)
       },
       {
         path: ROUTE_PARTS.balance,

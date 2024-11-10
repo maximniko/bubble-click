@@ -27,4 +27,6 @@ export const symbols = {
   // calendar3: "calendar3",
   gearFill: "gear-fill",
   nodePlusFill: "node-plus-fill",
+  volumeUpFill: "volume-up-fill",
+  volumeMute: "volume-mute",
 }

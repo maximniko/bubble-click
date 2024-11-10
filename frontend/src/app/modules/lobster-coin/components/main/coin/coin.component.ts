@@ -1,21 +1,23 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {CoinsService} from '../../../domains/coins/services/coins.service';
 import {FormsModule} from '@angular/forms';
 import {ClickAnimationDirective} from './click-animation.directive';
 import {debounceTime, scan, startWith, Subject, Subscription, switchMap, tap} from 'rxjs';
 import {fromSubscribable} from 'rxjs/internal/observable/fromSubscribable';
+import {ClickSoundDirective} from './click-sound.directive';
 
 @Component({
   selector: 'main-coin',
   standalone: true,
-  imports: [CommonModule, FormsModule, ClickAnimationDirective],
+  imports: [CommonModule, FormsModule, ClickAnimationDirective, ClickSoundDirective],
   styleUrl: 'coin.component.scss',
   template: `
     <div class="clicker-container" (touchend)="onClick($event)" style="width:16rem;height:16rem;background-color:red;">
       @for (click of clicks; track click.id) {
         <div class="click color-accent"
              [appClickAnimation]="click.id"
+             [appClickSound]="{withSound: withSound, sound: click.id}"
              [ngStyle]="{'top.px': click.top, 'left.px': click.left}">
           {{ coinsService.perClick }}
         </div>
@@ -25,6 +27,7 @@ import {fromSubscribable} from 'rxjs/internal/observable/fromSubscribable';
   host: {class: 'm-auto'},
 })
 export class CoinComponent implements OnInit, OnDestroy {
+  @Input() withSound: boolean = true
   clicks: Click[] = [];
   private clickCounter = 0;
   private trigger$ = new Subject<void>();
@@ -82,5 +85,5 @@ interface Click {
   id: number,
   top: number,
   left: number,
-  rotation: number
+  rotation: number,
 }

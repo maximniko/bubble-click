@@ -42,7 +42,7 @@ export class ClickAnimationDirective implements OnInit {
 
     const styleSheet = document.styleSheets[0] as CSSStyleSheet;
     styleSheet.insertRule(keyframes, styleSheet.cssRules.length);
-    this.renderer.setStyle(element, 'animation', `${animationName} 1.5s infinite ease-in-out`);
+    this.renderer.setStyle(element, 'animation', `${animationName} 1.5s ease-in-out forwards`);
     this.renderer.setStyle(element, 'offset-path', this.generateRandomPath());
   }
 
@@ -52,7 +52,7 @@ export class ClickAnimationDirective implements OnInit {
     const control1Y = -Math.random() * 100 // Подъем вверх
     const control2Y = -Math.random() * 200
     const endX = Math.random() * 50 - 25
-    const endY = -150; // Максимальная высота траектории
+    const endY = -150 - endX; // Максимальная высота траектории
 
     // Генерация траектории: M - начальная точка, C - кривая Безье
     return `path("M 0 0 C ${control1X} ${control1Y}, ${control2X} ${control2Y}, ${endX} ${endY}")`;

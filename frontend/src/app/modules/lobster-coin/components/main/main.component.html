@@ -1,3 +1,8 @@
 <section class="accent-border accent-border-top accent-bg-shadow rounded-5 tg-bg-secondary d-flex h-100">
-  <main-coin></main-coin>
+  <button (click)="withSound = !withSound" class="btn position-absolute end-0 m-3" [ngClass]="{'opacity-75':!withSound}">
+    <svg class="bi" style="width: 2rem; height: 2rem">
+      <use [attr.xlink:href]="'#' + (withSound ? symbols.volumeUpFill : symbols.volumeMute)"/>
+    </svg>
+  </button>
+  <main-coin [withSound]="withSound"/>
 </section>

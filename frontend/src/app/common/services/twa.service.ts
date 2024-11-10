@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import WebApp from "@twa-dev/sdk";
-import {CloudStorage, PopupParams, SecondaryButton} from "@twa-dev/types";
+import {CloudStorage, HapticFeedback, PopupParams, SecondaryButton} from "@twa-dev/types";
 import {environment} from '../../../environments/environment';
 
 @Injectable({providedIn: 'root'})
@@ -84,6 +84,14 @@ export class TwaService {
     this.buttonVisible(WebApp.MainButton, show)
   }
 
+  hapticFeedbackNotificationOccurred(type: "error" | "success" | "warning"): void {
+    WebApp.HapticFeedback.notificationOccurred(type)
+  }
+
+  hapticFeedbackImpactOccurred(type: "light" | "medium" | "heavy" | "rigid" | "soft"): void {
+    WebApp.HapticFeedback.impactOccurred(type)
+  }
+
   mainButtonIsActive(isActive: boolean) {
     isActive ? WebApp.MainButton.enable() : WebApp.MainButton.disable()
     this.buttonVisible(WebApp.MainButton, isActive)
@@ -142,6 +150,7 @@ interface ButtonVisible {
   show: VoidFunction;
   hide: VoidFunction;
 }
+
 type CloudStorageKey = string
 export const STORAGE_KEY_BALANCE: CloudStorageKey = '1'
 export const STORAGE_KEY_BANK: CloudStorageKey = '2'
