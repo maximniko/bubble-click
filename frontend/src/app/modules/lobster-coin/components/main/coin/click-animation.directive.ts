@@ -20,38 +20,41 @@ export class ClickAnimationDirective implements OnInit {
 
     // Создаем уникальное имя для анимации на основе номера
     const animationName = `bubbleMove-${this.appClickAnimation}-${Date.now()}`;
-
-    // Генерируем случайные значения для движения и вращения
-    const randomX1 = Math.random() * 50 - 25; // Смещение по X от -25 до 25
-    const randomY1 = Math.random() * 50; // Смещение по Y от 0 до 50
-    const randomX2 = Math.random() * 25 - 25;
-    const randomY2 = Math.random() * 25;
-    const rotation1 = Math.random() * 40 - 20; // Вращение от -20 до 20 градусов
-    const rotation2 = Math.random() * 40 - 20;
+    const rotation1 = Math.random() * 50 - 25; // Вращение от -20 до 20 градусов
+    const rotation2 = Math.random() * 50 - 25; // Вращение от -20 до 20 градусов
 
     // Создаем ключевые кадры для анимации
     const keyframes = `
       @keyframes ${animationName} {
         0% {
           opacity: 1;
-          transform: translate(0, 0) scale(1);
-        }
-        35% {
-          transform: translate(${randomX1}px, ${randomY1}px) rotate(${rotation1}deg) scale(1.1);
-        }
-        75% {
-          transform: translate(${randomX2}px, ${randomY2}px) rotate(${rotation2}deg) scale(1.1);
+          offset-rotate: ${rotation1}deg;
+          offset-distance: 0%;
         }
         100% {
           opacity: 0;
-          transform: translate(${randomX1}px, -120px) rotate(-30deg) scale(1.2);
+          offset-distance: 100%;
+          offset-rotate: ${rotation2}deg;
+          transform: scale(1.2);
         }
       }
     `;
 
     const styleSheet = document.styleSheets[0] as CSSStyleSheet;
     styleSheet.insertRule(keyframes, styleSheet.cssRules.length);
+    this.renderer.setStyle(element, 'animation', `${animationName} 1.5s infinite ease-in-out`);
+    this.renderer.setStyle(element, 'offset-path', this.generateRandomPath());
+  }
 
-    this.renderer.setStyle(element, 'animation', `${animationName} 1.5s ease-out forwards`);
+  generateRandomPath(): string {
+    const control1X = Math.random() * 100 - 50 // Случайное смещение влево и вправо
+    const control2X = Math.random() * 100 - 50
+    const control1Y = -Math.random() * 100 // Подъем вверх
+    const control2Y = -Math.random() * 200
+    const endX = Math.random() * 50 - 25
+    const endY = -150; // Максимальная высота траектории
+
+    // Генерация траектории: M - начальная точка, C - кривая Безье
+    return `path("M 0 0 C ${control1X} ${control1Y}, ${control2X} ${control2Y}, ${endX} ${endY}")`;
   }
 }
