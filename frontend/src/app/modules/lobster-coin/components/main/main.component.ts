@@ -24,8 +24,9 @@ export class MainComponent implements OnInit {
     this.twa.visibleBackButton(false)
   }
 
-  toggleSound() {
+  toggleWithSound() {
     this.withSound = !this.withSound
+    this.twa.hapticFeedbackNotificationOccurred(this.withSound ? 'success' : 'warning')
   }
 
   protected readonly symbols = symbols;

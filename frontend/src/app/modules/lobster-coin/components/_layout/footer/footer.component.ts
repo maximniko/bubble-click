@@ -23,12 +23,12 @@ import {symbols} from '../../../../../common/components/symbols/symbols';
           </svg>
           Balance
         </a>
-        <a class="nav-link w-100" [routerLink]="routeCreator.testFeedback()">
-          <svg class="bi">
-            <use [attr.xlink:href]="'#' + symbols.currencyExchange"/>
-          </svg>
-          back
-        </a>
+<!--        <a class="nav-link w-100" [routerLink]="routeCreator.testFeedback()">-->
+<!--          <svg class="bi">-->
+<!--            <use [attr.xlink:href]="'#' + symbols.currencyExchange"/>-->
+<!--          </svg>-->
+<!--          back-->
+<!--        </a>-->
       </div>
     </footer>
   `,
