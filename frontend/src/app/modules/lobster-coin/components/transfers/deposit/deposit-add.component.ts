@@ -24,7 +24,7 @@ import {CoinsService} from '../../../domains/coins/services/coins.service';
           <form [formGroup]="form">
             <deposit-inputs [parentForm]="form"></deposit-inputs>
           </form>
-          <button (click)="add()">add</button>
+<!--          <button (click)="add()">add</button>-->
         </div>
       </div>
     </section>
