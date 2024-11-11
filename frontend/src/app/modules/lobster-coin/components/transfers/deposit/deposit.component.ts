@@ -17,15 +17,15 @@ import {CoinsService} from '../../../domains/coins/services/coins.service';
   standalone: true,
   imports: [CommonModule],
   template: `
-    <section class="accent-border accent-border-top accent-bg-shadow rounded-5 tg-bg-secondary overflow-auto">
+    <section class="accent-border accent-border-top accent-bg-shadow rounded-5 tg-bg-secondary">
       <div class="hstack p-3 pb-0 color-accent">
         <span class="m-auto text-center h5">Deposits</span>
       </div>
       <div class="mb-5">
-        <div class="mx-2 my-4">
+        <div class="mx-2 my-4 overflow-auto" style="max-height: calc(var(--tg-viewport-stable-height, 200) * 0.7)">
           @if (depositService.depositsSubject | async; as deposits) {
             @if (deposits.length) {
-              <ul class="list-group">
+              <ul class="list-group mb-5">
                 @for (deposit of deposits; track deposit; let index = $index) {
                   <li class="list-group-item align-items-center">
                     @let coefficient = _coefficient(deposit) ;
