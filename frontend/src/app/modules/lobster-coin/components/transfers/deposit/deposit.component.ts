@@ -17,15 +17,15 @@ import {CoinsService} from '../../../domains/coins/services/coins.service';
   standalone: true,
   imports: [CommonModule],
   template: `
-    <section class="accent-border accent-border-top accent-bg-shadow rounded-5 tg-bg-secondary">
+    <section class="accent-border accent-border-top accent-bg-shadow rounded-5 tg-bg-secondary overflow-auto">
       <div class="hstack p-3 pb-0 color-accent">
         <span class="m-auto text-center h5">Deposits</span>
       </div>
-      <div class="d-flex flex-column h-100 mb-5">
+      <div class="mb-5">
         <div class="mx-2 my-4">
           @if (depositService.depositsSubject | async; as deposits) {
             @if (deposits.length) {
-              <ul class="list-group overflow-x-auto">
+              <ul class="list-group">
                 @for (deposit of deposits; track deposit; let index = $index) {
                   <li class="list-group-item align-items-center">
                     @let coefficient = _coefficient(deposit) ;
@@ -72,7 +72,7 @@ import {CoinsService} from '../../../domains/coins/services/coins.service';
       </div>
     </section>
   `,
-  host: {class: 'd-flex flex-column h-100 overflow-auto'},
+  host: {class: 'd-flex flex-column h-100'},
 })
 export class DepositComponent implements OnInit, OnDestroy {
   constructor(
@@ -110,7 +110,7 @@ export class DepositComponent implements OnInit, OnDestroy {
       title: 'Забрать вклад',
       message: `${message}?`, // 256
       buttons: [
-        {id: yes, type: 'default', text: 'Open ton.org'},
+        {id: yes, type: 'default', text: 'Да'},
         {type: 'cancel'},
       ]
     }, (btn) => {

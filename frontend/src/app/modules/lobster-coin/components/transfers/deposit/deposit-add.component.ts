@@ -24,7 +24,7 @@ import {CoinsService} from '../../../domains/coins/services/coins.service';
           <form [formGroup]="form">
             <deposit-inputs [parentForm]="form"></deposit-inputs>
           </form>
-<!--          <button (click)="add()">add</button>-->
+          <button (click)="add()">add</button>
         </div>
       </div>
     </section>
@@ -56,25 +56,25 @@ export class DepositAddComponent extends ReactiveForm implements OnInit, OnDestr
       next: (value) => this.onNextBalance(value),
       error: (err) => {
         this.twa.showAlert(err.toString())
-        this.goBack()
       },
     })
-    this.twa.setMainButton({text: 'Add', is_active: true, is_visible: true}, () => this.add())
+    this.twa.setMainButton({text: 'Create', is_active: true, is_visible: true}, () => this.add())
     this.twa.backButtonOnClick(() => this.goBack())
   }
 
   ngOnDestroy(): void {
     this.formSubscription?.unsubscribe()
+    this.depositsSubscription?.unsubscribe()
     this.twa.offBackButton(() => this.goBack())
     this.twa.offMainButton(() => this.add())
   }
 
-  protected add() {
+  add() {
     this.depositService.loadDeposits()
   }
 
   protected onNextBalance(deposits: Deposit[]) {
-    if (this.startDeposits.length && deposits !== this.startDeposits) { // if updated or changed from another device
+    if (this.startDeposits.length && deposits.toString() !== this.startDeposits.toString()) { // if updated or changed from another device
       this.goBack()
       return
     }
@@ -85,24 +85,31 @@ export class DepositAddComponent extends ReactiveForm implements OnInit, OnDestr
       return
     }
 
-    const newDeposits: Deposit[] = deposits,
+    const newDeposits: Deposit[] = Array.from(deposits),
       formDeposit: Deposit = this.form.value,
-      bank: number = this.coinsService.balance
+      coins: number = this.coinsService.balance
 
-    if (!formDeposit.plan || !formDeposit.fromDate || formDeposit.sum < 1) {
+    if (formDeposit.sum > coins) {
+      this.twa.showAlert('Error balance')
+      return;
+    }
+
+    if (!formDeposit.plan || !formDeposit.sum || isNaN(formDeposit.sum)) {
       return
     }
+
+    formDeposit.fromDate = new Date()
 
     newDeposits.push(formDeposit)
 
     try {
+      this.coinsService.saveBalance(coins - formDeposit.sum)
       this.depositService.saveDeposits(newDeposits)
-      this.coinsService.saveBalance(bank - formDeposit.sum)
       this.form.reset()
     } catch (e) {
       this.twa.showAlert((<Error>e).message)
+      this.coinsService.saveBalance(coins)
       this.depositService.saveDeposits(deposits)
-      this.coinsService.saveBalance(bank)
     }
   }
 

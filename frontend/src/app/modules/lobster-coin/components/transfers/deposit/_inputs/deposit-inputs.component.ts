@@ -57,7 +57,6 @@ export class DepositInputsComponent extends ReactiveForm implements OnInit {
 
   ngOnInit() {
     this.parentForm.addControl('plan', this.formBuilder.control('', [Validators.required]))
-    this.parentForm.addControl('fromDate', this.formBuilder.control(new Date(), [Validators.required]))
   }
 
   private get plan() {

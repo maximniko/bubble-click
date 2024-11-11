@@ -23,5 +23,5 @@ export function toParamDate(date: Date): string {
 }
 
 export function daysDiff(first: Date, second: Date): number {
-  return Math.ceil(Math.abs(second.getTime() - first.getTime()) / (1000 * 3600 * 24));
+  return Math.floor(Math.abs(second.getTime() - first.getTime()) / (1000 * 3600 * 24));
 }

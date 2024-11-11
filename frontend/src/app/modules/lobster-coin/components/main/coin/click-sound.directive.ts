@@ -11,6 +11,7 @@ export class ClickSoundDirective implements OnInit {
 
   constructor(private coinSoundService: CoinSoundService) {
   }
+
   ngOnInit() {
     this.addSound()
   }
