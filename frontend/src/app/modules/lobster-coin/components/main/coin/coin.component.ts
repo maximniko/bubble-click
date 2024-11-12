@@ -1,4 +1,4 @@
-import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {CoinsService} from '../../../domains/coins/services/coins.service';
 import {FormsModule} from '@angular/forms';
@@ -26,7 +26,7 @@ import {ClickSoundDirective} from './click-sound.directive';
   `,
   host: {class: 'm-auto'},
 })
-export class CoinComponent implements OnInit, OnDestroy {
+export class CoinComponent implements OnInit, OnDestroy, OnChanges {
   @Input() withSound: boolean = true
   clicks: Click[] = [];
   private clickCounter = 0;
@@ -48,6 +48,13 @@ export class CoinComponent implements OnInit, OnDestroy {
         tap(() => this.trigger$.next()),
       )
       .subscribe(clicks => this.coinsService.saveClicks(clicks))
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    console.log(changes)
+    if (changes['withSound']) {
+      this.withSound = changes['withSound'].currentValue as boolean
+    }
   }
 
   ngOnDestroy() {
