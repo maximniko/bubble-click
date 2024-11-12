@@ -4,7 +4,7 @@ import {Injectable} from '@angular/core';
 export class CoinSoundService {
   private readonly sounds: HTMLAudioElement[]
   private activeSounds: number = 0
-  private maxConcurrentSounds = 5
+  private maxConcurrentSounds = 3
 
   constructor() {
     this.sounds = AUDIO_ITEMS.map<HTMLAudioElement>(fileName => new Audio(AUDIO_PATH + fileName))
@@ -43,18 +43,11 @@ export class CoinSoundService {
 
 const AUDIO_PATH = 'assets/coin/sounds/'
 const AUDIO_ITEMS = [
-  '1-1.opus',
-  '1-2.opus',
-  '1-3.opus',
-  '1-4.opus',
-  '1-5.opus',
-  '2-1.opus',
-  '2-2.opus',
-  '2-3.opus',
-  '2-4.opus',
-  '2-5.opus',
-  '3-1.opus',
-  '3-2.opus',
-  '3-3.opus',
-  '3-4.opus',
+  '1-1.mp3',
+  '1-2.mp3',
+  '1-3.mp3',
+  '1-4.mp3',
+  '1-5.mp3',
+  '1-6.mp3',
+  '1-7.mp3',
 ]

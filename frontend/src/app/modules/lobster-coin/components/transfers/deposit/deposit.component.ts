@@ -25,7 +25,7 @@ import {CoinsService} from '../../../domains/coins/services/coins.service';
         <div class="mx-2 my-4 overflow-auto" style="max-height: calc(var(--tg-viewport-stable-height, 200) * 0.7)">
           @if (depositService.depositsSubject | async; as deposits) {
             @if (deposits.length) {
-              <ul class="list-group mb-5">
+              <ul class="list-group">
                 @for (deposit of deposits; track deposit; let index = $index) {
                   <li class="list-group-item align-items-center">
                     @let coefficient = _coefficient(deposit) ;
