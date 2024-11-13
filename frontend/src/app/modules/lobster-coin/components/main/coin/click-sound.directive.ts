@@ -7,7 +7,7 @@ import {CoinSoundService} from '../../../domains/coins/coin-sound.service';
 })
 export class ClickSoundDirective implements OnInit {
 
-  @Input() appClickSound: { withSound: boolean, sound: number } = {withSound: true, sound: 1}
+  @Input() appClickSound: { sound: number } = {sound: 1}
 
   constructor(private coinSoundService: CoinSoundService) {
   }
@@ -17,11 +17,6 @@ export class ClickSoundDirective implements OnInit {
   }
 
   addSound() {
-    // Проверяем, если уже играет максимальное количество звуков
-    if (!this.appClickSound.withSound) {
-      return
-    }
-
     this.coinSoundService.play(this.appClickSound.sound)
   }
 }

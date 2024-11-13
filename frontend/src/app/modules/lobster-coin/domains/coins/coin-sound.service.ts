@@ -5,12 +5,16 @@ export class CoinSoundService {
   private readonly sounds: HTMLAudioElement[]
   private activeSounds: number = 0
   private maxConcurrentSounds = 3
+  withSound = true
 
   constructor() {
     this.sounds = AUDIO_ITEMS.map<HTMLAudioElement>(fileName => new Audio(AUDIO_PATH + fileName))
   }
 
   play(index: number): void {
+    if (!this.withSound) {
+      return
+    }
     if (this.activeSounds >= this.maxConcurrentSounds) {
       return
     }

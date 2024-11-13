@@ -1,4 +1,4 @@
-import {Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {CoinsService} from '../../../domains/coins/services/coins.service';
 import {FormsModule} from '@angular/forms';
@@ -6,28 +6,34 @@ import {ClickAnimationDirective} from './click-animation.directive';
 import {debounceTime, scan, startWith, Subject, Subscription, switchMap, tap} from 'rxjs';
 import {fromSubscribable} from 'rxjs/internal/observable/fromSubscribable';
 import {ClickSoundDirective} from './click-sound.directive';
+import {CoinPressDirective} from './coin-press.directive';
 
 @Component({
   selector: 'main-coin',
   standalone: true,
-  imports: [CommonModule, FormsModule, ClickAnimationDirective, ClickSoundDirective],
+  imports: [CommonModule, FormsModule, ClickAnimationDirective, CoinPressDirective, ClickSoundDirective],
   styleUrl: 'coin.component.scss',
   template: `
-    <div class="clicker-container" (touchend)="onClick($event)" style="width:16rem;height:16rem;background-color:red;">
-      @for (click of clicks; track click.id) {
-        <div class="click color-accent"
-             [appClickAnimation]="click.id"
-             [appClickSound]="{withSound: withSound, sound: click.id}"
-             [ngStyle]="{'top.px': click.top, 'left.px': click.left}">
-          {{ coinsService.perClick }}
-        </div>
-      }
+    <div
+      class="clicker-container"
+      style="width:16rem;height:16rem;background-color:darkorange;"
+      (touchend)="onClick($event)"
+      coinPress
+      >test
     </div>
+    @for (click of clicks; track click.id) {
+      <div class="click color-accent"
+           [appClickAnimation]="click.id"
+           [appClickSound]="{sound: click.id}"
+           [ngStyle]="{'top.px': click.top, 'left.px': click.left}">
+        {{ coinsService.perClick }}
+      </div>
+    }
+
   `,
   host: {class: 'm-auto'},
 })
-export class CoinComponent implements OnInit, OnDestroy, OnChanges {
-  @Input() withSound: boolean = true
+export class CoinComponent implements OnInit, OnDestroy {
   clicks: Click[] = [];
   private clickCounter = 0;
   private trigger$ = new Subject<void>();
@@ -48,13 +54,6 @@ export class CoinComponent implements OnInit, OnDestroy, OnChanges {
         tap(() => this.trigger$.next()),
       )
       .subscribe(clicks => this.coinsService.saveClicks(clicks))
-  }
-
-  ngOnChanges(changes: SimpleChanges) {
-    console.log(changes)
-    if (changes['withSound']) {
-      this.withSound = changes['withSound'].currentValue as boolean
-    }
   }
 
   ngOnDestroy() {

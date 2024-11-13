@@ -4,6 +4,7 @@ import {Router} from "@angular/router";
 import {TwaService} from "../../../../common/services/twa.service";
 import {CoinComponent} from './coin/coin.component';
 import {symbols} from '../../../../common/components/symbols/symbols';
+import {CoinSoundService} from '../../domains/coins/coin-sound.service';
 
 @Component({
   standalone: true,
@@ -15,6 +16,7 @@ export class MainComponent implements OnInit {
   protected withSound = true
 
   constructor(
+    protected coinSoundService: CoinSoundService,
     protected twa: TwaService,
     protected router: Router
   ) {
@@ -25,8 +27,8 @@ export class MainComponent implements OnInit {
   }
 
   toggleWithSound() {
-    this.withSound = !this.withSound
-    this.twa.hapticFeedbackNotificationOccurred(this.withSound ? 'success' : 'warning')
+    this.coinSoundService.withSound = !this.coinSoundService.withSound
+    this.twa.hapticFeedbackNotificationOccurred(this.coinSoundService.withSound ? 'success' : 'warning')
   }
 
   protected readonly symbols = symbols;
