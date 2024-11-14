@@ -15,12 +15,11 @@ import {CoinPressDirective} from './coin-press.directive';
   styleUrl: 'coin.component.scss',
   template: `
     <div
-      class="clicker-container"
-      style="width:16rem;height:16rem;background-color:darkorange;"
+      class="clicker-container bubble"
+      style="width:16rem;height:16rem;"
       (touchend)="onClick($event)"
       coinPress
-      >test
-    </div>
+    ></div>
     @for (click of clicks; track click.id) {
       <div class="click color-accent"
            [appClickAnimation]="click.id"

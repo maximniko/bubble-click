@@ -23,17 +23,13 @@ export class CoinPressDirective {
     // Вычисляем смещение касания относительно центра
     const offsetX = centerX - averageX;
     const offsetY = centerY - averageY;
-
     const distance = Math.sqrt(offsetX ** 2 + offsetY ** 2);
     const maxDistance = Math.min(rect.width, rect.height) / 2;
     const animationName = `clickCenter-${Date.now()}`;
     let keyframes: string
 
     // Если касание ближе к центру, уменьшаем монету
-    console.log('offsetX', offsetX)
-    console.log('offsetY', offsetY)
-    console.log('maxDistance', maxDistance)
-    if (distance / maxDistance < 0.4) {
+    if (distance / maxDistance < 0.3) {
       keyframes = `
       @keyframes ${animationName} {
         0% { transform: scale(1); }
@@ -43,23 +39,22 @@ export class CoinPressDirective {
     `;
     } else {
       // Если касание на краю, наклоняем монету в сторону касания
-      const rotateX = (offsetY / rect.height) * -30; // Наклон по оси X
-      const rotateY = (offsetX / rect.width) * 30;   // Наклон по оси Y
+      // const rotateX = (offsetY / rect.height) * -30; // Наклон по оси X
+      // const rotateY = (offsetX / rect.width) * 30;   // Наклон по оси Y
 
-      const x = (offsetY / maxDistance)
-      const y = offsetX / maxDistance
+      const x = offsetY / maxDistance
+      const y = -(offsetX / maxDistance)
       const originX = centerX + offsetX
       const originY = centerY + offsetY
-      const deg = 30
-      console.log(`transform: rotate3d(${x}, ${y}, 0, ${deg * Math.max(x,y)}deg);
-transform-origin: ${originX}px ${originY}px;`)
+      const deg = 30 * Math.max(Math.abs(x), Math.abs(y))
+      console.log(`transform-origin: ${originX}px ${originY}px`)
       keyframes = `
       @keyframes ${animationName} {
         0% {
-          transform: rotate3d(${x}, ${y}, 0, ${deg * Math.max(x,y)}deg);
+          transform: rotate3d(${x}, ${y}, 0, ${deg}deg);
           transform-origin: ${originX}px ${originY}px;
         }
-        50% { transform: rotate3d(${x / 2}, ${y / 2}, 0, 15deg); }
+        50% { transform: rotate3d(${x / 2}, ${y / 2}, 0, ${deg / 2}deg); }
         100% { transform: rotate3d(0, 0, 0, 0deg); }
       }
     `;
