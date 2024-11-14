@@ -15,20 +15,20 @@
 .bubble {
   position: relative;
   border-radius: 50%;
-  background: white linear-gradient(to left, #7e94bf, #88bfb0);
-  box-shadow: 2rem 5rem 5rem rgba(0, 0, 0, 0.2);
+  background: white linear-gradient(to left, #bbd2ff, #b1fbff);
+  box-shadow: 2rem 5rem 5rem rgb(141 237 255 / 52%);
 }
 
 .bubble:before {
   content: "";
   position: absolute;
   display: block;
-  top: 5%;
-  left: 7%;
-  height: 90%;
-  width: 90%;
+  top: 2%;
+  left: 3%;
+  height: 95%;
+  width: 95%;
   border-radius: 50%;
-  background: #84b9bf;
+  background: #bff8ff;
   opacity: 0.8;
   overflow: hidden;
 }
@@ -42,6 +42,6 @@
   height: 25%;
   width: 9%;
   border-radius: 50%;
-  background: white;
+  background: #fbf8ff;
   overflow: hidden;
 }
