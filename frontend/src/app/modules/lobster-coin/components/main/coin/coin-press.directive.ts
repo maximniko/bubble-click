@@ -46,8 +46,10 @@ export class CoinPressDirective {
       const y = -(offsetX / maxDistance)
       const originX = centerX + offsetX
       const originY = centerY + offsetY
-      const deg = 30 * Math.max(Math.abs(x), Math.abs(y))
-      console.log(`transform-origin: ${originX}px ${originY}px`)
+      const deg = 20 * Math.max(Math.abs(x), Math.abs(y))
+      // console.log(`rotate x ${x}, y ${y}`)
+      // console.log(`transform-origin: ${originX}px ${originY}px`)
+      // console.log(`deg: ${deg}`)
       keyframes = `
       @keyframes ${animationName} {
         0% {
@@ -61,7 +63,7 @@ export class CoinPressDirective {
     }
     const styleSheet = document.styleSheets[0] as CSSStyleSheet;
     styleSheet.insertRule(keyframes, styleSheet.cssRules.length);
-    this.renderer.setStyle(coinElement, 'animation', `${animationName} 0.5s ease-out forwards`);
+    this.renderer.setStyle(coinElement, 'animation', `${animationName} 0.7s ease-out forwards`);
   }
 
   @HostListener('touchend', ['$event']) onTouchEnd(event: TouchEvent) {
