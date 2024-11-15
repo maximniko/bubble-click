@@ -58,7 +58,7 @@ export class DepositAddComponent extends ReactiveForm implements OnInit, OnDestr
         this.twa.showAlert(err.toString())
       },
     })
-    this.twa.setMainButton({text: 'Создать', is_active: true, is_visible: true}, () => this.add())
+    this.twa.setMainButton({text: 'Создать', is_active: true, is_visible: true}, () => this.addDeposit())
     this.twa.backButtonOnClick(() => this.goBack())
   }
 
@@ -66,10 +66,10 @@ export class DepositAddComponent extends ReactiveForm implements OnInit, OnDestr
     this.formSubscription?.unsubscribe()
     this.depositsSubscription?.unsubscribe()
     this.twa.offBackButton(() => this.goBack())
-    this.twa.offMainButton(() => this.add())
+    this.twa.offMainButton(() => this.addDeposit())
   }
 
-  add() {
+  addDeposit() {
     this.depositService.loadDeposits()
   }
 
