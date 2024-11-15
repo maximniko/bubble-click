@@ -19,7 +19,7 @@ import {CoinsService} from '../../../domains/coins/services/coins.service';
   template: `
     <section class="accent-border accent-border-top accent-bg-shadow rounded-5 tg-bg-secondary">
       <div class="hstack p-3 pb-0 color-accent">
-        <span class="m-auto text-center h5">Deposits</span>
+        <span class="m-auto text-center h5">Депозиты</span>
       </div>
       <div class="mb-5">
         <div class="mx-2 my-4 overflow-auto" style="max-height: calc(var(--tg-viewport-stable-height, 200) * 0.7)">
@@ -65,7 +65,7 @@ import {CoinsService} from '../../../domains/coins/services/coins.service';
                 }
               </ul>
             } @else {
-              <p>No deposits yet.</p>
+              <p>Пока нет депозитов.</p>
             }
           }
         </div>
@@ -143,7 +143,7 @@ export class DepositComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.twa.setMainButton({text: 'Add Deposit', is_active: true, is_visible: true}, () => this.add())
+    this.twa.setMainButton({text: 'Добавить депозит', is_active: true, is_visible: true}, () => this.add())
     this.twa.backButtonOnClick(() => this.goBack())
   }
 

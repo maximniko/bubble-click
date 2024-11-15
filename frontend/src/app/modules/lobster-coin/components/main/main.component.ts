@@ -13,8 +13,6 @@ import {CoinSoundService} from '../../domains/coins/coin-sound.service';
   host: {class: 'd-flex flex-column h-100'},
 })
 export class MainComponent implements OnInit {
-  protected withSound = true
-
   constructor(
     protected coinSoundService: CoinSoundService,
     protected twa: TwaService,

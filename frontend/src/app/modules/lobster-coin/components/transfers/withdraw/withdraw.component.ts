@@ -16,7 +16,7 @@ import {Router} from '@angular/router';
   template: `
     <section class="accent-border accent-border-top accent-bg-shadow rounded-5 tg-bg-secondary">
       <div class="hstack p-3 pb-0 color-accent">
-        <span class="m-auto text-center h5">Withdraw (amount: {{ this.bankService.balanceSubject | async }})</span>
+        <span class="m-auto text-center h5">Вывести (макс: {{ this.bankService.balanceSubject | async }})</span>
       </div>
       <div class="d-flex flex-column h-100 mb-5">
         <div class="mx-2 my-4">
@@ -56,7 +56,7 @@ export class WithdrawComponent extends ReactiveForm implements OnInit, OnDestroy
         error: () => this.goBack()
       })
     this.twa.backButtonOnClick(() => this.goBack())
-    this.twa.setMainButton({text: 'Withdraw', is_active: true, is_visible: true}, () => this.withdraw())
+    this.twa.setMainButton({text: 'Вывести', is_active: true, is_visible: true}, () => this.withdraw())
   }
 
   ngOnDestroy(): void {
@@ -82,7 +82,7 @@ export class WithdrawComponent extends ReactiveForm implements OnInit, OnDestroy
     const form: { sum: number } = this.form.value
 
     if (form.sum > balance) {
-      this.twa.showAlert('Error balance')
+      this.twa.showAlert('Ошибка баланса')
       return
     }
 

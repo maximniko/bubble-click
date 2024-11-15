@@ -1,11 +1,15 @@
 import {CommonModule} from '@angular/common';
-import {Component} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {symbols} from '../../../../../common/components/symbols/symbols';
+import {toLocalDate} from '../../../../../common/extensions/Date';
 import {routeCreator} from '../../../lobster-coin.routes';
 import {RouterLink} from '@angular/router';
 import {CoinsService} from '../../../domains/coins/services/coins.service';
 import {BankService} from '../../../domains/bank/services/bank/bank.service';
 import {TwaService} from '../../../../../common/services/twa.service';
+import {DepositService} from '../../../domains/bank/services/deposit/deposit.service';
+import {Subscription} from 'rxjs';
+import {Deposit, depositToDate} from '../../../domains/bank/interfaces/deposit.interface';
 
 @Component({
   selector: 'balance-main',
@@ -17,11 +21,11 @@ import {TwaService} from '../../../../../common/services/twa.service';
     }`,
   template: `
     <div class="mx-2">
-      <h1 class="h1 text-center mt-2 mb-0">{{ coinsService.balanceSubject | async }} Coins</h1>
+      <h1 class="h1 text-center mt-2 mb-0">{{ coinsService.balanceSubject | async }} Монет</h1>
       <section class="tg-bg-secondary p-2 rounded-2">
         <article class="in-bank mb-3">
           <h5 class="h5 color-subtitle jcb">
-            <span class="my-auto mx-0">In Bank</span>
+            <span class="my-auto mx-0">В Банке</span>
             <span class="p-2" (click)="bankInfo()">
               <svg class="bi">
                 <use [attr.xlink:href]="'#' + symbols.infoCircle"/>
@@ -29,11 +33,11 @@ import {TwaService} from '../../../../../common/services/twa.service';
             </span>
           </h5>
           <div class="input-group input-group-lg mb-3">
-          <span class="input-group-text">
-            <svg class="bi">
-              <use [attr.xlink:href]="'#' + symbols.coin"/>
-            </svg>
-          </span>
+            <span class="input-group-text">
+              <svg class="bi">
+                <use [attr.xlink:href]="'#' + symbols.coin"/>
+              </svg>
+            </span>
             <input class="form-control" type="text" value="{{ bankService.balanceSubject | async }}" aria-label="Wallet balance" disabled readonly>
           </div>
           <div class="row row-cols-2">
@@ -44,7 +48,7 @@ import {TwaService} from '../../../../../common/services/twa.service';
                     <use [attr.xlink:href]="'#' + symbols.arrowUp"/>
                   </svg>
                 </div>
-                <div class="m-auto">To Bank</div>
+                <div class="m-auto">Пополнить</div>
               </a>
             </div>
             <div class="col">
@@ -54,7 +58,7 @@ import {TwaService} from '../../../../../common/services/twa.service';
                     <use [attr.xlink:href]="'#' + symbols.arrowDown"/>
                   </svg>
                 </div>
-                <div class="m-auto">Withdrawal</div>
+                <div class="m-auto">Вывести</div>
               </a>
             </div>
           </div>
@@ -62,28 +66,67 @@ import {TwaService} from '../../../../../common/services/twa.service';
         <hr>
         <article class="deposit">
           <h5 class="h5 color-subtitle jcb">
-            <span class="my-auto mx-0">Deposit</span>
+            <span class="my-auto mx-0">На Депозите</span>
             <span class="p-2" (click)="depositInfo()">
               <svg class="bi">
                 <use [attr.xlink:href]="'#' + symbols.infoCircle"/>
               </svg>
             </span>
           </h5>
+          <div class="input-group input-group-lg mb-3">
+            <span class="input-group-text">
+              <svg class="bi">
+                <use [attr.xlink:href]="'#' + symbols.clockHistory"/>
+              </svg>
+            </span>
+            <input class="form-control" type="text" value="{{ depositSum }}" aria-label="Баланс депозитов" disabled readonly>
+            @if (nearestDeposit) {
+              <div class="valid-feedback d-block">
+                Ближайший бонус {{ toLocalDate(depositToDate(nearestDeposit), twa.getUserLanguageCode() ?? 'en') }}
+              </div>
+            }
+          </div>
           <div class="jcc">
-            <a class="btn btn-lg tg-btn w-100" [routerLink]="routeCreator.deposit()">Check Deposits</a>
+            <a class="btn btn-lg tg-btn w-100" [routerLink]="routeCreator.deposit()">Депозиты</a>
           </div>
         </article>
       </section>
     </div>
   `,
 })
-export class MainComponent {
+export class MainComponent implements OnInit, OnDestroy {
+  private depositSubscription?: Subscription
+  protected depositSum: number = 0
+  protected nearestDeposit?: Deposit
 
   constructor(
     protected coinsService: CoinsService,
     protected bankService: BankService,
+    protected depositService: DepositService,
     protected twa: TwaService,
   ) {
+  }
+
+  ngOnInit() {
+    this.depositSubscription = this.depositService.depositsSubject
+      .subscribe((items: Deposit[]) => {
+        this.depositSum = items.reduce<number>((acc: number, item: Deposit) => {
+          acc += item.sum
+          return acc
+        }, 0)
+        items.forEach((item: Deposit) => {
+          if (
+            !this.nearestDeposit
+            || depositToDate(this.nearestDeposit).getTime() > depositToDate(item).getTime()
+          ) {
+            this.nearestDeposit = item
+          }
+        })
+      })
+  }
+
+  ngOnDestroy() {
+    this.depositSubscription?.unsubscribe()
   }
 
   bankInfo() {
@@ -106,6 +149,8 @@ export class MainComponent {
     })
   }
 
+  protected readonly toLocalDate = toLocalDate;
   protected readonly symbols = symbols;
   protected readonly routeCreator = routeCreator;
+  protected readonly depositToDate = depositToDate;
 }

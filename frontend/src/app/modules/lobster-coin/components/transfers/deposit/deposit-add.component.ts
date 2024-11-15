@@ -58,7 +58,7 @@ export class DepositAddComponent extends ReactiveForm implements OnInit, OnDestr
         this.twa.showAlert(err.toString())
       },
     })
-    this.twa.setMainButton({text: 'Create', is_active: true, is_visible: true}, () => this.add())
+    this.twa.setMainButton({text: 'Создать', is_active: true, is_visible: true}, () => this.add())
     this.twa.backButtonOnClick(() => this.goBack())
   }
 
@@ -90,7 +90,7 @@ export class DepositAddComponent extends ReactiveForm implements OnInit, OnDestr
       coins: number = this.coinsService.balance
 
     if (formDeposit.sum > coins) {
-      this.twa.showAlert('Error balance')
+      this.twa.showAlert('Ошибка баланса')
       return;
     }
 
