@@ -20,8 +20,7 @@ import {Deposit, depositToDate} from '../../../domains/bank/interfaces/deposit.i
       content: none;
     }`,
   template: `
-    <div class="mx-2">
-      <h1 class="h1 text-center mt-2 mb-0">{{ coinsService.balanceSubject | async }} Монет</h1>
+    <div class="m-2">
       <section class="tg-bg-secondary p-2 rounded-2">
         <article class="in-bank mb-3">
           <h5 class="h5 color-subtitle jcb">
