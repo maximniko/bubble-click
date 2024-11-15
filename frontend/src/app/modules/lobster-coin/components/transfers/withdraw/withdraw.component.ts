@@ -55,15 +55,15 @@ export class WithdrawComponent extends ReactiveForm implements OnInit, OnDestroy
         next: (value) => this.onNextBalance(value),
         error: () => this.goBack()
       })
-    this.twa.backButtonOnClick(() => this.goBack())
-    this.twa.setMainButton({text: 'Вывести', is_active: true, is_visible: true}, () => this.withdraw())
+    this.twa.backButtonOnClick(this.goBack.bind(this))
+    this.twa.setMainButton({text: 'Вывести', is_active: true, is_visible: true}, this.withdraw.bind(this))
   }
 
   ngOnDestroy(): void {
     this.formSubscription?.unsubscribe()
     this.balanceSubscription?.unsubscribe()
-    this.twa.offBackButton(() => this.goBack())
-    this.twa.offMainButton(() => this.withdraw())
+    this.twa.offBackButton(this.goBack.bind(this))
+    this.twa.offMainButton(this.withdraw.bind(this))
   }
 
   withdraw() {

@@ -145,14 +145,14 @@ export class DepositComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.twa.setMainButton({text: 'Добавить депозит', is_active: true, is_visible: true}, this.add)
-    this.twa.backButtonOnClick(() => this.goBack())
+    this.twa.setMainButton({text: 'Добавить депозит', is_active: true, is_visible: true}, this.add.bind(this))
+    this.twa.backButtonOnClick(this.goBack.bind(this))
   }
 
   ngOnDestroy() {
     console.log('deposit.ngOnDestroy')
-    this.twa.offBackButton(() => this.goBack())
-    this.twa.offMainButton(this.add)
+    this.twa.offBackButton(this.goBack.bind(this))
+    this.twa.offMainButton(this.add.bind(this))
   }
 
   goBack() {

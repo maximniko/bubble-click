@@ -54,15 +54,15 @@ export class TransferComponent extends ReactiveForm implements OnInit, OnDestroy
         next: (value) => this.onNextBalance(value),
         error: () => this.goBack()
       })
-    this.twa.backButtonOnClick(() => this.goBack())
-    this.twa.setMainButton({text: 'Перевести', is_active: true, is_visible: true}, () => this.transfer())
+    this.twa.backButtonOnClick(this.goBack.bind(this))
+    this.twa.setMainButton({text: 'Перевести', is_active: true, is_visible: true}, this.transfer.bind(this))
   }
 
   ngOnDestroy(): void {
     this.formSubscription?.unsubscribe()
     this.coinsSubscription?.unsubscribe()
-    this.twa.offBackButton(() => this.goBack())
-    this.twa.offMainButton(() => this.transfer())
+    this.twa.offBackButton(this.goBack.bind(this))
+    this.twa.offMainButton(this.transfer.bind(this))
   }
 
   private onNextBalance(balance: number) {

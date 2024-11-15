@@ -58,15 +58,15 @@ export class DepositAddComponent extends ReactiveForm implements OnInit, OnDestr
         this.twa.showAlert(err.toString())
       },
     })
-    this.twa.setMainButton({text: 'Создать', is_active: true, is_visible: true}, () => this.addDeposit())
-    this.twa.backButtonOnClick(() => this.goBack())
+    this.twa.setMainButton({text: 'Создать', is_active: true, is_visible: true}, this.addDeposit.bind(this))
+    this.twa.backButtonOnClick(this.goBack.bind(this))
   }
 
   ngOnDestroy(): void {
     this.formSubscription?.unsubscribe()
     this.depositsSubscription?.unsubscribe()
-    this.twa.offBackButton(() => this.goBack())
-    this.twa.offMainButton(() => this.addDeposit())
+    this.twa.offBackButton(this.goBack.bind(this))
+    this.twa.offMainButton(this.addDeposit.bind(this))
   }
 
   addDeposit() {
