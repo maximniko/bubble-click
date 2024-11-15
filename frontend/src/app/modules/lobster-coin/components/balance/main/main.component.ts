@@ -25,7 +25,7 @@ import {Deposit, depositToDate} from '../../../domains/bank/interfaces/deposit.i
       <section class="tg-bg-secondary p-2 rounded-2">
         <article class="in-bank mb-3">
           <h5 class="h5 color-subtitle jcb">
-            <span class="my-auto mx-0">В Банке</span>
+            <span class="my-auto mx-0">В банке</span>
             <span class="p-2" (click)="bankInfo()">
               <svg class="bi">
                 <use [attr.xlink:href]="'#' + symbols.infoCircle"/>
@@ -38,7 +38,7 @@ import {Deposit, depositToDate} from '../../../domains/bank/interfaces/deposit.i
                 <use [attr.xlink:href]="'#' + symbols.coin"/>
               </svg>
             </span>
-            <input class="form-control" type="text" value="{{ bankService.balanceSubject | async }}" aria-label="Wallet balance" disabled readonly>
+            <input class="form-control" type="text" value="{{ bankService.balanceSubject | async }}" aria-label="В банке" disabled readonly>
           </div>
           <div class="row row-cols-2">
             <div class="col">
@@ -66,7 +66,7 @@ import {Deposit, depositToDate} from '../../../domains/bank/interfaces/deposit.i
         <hr>
         <article class="deposit">
           <h5 class="h5 color-subtitle jcb">
-            <span class="my-auto mx-0">На Депозите</span>
+            <span class="my-auto mx-0">На депозите</span>
             <span class="p-2" (click)="depositInfo()">
               <svg class="bi">
                 <use [attr.xlink:href]="'#' + symbols.infoCircle"/>
@@ -81,7 +81,7 @@ import {Deposit, depositToDate} from '../../../domains/bank/interfaces/deposit.i
             </span>
             <input class="form-control" type="text" value="{{ depositSum }}" aria-label="Баланс депозитов" disabled readonly>
             @if (nearestDeposit) {
-              <div class="valid-feedback d-block">
+              <div class="valid-feedback d-block color-accent">
                 Ближайший бонус {{ toLocalDate(depositToDate(nearestDeposit), twa.getUserLanguageCode() ?? 'en') }}
               </div>
             }
