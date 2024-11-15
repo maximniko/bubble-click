@@ -21,7 +21,6 @@ import {CoinsService} from '../../../domains/coins/services/coins.service';
       <div class="hstack p-3 pb-0 color-accent">
         <span class="m-auto text-center h5">Депозиты</span>
       </div>
-      <button (click)="add()">add deposit</button>
 
       <div class="mb-5">
         <div class="mx-2 my-4 overflow-auto" style="max-height: calc(var(--tg-viewport-stable-height, 200) * 0.7)">
@@ -83,6 +82,8 @@ export class DepositComponent implements OnInit, OnDestroy {
     protected depositService: DepositService,
     protected twa: TwaService,
   ) {
+    this.add = this.add.bind(this)
+    this.goBack = this.goBack.bind(this)
   }
 
   protected _coefficient(deposit: Deposit): number {
@@ -145,14 +146,13 @@ export class DepositComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.twa.setMainButton({text: 'Добавить депозит', is_active: true, is_visible: true}, this.add.bind(this))
-    this.twa.backButtonOnClick(this.goBack.bind(this))
+    this.twa.setMainButton({text: 'Добавить депозит', is_active: true, is_visible: true}, this.add)
+    this.twa.backButtonOnClick(this.goBack)
   }
 
   ngOnDestroy() {
-    console.log('deposit.ngOnDestroy')
-    this.twa.offBackButton(this.goBack.bind(this))
-    this.twa.offMainButton(this.add.bind(this))
+    this.twa.offMainButton(this.add)
+    this.twa.offBackButton(this.goBack)
   }
 
   goBack() {
