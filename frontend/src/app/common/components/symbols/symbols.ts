@@ -23,6 +23,8 @@ export const symbols = {
   arrowUp: "arrow-up",
   chartFill: "chart-fill",
   clockHistory: "clock-history",
+  rocketTakeoff: "rocket-takeoff",
+  starFill: "star-fill",
   menu: "menu",
   // calendar3: "calendar3",
   gearFill: "gear-fill",

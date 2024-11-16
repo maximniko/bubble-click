@@ -15,20 +15,17 @@ import {symbols} from '../../../../../common/components/symbols/symbols';
           <svg class="bi">
             <use [attr.xlink:href]="'#' + symbols.coin"/>
           </svg>
-          Главная
+        </a>
+        <a class="nav-link w-100" [routerLink]="routeCreator.boost()">
+          <svg class="bi">
+            <use [attr.xlink:href]="'#' + symbols.rocketTakeoff"/>
+          </svg>
         </a>
         <a class="nav-link w-100" [routerLink]="routeCreator.balance()">
           <svg class="bi">
             <use [attr.xlink:href]="'#' + symbols.currencyExchange"/>
           </svg>
-          Баланс
         </a>
-<!--        <a class="nav-link w-100" [routerLink]="routeCreator.testFeedback()">-->
-<!--          <svg class="bi">-->
-<!--            <use [attr.xlink:href]="'#' + symbols.currencyExchange"/>-->
-<!--          </svg>-->
-<!--          back-->
-<!--        </a>-->
       </div>
     </footer>
   `,

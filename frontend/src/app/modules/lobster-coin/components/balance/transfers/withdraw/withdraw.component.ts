@@ -2,13 +2,13 @@ import {CommonModule} from '@angular/common';
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormControlStatus, FormGroup, FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {SumInputComponent} from '../_inputs/sum/sum-input.component';
-import {ReactiveForm} from '../../../../../common/components/reactive-form.component';
+import {ReactiveForm} from '../../../../../../common/components/reactive-form.component';
 import {Subscription} from 'rxjs';
-import {TwaService} from '../../../../../common/services/twa.service';
-import {BankService} from '../../../domains/bank/services/bank/bank.service';
-import {CoinsService} from '../../../domains/coins/services/coins.service';
+import {TwaService} from '../../../../../../common/services/twa.service';
+import {BankService} from '../../../../domains/bank/services/bank/bank.service';
+import {CoinsService} from '../../../../domains/coins/services/coins.service';
+import {routeCreator} from '../../../../lobster-coin.routes';
 import {Router} from '@angular/router';
-import {routeCreator} from '../../../lobster-coin.routes';
 
 @Component({
   standalone: true,
@@ -16,7 +16,7 @@ import {routeCreator} from '../../../lobster-coin.routes';
   template: `
     <section class="accent-border accent-border-top accent-bg-shadow rounded-5 tg-bg-secondary">
       <div class="hstack p-3 pb-0 color-accent">
-        <span class="m-auto text-center h5">Перевод (всего: {{ this.coinsService.balanceSubject | async }})</span>
+        <span class="m-auto text-center h5">Вывести (макс: {{ this.bankService.balanceSubject | async }})</span>
       </div>
       <div class="d-flex flex-column h-100 mb-5">
         <div class="mx-2 my-4">
@@ -25,46 +25,51 @@ import {routeCreator} from '../../../lobster-coin.routes';
           </form>
         </div>
       </div>
-    </section>`,
+    </section>
+  `,
   host: {class: 'd-flex flex-column h-100'},
 })
-export class TransferComponent extends ReactiveForm implements OnInit, OnDestroy {
+export class WithdrawComponent extends ReactiveForm implements OnInit, OnDestroy {
   protected form: FormGroup
   protected formSubscription?: Subscription
-  protected coinsSubscription?: Subscription
+  protected balanceSubscription?: Subscription
   protected maxSum: number
 
   constructor(
     private formBuilder: FormBuilder,
     private router: Router,
     private twa: TwaService,
-    private bankService: BankService,
+    protected bankService: BankService,
     protected coinsService: CoinsService,
   ) {
     super()
-    this.transfer = this.transfer.bind(this)
     this.goBack = this.goBack.bind(this)
-    this.maxSum = this.coinsService.balance
+    this.withdraw = this.withdraw.bind(this)
+    this.maxSum = this.bankService.balance
     this.form = this.formBuilder.group({})
   }
 
   ngOnInit() {
     this.formSubscription = this.form.statusChanges
       .subscribe((status: FormControlStatus) => this.twa.mainButtonIsActive(status == "VALID"))
-    this.coinsSubscription = this.coinsService.balanceSubject
+    this.balanceSubscription = this.bankService.balanceSubject
       .subscribe({
         next: (value) => this.onNextBalance(value),
         error: () => this.goBack()
       })
     this.twa.backButtonOnClick(this.goBack)
-    this.twa.setMainButton({text: 'Перевести', is_active: true, is_visible: true}, this.transfer)
+    this.twa.setMainButton({text: 'Вывести', is_active: true, is_visible: true}, this.withdraw)
   }
 
   ngOnDestroy(): void {
     this.formSubscription?.unsubscribe()
-    this.coinsSubscription?.unsubscribe()
+    this.balanceSubscription?.unsubscribe()
     this.twa.offBackButton(this.goBack)
-    this.twa.offMainButton(this.transfer)
+    this.twa.offMainButton(this.withdraw)
+  }
+
+  withdraw() {
+    this.bankService.loadBalance()
   }
 
   private onNextBalance(balance: number) {
@@ -72,7 +77,6 @@ export class TransferComponent extends ReactiveForm implements OnInit, OnDestroy
       this.goBack()
       return
     }
-
     if (this.form.invalid) {
       return
     }
@@ -87,22 +91,17 @@ export class TransferComponent extends ReactiveForm implements OnInit, OnDestroy
     if (!form.sum || isNaN(form.sum)) {
       return
     }
-
-    const bank = this.bankService.balance
+    const coins = this.coinsService.balance
 
     try {
-      this.bankService.saveBalance(bank + form.sum)
-      this.coinsService.saveBalance(balance - form.sum)
+      this.coinsService.saveBalance(coins + form.sum)
+      this.bankService.saveBalance(balance - form.sum)
       this.form.reset()
     } catch (e) {
       this.twa.showAlert((<Error>e).message)
-      this.bankService.saveBalance(bank)
-      this.coinsService.saveBalance(balance)
+      this.coinsService.saveBalance(coins)
+      this.bankService.saveBalance(balance)
     }
-  }
-
-  transfer() {
-    this.coinsService.loadBalance()  // see OnInit - if balance !== this.maxSum -> goBack
   }
 
   goBack() {

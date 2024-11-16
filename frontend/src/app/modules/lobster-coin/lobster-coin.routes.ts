@@ -3,7 +3,8 @@ import {Routes} from '@angular/router';
 const ROUTE_PARTS = {
   lobsterCoin: 'lobster-coin',
   main: 'main',
-  balance: 'bank',
+  balance: 'balance',
+  boost: 'boost',
   transfer: 'transfer',
   withdraw: 'withdraw',
   deposit: 'deposit',
@@ -11,7 +12,7 @@ const ROUTE_PARTS = {
 export const routeCreator = {
   main: () => `/${ROUTE_PARTS.lobsterCoin}/${ROUTE_PARTS.main}`,
   balance: () => `/${ROUTE_PARTS.lobsterCoin}/${ROUTE_PARTS.balance}`,
-  testFeedback: () => `/${ROUTE_PARTS.lobsterCoin}/test-feedback`,
+  boost: () => `/${ROUTE_PARTS.lobsterCoin}/${ROUTE_PARTS.boost}`,
   transfer: () => `/${ROUTE_PARTS.lobsterCoin}/${ROUTE_PARTS.transfer}`,
   withdraw: () => `/${ROUTE_PARTS.lobsterCoin}/${ROUTE_PARTS.withdraw}`,
   deposit: () => `/${ROUTE_PARTS.lobsterCoin}/${ROUTE_PARTS.deposit}`,
@@ -28,8 +29,8 @@ export const lobsterCoinRoutes: Routes = [
         loadComponent: () => import('./components/main/main.component').then(mod => mod.MainComponent)
       },
       {
-        path: 'test-feedback',
-        loadComponent: () => import('./components/main/feedback.component').then(mod => mod.FeedbackComponent)
+        path: ROUTE_PARTS.boost,
+        loadComponent: () => import('./components/boost/boost.component').then(mod => mod.BoostComponent)
       },
       {
         path: ROUTE_PARTS.balance,
@@ -37,19 +38,19 @@ export const lobsterCoinRoutes: Routes = [
       },
       {
         path: ROUTE_PARTS.withdraw,
-        loadComponent: () => import('./components/transfers/withdraw/withdraw.component').then(mod => mod.WithdrawComponent)
+        loadComponent: () => import('./components/balance/transfers/withdraw/withdraw.component').then(mod => mod.WithdrawComponent)
       },
       {
         path: ROUTE_PARTS.transfer,
-        loadComponent: () => import('./components/transfers/transfer/transfer.component').then(mod => mod.TransferComponent)
+        loadComponent: () => import('./components/balance/transfers/transfer/transfer.component').then(mod => mod.TransferComponent)
       },
       {
         path: ROUTE_PARTS.deposit,
-        loadComponent: () => import('./components/transfers/deposit/deposit.component').then(mod => mod.DepositComponent)
+        loadComponent: () => import('./components/balance/transfers/deposit/deposit.component').then(mod => mod.DepositComponent)
       },
       {
         path: `${ROUTE_PARTS.deposit}-add`,
-        loadComponent: () => import('./components/transfers/deposit/deposit-add.component').then(mod => mod.DepositAddComponent)
+        loadComponent: () => import('./components/balance/transfers/deposit/deposit-add.component').then(mod => mod.DepositAddComponent)
       },
       {path: '**', redirectTo: routeCreator.main(), pathMatch: 'full'},
     ],

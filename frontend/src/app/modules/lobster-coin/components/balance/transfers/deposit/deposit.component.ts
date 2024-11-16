@@ -5,13 +5,13 @@ import {
   depositToBonus,
   depositToCoefficient,
   depositToDate,
-} from '../../../domains/bank/interfaces/deposit.interface';
-import {DepositService} from '../../../domains/bank/services/deposit/deposit.service';
-import {toLocalDate} from '../../../../../common/extensions/Date';
-import {TwaService} from '../../../../../common/services/twa.service';
+} from '../../../../domains/bank/interfaces/deposit.interface';
+import {DepositService} from '../../../../domains/bank/services/deposit/deposit.service';
+import {toLocalDate} from '../../../../../../common/extensions/Date';
+import {TwaService} from '../../../../../../common/services/twa.service';
 import {Router} from '@angular/router';
-import {routeCreator} from '../../../lobster-coin.routes';
-import {CoinsService} from '../../../domains/coins/services/coins.service';
+import {routeCreator} from '../../../../lobster-coin.routes';
+import {CoinsService} from '../../../../domains/coins/services/coins.service';
 
 @Component({
   standalone: true,

@@ -1,15 +1,15 @@
 import {CommonModule} from '@angular/common';
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {DepositService} from '../../../domains/bank/services/deposit/deposit.service';
+import {DepositService} from '../../../../domains/bank/services/deposit/deposit.service';
 import {FormBuilder, FormControlStatus, FormGroup, ReactiveFormsModule} from '@angular/forms';
-import {ReactiveForm} from '../../../../../common/components/reactive-form.component';
-import {Deposit} from '../../../domains/bank/interfaces/deposit.interface';
-import {TwaService} from '../../../../../common/services/twa.service';
-import {DepositInputsComponent} from './_inputs/deposit-inputs.component';
+import {ReactiveForm} from '../../../../../../common/components/reactive-form.component';
+import {Deposit} from '../../../../domains/bank/interfaces/deposit.interface';
+import {TwaService} from '../../../../../../common/services/twa.service';
 import {Subscription} from 'rxjs';
 import {Router} from '@angular/router';
-import {routeCreator} from '../../../lobster-coin.routes';
-import {CoinsService} from '../../../domains/coins/services/coins.service';
+import {routeCreator} from '../../../../lobster-coin.routes';
+import {CoinsService} from '../../../../domains/coins/services/coins.service';
+import {DepositInputsComponent} from './_inputs/deposit-inputs.component';
 
 @Component({
   standalone: true,

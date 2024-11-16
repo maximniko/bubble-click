@@ -1,6 +1,6 @@
 import {Component, Input, OnInit} from "@angular/core";
 import {CommonModule} from "@angular/common";
-import {ReactiveForm} from "../../../../../../common/components/reactive-form.component";
+import {ReactiveForm} from "../../../../../../../common/components/reactive-form.component";
 import {
   ControlContainer,
   FormBuilder,
@@ -13,7 +13,7 @@ import {
   NgbInputDatepicker,
   NgbInputDatepickerConfig
 } from "@ng-bootstrap/ng-bootstrap";
-import {DateValidator} from "../../../../../../common/extensions/Validators";
+import {DateValidator} from "../../../../../../../common/extensions/Validators";
 
 @Component({
   selector: 'date-input',

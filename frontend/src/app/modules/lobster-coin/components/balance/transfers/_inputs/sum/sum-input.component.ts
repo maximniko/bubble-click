@@ -1,4 +1,4 @@
-import {ReactiveForm} from '../../../../../../common/components/reactive-form.component';
+import {ReactiveForm} from '../../../../../../../common/components/reactive-form.component';
 import {Component, Input, OnInit} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {

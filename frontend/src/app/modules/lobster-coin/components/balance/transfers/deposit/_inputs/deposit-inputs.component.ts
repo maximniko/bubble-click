@@ -1,4 +1,4 @@
-import {ReactiveForm} from '../../../../../../common/components/reactive-form.component';
+import {ReactiveForm} from '../../../../../../../common/components/reactive-form.component';
 import {Component, Input, OnInit} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {
@@ -9,9 +9,9 @@ import {
   ReactiveFormsModule,
   Validators
 } from '@angular/forms';
-import {DEPOSIT_PLANS, DepositPlan, planToLabel} from '../../../../domains/bank/interfaces/deposit.interface';
+import {DEPOSIT_PLANS, DepositPlan, planToLabel} from '../../../../../domains/bank/interfaces/deposit.interface';
 import {SumInputComponent} from '../../_inputs/sum/sum-input.component';
-import {CoinsService} from '../../../../domains/coins/services/coins.service';
+import {CoinsService} from '../../../../../domains/coins/services/coins.service';
 
 @Component({
   selector: 'deposit-inputs',
