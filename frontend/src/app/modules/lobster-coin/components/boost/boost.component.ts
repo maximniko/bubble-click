@@ -21,7 +21,7 @@ import {symbols} from '../../../../common/components/symbols/symbols';
           @for (boost of boosts; track boost.level) {
             <li class="list-group-item vstack">
               <div class="jcb">
-                <h3 class="color-header-text h3">Уровень {{ boost.level }}</h3>
+                <h3 class="h3">Уровень {{ boost.level }}</h3>
                 <div><span class="color-accent h3">{{ boost.perClick }}</span> за клик</div>
               </div>
               <div class="jcb gap-2 text-center">
