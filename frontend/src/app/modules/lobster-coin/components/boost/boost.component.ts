@@ -8,8 +8,13 @@ import {symbols} from '../../../../common/components/symbols/symbols';
   imports: [CommonModule],
   template: `
     <section class="accent-border accent-border-top accent-bg-shadow rounded-5 tg-bg-secondary h-100">
-      <div class="hstack p-3 pb-0 color-accent">
-        <span class="m-auto text-center h5">Турбо</span>
+      <div class="hstack p-3 color-accent">
+        <span class="m-auto text-center h5">
+          <svg class="bi">
+            <use [attr.xlink:href]="'#' + symbols.rocketTakeoff"/>
+          </svg>
+          Турбо
+        </span>
       </div>
       <div class="overflow-auto" style="max-height: calc(var(--tg-viewport-stable-height, 200) * 0.7)">
         <ul class="list-group m-2 my-3 tg-bg-secondary">
@@ -20,8 +25,8 @@ import {symbols} from '../../../../common/components/symbols/symbols';
                 <div><span class="color-accent h3">{{ boost.perClick }}</span> за клик</div>
               </div>
               <div class="jcb gap-2 text-center">
-                <div class="vstack jcc">
-                  <div class="color-accent">
+                <div class="vstack jcb">
+                  <div class="color-accent my-2 h3">
                     <svg class="bi">
                       <use [attr.xlink:href]="'#' + symbols.starFill"/>
                     </svg>
@@ -29,8 +34,8 @@ import {symbols} from '../../../../common/components/symbols/symbols';
                   </div>
                   <button class="btn tg-btn">получить за звезды</button>
                 </div>
-                <div class="vstack jcc">
-                  <div class="color-accent">
+                <div class="vstack jcb">
+                  <div class="color-accent my-2 h4">
                     <svg class="bi">
                       <use [attr.xlink:href]="'#' + symbols.coin"/>
                     </svg>

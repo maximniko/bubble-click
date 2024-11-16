@@ -4,6 +4,7 @@ import {MainComponent} from './main/main.component';
 import {routeCreator} from '../../lobster-coin.routes';
 import {TwaService} from '../../../../common/services/twa.service';
 import {Router} from '@angular/router';
+import {symbols} from '../../../../common/components/symbols/symbols';
 
 @Component({
   standalone: true,
@@ -29,4 +30,6 @@ export class BalanceComponent implements OnInit, OnDestroy {
   goBack() {
     this.router.navigate([routeCreator.main()])
   }
+
+  protected readonly symbols = symbols;
 }
