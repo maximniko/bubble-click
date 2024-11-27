@@ -4,7 +4,7 @@ import {symbols} from '../../../../../common/components/symbols/symbols';
 import {toLocalDate} from '../../../../../common/extensions/Date';
 import {routeCreator} from '../../../lobster-coin.routes';
 import {RouterLink} from '@angular/router';
-import {CoinsService} from '../../../domains/coins/services/coins.service';
+import {CoinsService} from '../../../domains/coins/services/coins/coins.service';
 import {BankService} from '../../../domains/bank/services/bank/bank.service';
 import {TwaService} from '../../../../../common/services/twa.service';
 import {DepositService} from '../../../domains/bank/services/deposit/deposit.service';

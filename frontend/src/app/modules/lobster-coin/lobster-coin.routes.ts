@@ -30,7 +30,7 @@ export const lobsterCoinRoutes: Routes = [
       },
       {
         path: ROUTE_PARTS.boost,
-        loadComponent: () => import('./components/boost/boost.component').then(mod => mod.BoostComponent)
+        loadComponent: () => import('./components/boost/turbo.component').then(mod => mod.TurboComponent)
       },
       {
         path: ROUTE_PARTS.balance,

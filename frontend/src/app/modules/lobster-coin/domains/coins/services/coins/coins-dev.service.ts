@@ -10,6 +10,6 @@ export class CoinsDevService extends CoinsService {
   }
 
   override loadBalance(onComplete?: (observable: Observable<void>) => void) {
-    this.balance = 100
+    this.balance = 10000000000
   }
 }

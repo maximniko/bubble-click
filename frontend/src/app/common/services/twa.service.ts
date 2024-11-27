@@ -155,6 +155,7 @@ type CloudStorageKey = string
 export const STORAGE_KEY_BALANCE: CloudStorageKey = '1'
 export const STORAGE_KEY_BANK: CloudStorageKey = '2'
 export const STORAGE_KEY_BANK_DEPOSIT: CloudStorageKey = '3'
+export const STORAGE_KEY_TURBO: CloudStorageKey = '5'
 
 export const STORAGE_MAX_VALUE_LENGTH = 4096
 

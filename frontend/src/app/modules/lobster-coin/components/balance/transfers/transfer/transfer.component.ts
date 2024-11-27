@@ -6,7 +6,7 @@ import {ReactiveForm} from '../../../../../../common/components/reactive-form.co
 import {Subscription} from 'rxjs';
 import {TwaService} from '../../../../../../common/services/twa.service';
 import {BankService} from '../../../../domains/bank/services/bank/bank.service';
-import {CoinsService} from '../../../../domains/coins/services/coins.service';
+import {CoinsService} from '../../../../domains/coins/services/coins/coins.service';
 import {Router} from '@angular/router';
 import {routeCreator} from '../../../../lobster-coin.routes';
 

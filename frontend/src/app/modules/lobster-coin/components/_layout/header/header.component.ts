@@ -5,7 +5,7 @@ import {routeCreator} from "../../../lobster-coin.routes";
 import {symbols} from "../../../../../common/components/symbols/symbols";
 import {NgbOffcanvas} from "@ng-bootstrap/ng-bootstrap";
 import {Localisation} from "../../../../../common/services/localisation";
-import {CoinsService} from '../../../domains/coins/services/coins.service';
+import {CoinsService} from '../../../domains/coins/services/coins/coins.service';
 import {Subscription} from 'rxjs';
 
 @Component({

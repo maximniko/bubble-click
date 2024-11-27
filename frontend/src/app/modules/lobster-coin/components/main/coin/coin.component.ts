@@ -1,12 +1,13 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {CoinsService} from '../../../domains/coins/services/coins.service';
+import {CoinsService} from '../../../domains/coins/services/coins/coins.service';
 import {FormsModule} from '@angular/forms';
 import {ClickAnimationDirective} from './click-animation.directive';
 import {debounceTime, scan, startWith, Subject, Subscription, switchMap, tap} from 'rxjs';
 import {fromSubscribable} from 'rxjs/internal/observable/fromSubscribable';
 import {ClickSoundDirective} from './click-sound.directive';
 import {CoinPressDirective} from './coin-press.directive';
+import {TurboService} from '../../../domains/coins/services/turbo/turbo.service';
 
 @Component({
   selector: 'main-coin',
@@ -25,7 +26,7 @@ import {CoinPressDirective} from './coin-press.directive';
            [appClickAnimation]="click.id"
            [appClickSound]="{sound: click.id}"
            [ngStyle]="{'top.px': click.top, 'left.px': click.left}">
-        {{ coinsService.perClick }}
+        {{ turboService.perClickSubject | async }}
       </div>
     }
 
@@ -35,12 +36,15 @@ import {CoinPressDirective} from './coin-press.directive';
 export class CoinComponent implements OnInit, OnDestroy {
   clicks: Click[] = [];
   private clickCounter = 0;
+  private perClick = 1;
   private trigger$ = new Subject<void>();
   private clickSubject = new Subject<void>();
   protected triggerSubscription?: Subscription
+  protected turboSubscription?: Subscription
 
   constructor(
     protected coinsService: CoinsService,
+    protected turboService: TurboService,
   ) {
   }
 
@@ -52,11 +56,14 @@ export class CoinComponent implements OnInit, OnDestroy {
         debounceTime(500),
         tap(() => this.trigger$.next()),
       )
-      .subscribe(clicks => this.coinsService.saveClicks(clicks))
+      .subscribe(clicks => this.coinsService.saveClicks(clicks * this.perClick))
+    this.turboSubscription = this.turboService.perClickSubject
+      .subscribe((value) => this.perClick = value)
   }
 
   ngOnDestroy() {
     this.triggerSubscription?.unsubscribe()
+    this.turboSubscription?.unsubscribe()
   }
 
   // Обрабатываем событие клика и передаем в Subject

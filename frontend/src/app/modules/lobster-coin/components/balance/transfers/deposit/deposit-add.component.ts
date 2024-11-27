@@ -8,7 +8,7 @@ import {TwaService} from '../../../../../../common/services/twa.service';
 import {Subscription} from 'rxjs';
 import {Router} from '@angular/router';
 import {routeCreator} from '../../../../lobster-coin.routes';
-import {CoinsService} from '../../../../domains/coins/services/coins.service';
+import {CoinsService} from '../../../../domains/coins/services/coins/coins.service';
 import {DepositInputsComponent} from './_inputs/deposit-inputs.component';
 
 @Component({

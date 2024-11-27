@@ -11,7 +11,7 @@ import {toLocalDate} from '../../../../../../common/extensions/Date';
 import {TwaService} from '../../../../../../common/services/twa.service';
 import {Router} from '@angular/router';
 import {routeCreator} from '../../../../lobster-coin.routes';
-import {CoinsService} from '../../../../domains/coins/services/coins.service';
+import {CoinsService} from '../../../../domains/coins/services/coins/coins.service';
 
 @Component({
   standalone: true,

@@ -1,14 +1,13 @@
 import {Injectable} from '@angular/core';
 import {BehaviorSubject, Observable} from 'rxjs';
-import {STORAGE_KEY_BALANCE, TwaService} from '../../../../../common/services/twa.service';
+import {STORAGE_KEY_BALANCE, TwaService} from '../../../../../../common/services/twa.service';
 import {CoinsInterface} from './coins.interface';
-import {CloudStorage} from '../../../../../common/services/cloud-storage';
+import {CloudStorage} from '../../../../../../common/services/cloud-storage';
 
 @Injectable({providedIn: 'root'})
 export class CoinsService implements CoinsInterface {
   balanceSubject = new BehaviorSubject<number>(0);
-  perClick: number = 1;
-  private _balance: number = 0;
+  protected _balance: number = 0;
 
   constructor(
     private cloudStorage: CloudStorage,
@@ -21,7 +20,7 @@ export class CoinsService implements CoinsInterface {
     return this._balance
   }
 
-  protected set balance(balance: number) {
+  set balance(balance: number) {
     this._balance = balance
     this.balanceSubject.next(balance)
   }
@@ -30,11 +29,7 @@ export class CoinsService implements CoinsInterface {
     this.cloudStorage.getItem(STORAGE_KEY_BALANCE)
       .subscribe({
         next: (x) => {
-          if (x) {
-            this.balance = +x
-          } else {
-            this.balance = 0
-          }
+          this.balance = x ? +x : 0
         },
         error: (err) => {
           if (err) {
@@ -55,7 +50,7 @@ export class CoinsService implements CoinsInterface {
   }
 
   saveClicks(clicks: number): void {
-    this.saveBalance(this.balance + clicks * this.perClick)
+    this.saveBalance(this.balance + clicks)
   }
 
   saveBalance(balance: number, onComplete?: (observable: Observable<void>) => void): void {

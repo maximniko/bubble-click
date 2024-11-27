@@ -11,7 +11,7 @@ import {
 } from '@angular/forms';
 import {DEPOSIT_PLANS, DepositPlan, planToLabel} from '../../../../../domains/bank/interfaces/deposit.interface';
 import {SumInputComponent} from '../../_inputs/sum/sum-input.component';
-import {CoinsService} from '../../../../../domains/coins/services/coins.service';
+import {CoinsService} from '../../../../../domains/coins/services/coins/coins.service';
 
 @Component({
   selector: 'deposit-inputs',
