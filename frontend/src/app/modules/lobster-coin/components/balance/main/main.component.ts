@@ -113,10 +113,15 @@ export class MainComponent implements OnInit, OnDestroy {
           acc += item.sum
           return acc
         }, 0)
+        const now = Date.now()
         items.forEach((item: Deposit) => {
+          const itemTime = depositToDate(item).getTime()
+          if (itemTime < now) {
+            return
+          }
           if (
             !this.nearestDeposit
-            || depositToDate(this.nearestDeposit).getTime() > depositToDate(item).getTime()
+            || depositToDate(this.nearestDeposit).getTime() > itemTime
           ) {
             this.nearestDeposit = item
           }
