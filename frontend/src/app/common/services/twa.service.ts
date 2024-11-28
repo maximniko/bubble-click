@@ -1,14 +1,16 @@
 import {Injectable} from '@angular/core';
 import WebApp from "@twa-dev/sdk";
-import {CloudStorage, HapticFeedback, PopupParams, SecondaryButton} from "@twa-dev/types";
+import {CloudStorage, PopupParams, SecondaryButton} from "@twa-dev/types";
 import {environment} from '../../../environments/environment';
 
 @Injectable({providedIn: 'root'})
 export class TwaService {
 
   constructor() {
-    console.log('TwaService.init')
     this.initTheme()
+    // if (!WebApp.isOrientationLocked) {
+    //   WebApp.lockOrientation()
+    // }
   }
 
   getInitData(): string {
@@ -134,6 +136,20 @@ export class TwaService {
   get cloudStorage(): CloudStorage {
     return WebApp.CloudStorage
   }
+
+  // requestFullscreen() {
+  //   console.log('requestFullscreen')
+  //   console.log(typeof WebApp.requestFullscreen)
+  //   if (!WebApp.isFullscreen && typeof WebApp.requestFullscreen !== undefined) {
+  //     WebApp.requestFullscreen()
+  //   }
+  // }
+  //
+  // exitFullscreen() {
+  //   if (WebApp.isFullscreen && typeof WebApp.exitFullscreen !== undefined) {
+  //     WebApp.exitFullscreen()
+  //   }
+  // }
 }
 
 type BottomButtonParams = {
