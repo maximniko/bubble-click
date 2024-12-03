@@ -23,7 +23,7 @@ import {CoinsService} from '../../../../domains/coins/services/coins/coins.servi
       </div>
 
       <div class="mb-5">
-        <div class="mx-2 my-4 overflow-auto" style="max-height: 70%">
+        <div class="mx-2 my-4 overflow-auto" style="max-height: calc(var(--tg-viewport-stable-height, 200) * 0.7)">
           @if (depositService.depositsSubject | async; as deposits) {
             @if (deposits.length) {
               <ul class="list-group">
