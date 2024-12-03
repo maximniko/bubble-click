@@ -6,6 +6,6 @@ import {DepositService} from './services/deposit/deposit.service';
 import {DepositDevService} from './services/deposit/deposit-dev.service';
 
 export const bankProviders: Array<Provider | EnvironmentProviders> = [
-  {provide: BankService, useClass: environment.production ? BankDevService : BankDevService},
-  {provide: DepositService, useClass: environment.production ? DepositDevService : DepositDevService},
+  {provide: BankService, useClass: environment.production ? BankService : BankDevService},
+  {provide: DepositService, useClass: environment.production ? DepositService : DepositDevService},
 ]
