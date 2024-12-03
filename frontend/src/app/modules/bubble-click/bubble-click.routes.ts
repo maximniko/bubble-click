@@ -1,7 +1,7 @@
 import {Routes} from '@angular/router';
 
 const ROUTE_PARTS = {
-  lobsterCoin: 'lobster-coin',
+  bubbleClick: 'bubble-click',
   main: 'main',
   balance: 'balance',
   boost: 'boost',
@@ -10,19 +10,19 @@ const ROUTE_PARTS = {
   deposit: 'deposit',
 }
 export const routeCreator = {
-  main: () => `/${ROUTE_PARTS.lobsterCoin}/${ROUTE_PARTS.main}`,
-  balance: () => `/${ROUTE_PARTS.lobsterCoin}/${ROUTE_PARTS.balance}`,
-  boost: () => `/${ROUTE_PARTS.lobsterCoin}/${ROUTE_PARTS.boost}`,
-  transfer: () => `/${ROUTE_PARTS.lobsterCoin}/${ROUTE_PARTS.transfer}`,
-  withdraw: () => `/${ROUTE_PARTS.lobsterCoin}/${ROUTE_PARTS.withdraw}`,
-  deposit: () => `/${ROUTE_PARTS.lobsterCoin}/${ROUTE_PARTS.deposit}`,
-  depositAdd: () => `/${ROUTE_PARTS.lobsterCoin}/${ROUTE_PARTS.deposit}-add`,
+  main: () => `/${ROUTE_PARTS.bubbleClick}/${ROUTE_PARTS.main}`,
+  balance: () => `/${ROUTE_PARTS.bubbleClick}/${ROUTE_PARTS.balance}`,
+  boost: () => `/${ROUTE_PARTS.bubbleClick}/${ROUTE_PARTS.boost}`,
+  transfer: () => `/${ROUTE_PARTS.bubbleClick}/${ROUTE_PARTS.transfer}`,
+  withdraw: () => `/${ROUTE_PARTS.bubbleClick}/${ROUTE_PARTS.withdraw}`,
+  deposit: () => `/${ROUTE_PARTS.bubbleClick}/${ROUTE_PARTS.deposit}`,
+  depositAdd: () => `/${ROUTE_PARTS.bubbleClick}/${ROUTE_PARTS.deposit}-add`,
 }
 
-export const lobsterCoinRoutes: Routes = [
+export const bubbleClickRoutes: Routes = [
   {
-    path: ROUTE_PARTS.lobsterCoin,
-    loadComponent: () => import('./lobster-coin.component').then(mod => mod.LobsterCoinComponent),
+    path: ROUTE_PARTS.bubbleClick,
+    loadComponent: () => import('./bubble-click.component').then(mod => mod.BubbleClickComponent),
     children: [
       {
         path: ROUTE_PARTS.main,

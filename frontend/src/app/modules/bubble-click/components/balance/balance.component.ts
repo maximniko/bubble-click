@@ -1,7 +1,7 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {MainComponent} from './main/main.component';
-import {routeCreator} from '../../lobster-coin.routes';
+import {routeCreator} from '../../bubble-click.routes';
 import {TwaService} from '../../../../common/services/twa.service';
 import {Router} from '@angular/router';
 import {symbols} from '../../../../common/components/symbols/symbols';

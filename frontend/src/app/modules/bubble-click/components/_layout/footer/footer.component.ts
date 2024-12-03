@@ -1,7 +1,7 @@
 import {Component} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {RouterLink} from '@angular/router';
-import {routeCreator} from '../../../lobster-coin.routes';
+import {routeCreator} from '../../../bubble-click.routes';
 import {symbols} from '../../../../../common/components/symbols/symbols';
 
 @Component({

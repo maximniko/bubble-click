@@ -6,7 +6,7 @@ import {appRoutesProvider} from './app.routes.provider';
 import {interceptors} from './common/interceptors.provider';
 import {provideClientHydration} from '@angular/platform-browser';
 import {provideHttpClient, withFetch, withInterceptorsFromDi} from '@angular/common/http';
-import {lobsterCoinProviders} from './modules/lobster-coin/lobster-coin.provider';
+import {bubbleClickProviders} from './modules/bubble-click/bubble-click.provider';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -16,6 +16,6 @@ export const appConfig: ApplicationConfig = {
     provideClientHydration(),
     provideHttpClient(withFetch(), withInterceptorsFromDi()),
     ...interceptors,
-    ...lobsterCoinProviders,
+    ...bubbleClickProviders,
   ]
 };

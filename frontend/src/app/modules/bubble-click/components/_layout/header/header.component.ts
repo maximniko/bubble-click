@@ -1,7 +1,7 @@
 import {Component, inject, OnDestroy, OnInit, TemplateRef} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {RouterLink} from "@angular/router";
-import {routeCreator} from "../../../lobster-coin.routes";
+import {routeCreator} from "../../../bubble-click.routes";
 import {symbols} from "../../../../../common/components/symbols/symbols";
 import {NgbOffcanvas} from "@ng-bootstrap/ng-bootstrap";
 import {Localisation} from "../../../../../common/services/localisation";

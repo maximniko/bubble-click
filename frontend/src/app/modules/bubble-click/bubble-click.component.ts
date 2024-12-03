@@ -18,7 +18,7 @@ import {TwaService} from "../../common/services/twa.service";
     <app-symbols/>`,
   host: {'class': 'd-flex flex-column h-100'}
 })
-export class LobsterCoinComponent implements OnInit {
+export class BubbleClickComponent implements OnInit {
   constructor(private twa: TwaService) {
     this.twa.ready()
   }

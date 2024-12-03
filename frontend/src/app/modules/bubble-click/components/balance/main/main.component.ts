@@ -2,7 +2,7 @@ import {CommonModule} from '@angular/common';
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {symbols} from '../../../../../common/components/symbols/symbols';
 import {toLocalDate} from '../../../../../common/extensions/Date';
-import {routeCreator} from '../../../lobster-coin.routes';
+import {routeCreator} from '../../../bubble-click.routes';
 import {RouterLink} from '@angular/router';
 import {CoinsService} from '../../../domains/coins/services/coins/coins.service';
 import {BankService} from '../../../domains/bank/services/bank/bank.service';

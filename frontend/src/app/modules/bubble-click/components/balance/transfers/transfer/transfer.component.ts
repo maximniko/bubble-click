@@ -7,8 +7,8 @@ import {Subscription} from 'rxjs';
 import {TwaService} from '../../../../../../common/services/twa.service';
 import {BankService} from '../../../../domains/bank/services/bank/bank.service';
 import {CoinsService} from '../../../../domains/coins/services/coins/coins.service';
-import {routeCreator} from '../../../../lobster-coin.routes';
 import {Router} from '@angular/router';
+import {routeCreator} from '../../../../bubble-click.routes';
 
 @Component({
   standalone: true,
@@ -16,7 +16,7 @@ import {Router} from '@angular/router';
   template: `
     <section class="accent-border accent-border-top accent-bg-shadow rounded-5 tg-bg-secondary">
       <div class="hstack p-3 pb-0 color-accent">
-        <span class="m-auto text-center h5">Вывести (макс: {{ this.bankService.balanceSubject | async }})</span>
+        <span class="m-auto text-center h5">Перевод (всего: {{ this.coinsService.balanceSubject | async }})</span>
       </div>
       <div class="d-flex flex-column h-100 mb-5">
         <div class="mx-2 my-4">
@@ -25,51 +25,46 @@ import {Router} from '@angular/router';
           </form>
         </div>
       </div>
-    </section>
-  `,
+    </section>`,
   host: {class: 'd-flex flex-column h-100'},
 })
-export class WithdrawComponent extends ReactiveForm implements OnInit, OnDestroy {
+export class TransferComponent extends ReactiveForm implements OnInit, OnDestroy {
   protected form: FormGroup
   protected formSubscription?: Subscription
-  protected balanceSubscription?: Subscription
+  protected coinsSubscription?: Subscription
   protected maxSum: number
 
   constructor(
     private formBuilder: FormBuilder,
     private router: Router,
     private twa: TwaService,
-    protected bankService: BankService,
+    private bankService: BankService,
     protected coinsService: CoinsService,
   ) {
     super()
+    this.transfer = this.transfer.bind(this)
     this.goBack = this.goBack.bind(this)
-    this.withdraw = this.withdraw.bind(this)
-    this.maxSum = this.bankService.balance
+    this.maxSum = this.coinsService.balance
     this.form = this.formBuilder.group({})
   }
 
   ngOnInit() {
     this.formSubscription = this.form.statusChanges
       .subscribe((status: FormControlStatus) => this.twa.mainButtonIsActive(status == "VALID"))
-    this.balanceSubscription = this.bankService.balanceSubject
+    this.coinsSubscription = this.coinsService.balanceSubject
       .subscribe({
         next: (value) => this.onNextBalance(value),
         error: () => this.goBack()
       })
     this.twa.backButtonOnClick(this.goBack)
-    this.twa.setMainButton({text: 'Вывести', is_active: true, is_visible: true}, this.withdraw)
+    this.twa.setMainButton({text: 'Перевести', is_active: true, is_visible: true}, this.transfer)
   }
 
   ngOnDestroy(): void {
     this.formSubscription?.unsubscribe()
-    this.balanceSubscription?.unsubscribe()
+    this.coinsSubscription?.unsubscribe()
     this.twa.offBackButton(this.goBack)
-    this.twa.offMainButton(this.withdraw)
-  }
-
-  withdraw() {
-    this.bankService.loadBalance()
+    this.twa.offMainButton(this.transfer)
   }
 
   private onNextBalance(balance: number) {
@@ -77,6 +72,7 @@ export class WithdrawComponent extends ReactiveForm implements OnInit, OnDestroy
       this.goBack()
       return
     }
+
     if (this.form.invalid) {
       return
     }
@@ -91,17 +87,22 @@ export class WithdrawComponent extends ReactiveForm implements OnInit, OnDestroy
     if (!form.sum || isNaN(form.sum)) {
       return
     }
-    const coins = this.coinsService.balance
+
+    const bank = this.bankService.balance
 
     try {
-      this.coinsService.saveBalance(coins + form.sum)
-      this.bankService.saveBalance(balance - form.sum)
+      this.bankService.saveBalance(bank + form.sum)
+      this.coinsService.saveBalance(balance - form.sum)
       this.form.reset()
     } catch (e) {
       this.twa.showAlert((<Error>e).message)
-      this.coinsService.saveBalance(coins)
-      this.bankService.saveBalance(balance)
+      this.bankService.saveBalance(bank)
+      this.coinsService.saveBalance(balance)
     }
+  }
+
+  transfer() {
+    this.coinsService.loadBalance()  // see OnInit - if balance !== this.maxSum -> goBack
   }
 
   goBack() {
