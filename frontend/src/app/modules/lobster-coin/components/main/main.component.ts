@@ -3,6 +3,8 @@ import {CommonModule} from '@angular/common';
 import {Router} from "@angular/router";
 import {TwaService} from "../../../../common/services/twa.service";
 import {CoinComponent} from './coin/coin.component';
+import {symbols} from '../../../../common/components/symbols/symbols';
+import {CoinSoundService} from '../../domains/coins/coin-sound.service';
 
 @Component({
   standalone: true,
@@ -12,6 +14,7 @@ import {CoinComponent} from './coin/coin.component';
 })
 export class MainComponent implements OnInit {
   constructor(
+    protected coinSoundService: CoinSoundService,
     protected twa: TwaService,
     protected router: Router
   ) {
@@ -20,4 +23,11 @@ export class MainComponent implements OnInit {
   ngOnInit(): void {
     this.twa.visibleBackButton(false)
   }
+
+  toggleWithSound() {
+    this.coinSoundService.withSound = !this.coinSoundService.withSound
+    this.twa.hapticFeedbackNotificationOccurred(this.coinSoundService.withSound ? 'success' : 'warning')
+  }
+
+  protected readonly symbols = symbols;
 }

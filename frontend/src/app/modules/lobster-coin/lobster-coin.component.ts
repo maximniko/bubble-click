@@ -11,11 +11,11 @@ import {TwaService} from "../../common/services/twa.service";
   imports: [CommonModule, RouterOutlet, HeaderComponent, FooterComponent, SymbolsComponent],
   template: `
     <main class="main d-flex flex-column h-100">
-      <my-money-header></my-money-header>
-      <router-outlet></router-outlet>
+      <my-money-header/>
+      <router-outlet/>
     </main>
-    <my-money-footer></my-money-footer>
-    <app-symbols></app-symbols>`,
+    <my-money-footer/>
+    <app-symbols/>`,
   host: {'class': 'd-flex flex-column h-100'}
 })
 export class LobsterCoinComponent implements OnInit {

@@ -1,12 +1,16 @@
 import {Injectable} from '@angular/core';
 import WebApp from "@twa-dev/sdk";
 import {CloudStorage, PopupParams, SecondaryButton} from "@twa-dev/types";
+import {environment} from '../../../environments/environment';
 
 @Injectable({providedIn: 'root'})
 export class TwaService {
 
   constructor() {
     this.initTheme()
+    // if (!WebApp.isOrientationLocked) {
+    //   WebApp.lockOrientation()
+    // }
   }
 
   getInitData(): string {
@@ -55,7 +59,11 @@ export class TwaService {
   }
 
   showAlert(message: string, callback?: () => unknown) {
-    WebApp.showAlert(message, callback)
+    if (environment.production) {
+      WebApp.showAlert(message, callback)
+    } else {
+      console.log(message)
+    }
   }
 
   showPopup(params: PopupParams, callback?: (id?: string) => unknown) {
@@ -76,6 +84,14 @@ export class TwaService {
 
   visibleMainButton(show: boolean) {
     this.buttonVisible(WebApp.MainButton, show)
+  }
+
+  hapticFeedbackNotificationOccurred(type: "error" | "success" | "warning"): void {
+    WebApp.HapticFeedback.notificationOccurred(type)
+  }
+
+  hapticFeedbackImpactOccurred(type: "light" | "medium" | "heavy" | "rigid" | "soft"): void {
+    WebApp.HapticFeedback.impactOccurred(type)
   }
 
   mainButtonIsActive(isActive: boolean) {
@@ -101,6 +117,7 @@ export class TwaService {
 
   ready(): void {
     WebApp.ready()
+    WebApp.disableVerticalSwipes()
   }
 
   initTheme(): void {
@@ -119,6 +136,20 @@ export class TwaService {
   get cloudStorage(): CloudStorage {
     return WebApp.CloudStorage
   }
+
+  // requestFullscreen() {
+  //   console.log('requestFullscreen')
+  //   console.log(typeof WebApp.requestFullscreen)
+  //   if (!WebApp.isFullscreen && typeof WebApp.requestFullscreen !== undefined) {
+  //     WebApp.requestFullscreen()
+  //   }
+  // }
+  //
+  // exitFullscreen() {
+  //   if (WebApp.isFullscreen && typeof WebApp.exitFullscreen !== undefined) {
+  //     WebApp.exitFullscreen()
+  //   }
+  // }
 }
 
 type BottomButtonParams = {
@@ -135,10 +166,12 @@ interface ButtonVisible {
   show: VoidFunction;
   hide: VoidFunction;
 }
+
 type CloudStorageKey = string
 export const STORAGE_KEY_BALANCE: CloudStorageKey = '1'
 export const STORAGE_KEY_BANK: CloudStorageKey = '2'
 export const STORAGE_KEY_BANK_DEPOSIT: CloudStorageKey = '3'
+export const STORAGE_KEY_TURBO: CloudStorageKey = '5'
 
 export const STORAGE_MAX_VALUE_LENGTH = 4096
 

@@ -6,47 +6,55 @@ import {
 } from '../../../../../../common/services/twa.service';
 import {Deposit, DEPOSIT_PLANS, DepositPlan} from '../../interfaces/deposit.interface';
 import {toParamDate} from '../../../../../../common/extensions/Date';
-import {environment} from '../../../../../../../environments/environment';
 import {DepositInterface} from './deposit.interface';
+import {BehaviorSubject, Observable} from 'rxjs';
+import {CloudStorage} from '../../../../../../common/services/cloud-storage';
+import {jsonParse} from '../../../../../../common/extensions/String';
 
 @Injectable({providedIn: 'root'})
 export class DepositService implements DepositInterface {
+  depositsSubject = new BehaviorSubject<Deposit[]>([]);
   private _deposits: Deposit[] = [];
 
-  constructor(private twa: TwaService) {
+  constructor(
+    private twa: TwaService,
+    private cloudStorage: CloudStorage,
+  ) {
     this.loadDeposits()
-  }
-
-  canSave(deposits: Deposit[]): boolean {
-    return this.depositsToValue(deposits).length < STORAGE_MAX_VALUE_LENGTH
   }
 
   get deposits(): Deposit[] {
     return this._deposits
   }
 
-  set deposits(deposits: Deposit[]) {
+  protected set deposits(deposits: Deposit[]) {
     this._deposits = deposits
-    this.saveDeposits()
+    this.depositsSubject.next(deposits)
   }
 
-  private saveDeposits() {
-    if (!environment.production) {
-      return
+  saveDeposits(deposits: Deposit[], onComplete?: (observable: Observable<void>) => void) {
+    if (!this.canSave(deposits)) {
+      throw new Error('Too many deposits.')
     }
-    this.twa.cloudStorage.setItem(
-      STORAGE_KEY_BANK_DEPOSIT,
-      this.depositsToValue(this.deposits),
-      (error?: string | null, result?: boolean) => {
-        if (error) {
-          this.twa.showAlert(error)
-          return
+    this.cloudStorage.setItem(STORAGE_KEY_BANK_DEPOSIT, this.depositsToValue(deposits))
+      .subscribe({
+        next: (x) => {
+          if (x) {
+            this.deposits = deposits
+          }
+        },
+        error: (err) => {
+          if (err) {
+            throw new Error(err)
+          }
+        },
+        complete: () => {
+          if (!onComplete) {
+            return
+          }
+          onComplete(new Observable(subscriber => subscriber.next()))
         }
-        if (!result) {
-          this.twa.showAlert('Bank Deposits not updated.')
-        }
-      },
-    )
+      })
   }
 
   private depositsToValue(deposits: Deposit[]): string {
@@ -56,27 +64,44 @@ export class DepositService implements DepositInterface {
   }
 
   private valueToDeposits(value: string): Deposit[] {
-    const plans = DEPOSIT_PLANS
-    return (JSON.parse(value) as [number, string, number][]).map(
-      (item: [number, string, number]) => {
-        return {
-          plan: plans.find((i: DepositPlan) => i.id == item[0])!,
-          fromDate: new Date(item[1]),
-          sum: item[2]
-        }
-      }) as Deposit[]
-  }
+    const items = jsonParse<[number, string, number][]>(value)
 
-  private loadDeposits() {
-    this.twa.cloudStorage.getItem(STORAGE_KEY_BANK_DEPOSIT, (error?: string | null, result?: string) => {
-      if (error) {
-        this.twa.showAlert(error)
-        return
-      }
-      if (result) {
-        this._deposits = this.valueToDeposits(result)
+    if (!items) {
+      return []
+    }
+
+    const plans: DepositPlan[] = DEPOSIT_PLANS
+
+    return items.map<Deposit>((item: [number, string, number]) => {
+      return {
+        plan: plans.find((i: DepositPlan) => i.id == item[0])!,
+        fromDate: new Date(item[1]),
+        sum: item[2]
       }
     })
   }
-}
 
+  loadDeposits(onComplete?: () => void) {
+    this.cloudStorage.getItem(STORAGE_KEY_BANK_DEPOSIT).subscribe({
+      next: (x) => {
+        if (x) {
+          this.deposits = this.valueToDeposits(x)
+        } else {
+          this.deposits = []
+        }
+      },
+      error: (err) => {
+        if (err) {
+          this.twa.showAlert(err)
+        }
+      },
+      complete: () => {
+        onComplete?.()
+      }
+    })
+  }
+
+  private canSave(deposits: Deposit[]): boolean {
+    return this.depositsToValue(deposits).length < STORAGE_MAX_VALUE_LENGTH
+  }
+}

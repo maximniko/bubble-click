@@ -1,7 +1,11 @@
 import {Deposit} from '../../interfaces/deposit.interface';
+import {BehaviorSubject, Observable} from 'rxjs';
 
 export interface DepositInterface {
-  canSave(deposits: Deposit[]): boolean;
-  get deposits(): Deposit[]
-  set deposits(deposits: Deposit[])
+  depositsSubject: BehaviorSubject<Deposit[]>;
+  deposits: Deposit[];
+
+  saveDeposits(deposits: Deposit[], onComplete?: (observable: Observable<void>) => void): void;
+
+  loadDeposits(onComplete?: () => void): void;
 }

@@ -1,3 +1,5 @@
+import {daysDiff} from '../../../../../common/extensions/Date';
+
 export interface Deposit {
   plan: DepositPlan
   fromDate: Date
@@ -45,4 +47,19 @@ export const DEPOSIT_PLANS: DepositPlan[] = [
 
 export function planToLabel(plan: DepositPlan): string {
   return `${plan.percents}% per ${plan.days} days`
+}
+
+export function depositToCoefficient(deposit: Deposit): number {
+  return daysDiff(deposit.fromDate, new Date()) / deposit.plan.days
+}
+
+export function depositToBonus(deposit: Deposit): number {
+  const coefficient = depositToCoefficient(deposit),
+    profit = (deposit.sum * deposit.plan.percents / 100)
+
+  return Math.ceil(coefficient * profit)
+}
+
+export function depositToDate(deposit: Deposit): Date {
+  return new Date(deposit.fromDate.getTime() + (deposit.plan.days * 24 * 3600 * 1000))
 }

@@ -1,34 +1,69 @@
-import {Component} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {CoinsService} from '../../../domains/coins/services/coins.service';
+import {CoinsService} from '../../../domains/coins/services/coins/coins.service';
 import {FormsModule} from '@angular/forms';
 import {ClickAnimationDirective} from './click-animation.directive';
+import {debounceTime, scan, startWith, Subject, Subscription, switchMap, tap} from 'rxjs';
+import {fromSubscribable} from 'rxjs/internal/observable/fromSubscribable';
+import {ClickSoundDirective} from './click-sound.directive';
+import {CoinPressDirective} from './coin-press.directive';
+import {TurboService} from '../../../domains/coins/services/turbo/turbo.service';
 
 @Component({
   selector: 'main-coin',
   standalone: true,
-  imports: [CommonModule, FormsModule, ClickAnimationDirective],
+  imports: [CommonModule, FormsModule, ClickAnimationDirective, CoinPressDirective, ClickSoundDirective],
   styleUrl: 'coin.component.scss',
   template: `
-    <div class="clicker-container" (touchend)="onClick($event)" style="width:14rem;height:14rem;background-color:red;">
-      @for (click of clicks; track click.id) {
-        <div class="click color-accent"
-             [appClickAnimation]="click.id"
-             [ngStyle]="{'top.px': click.top, 'left.px': click.left}">
-          {{ coinsService.perClick }}
-        </div>
-      }
-    </div>
+    <div
+      class="clicker-container bubble"
+      style="width:16rem;height:16rem;"
+      (touchend)="onClick($event)"
+      coinPress
+    ></div>
+    @for (click of clicks; track click.id) {
+      <div class="click color-accent"
+           [appClickAnimation]="click.id"
+           [appClickSound]="{sound: click.id}"
+           [ngStyle]="{'top.px': click.top, 'left.px': click.left}">
+        {{ turboService.perClickSubject | async }}
+      </div>
+    }
+
   `,
   host: {class: 'm-auto'},
 })
-export class CoinComponent {
+export class CoinComponent implements OnInit, OnDestroy {
   clicks: Click[] = [];
   private clickCounter = 0;
+  private perClick = 1;
+  private trigger$ = new Subject<void>();
+  private clickSubject = new Subject<void>();
+  protected triggerSubscription?: Subscription
+  protected turboSubscription?: Subscription
 
   constructor(
     protected coinsService: CoinsService,
+    protected turboService: TurboService,
   ) {
+  }
+
+  ngOnInit() {
+    this.triggerSubscription = this.trigger$
+      .pipe(
+        startWith(void 0),
+        switchMap(() => fromSubscribable(this.clickSubject).pipe(scan((acc) => acc + 1, 0))),
+        debounceTime(500),
+        tap(() => this.trigger$.next()),
+      )
+      .subscribe(clicks => this.coinsService.saveClicks(clicks * this.perClick))
+    this.turboSubscription = this.turboService.perClickSubject
+      .subscribe((value) => this.perClick = value)
+  }
+
+  ngOnDestroy() {
+    this.triggerSubscription?.unsubscribe()
+    this.turboSubscription?.unsubscribe()
   }
 
   // Обрабатываем событие клика и передаем в Subject
@@ -48,7 +83,7 @@ export class CoinComponent {
 
       this.clicks.push(newClick);
 
-      this.coinsService.onClick()
+      this.clickSubject.next()
 
       // Удаляем элемент через 1.5 секунды после анимации
       setTimeout(() => {
@@ -62,5 +97,5 @@ interface Click {
   id: number,
   top: number,
   left: number,
-  rotation: number
+  rotation: number,
 }

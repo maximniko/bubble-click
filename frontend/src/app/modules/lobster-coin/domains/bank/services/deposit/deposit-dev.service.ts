@@ -1,22 +1,23 @@
 import {Injectable} from '@angular/core';
-import {STORAGE_MAX_VALUE_LENGTH} from '../../../../../../common/services/twa.service';
-import {Deposit} from '../../interfaces/deposit.interface';
-import {DepositInterface} from './deposit.interface';
+import {DepositService} from './deposit.service';
+import {Deposit, DEPOSIT_PLANS} from '../../interfaces/deposit.interface';
+import {Observable} from 'rxjs';
 
 @Injectable({providedIn: 'root'})
-export class DepositDevService implements DepositInterface {
-  _deposits: Deposit[] = [];
+export class DepositDevService extends DepositService {
 
-  canSave(deposits: Deposit[]): boolean {
-    return JSON.stringify(deposits).length < STORAGE_MAX_VALUE_LENGTH
+  override saveDeposits(deposits: Deposit[], onComplete?: (observable: Observable<void>) => void) {
+    this.deposits = deposits
   }
 
-  get deposits(): Deposit[] {
-    return this._deposits
-  }
-
-  set deposits(deposits: Deposit[]) {
-    this._deposits = deposits
+  override loadDeposits(onComplete?: (observable: Observable<void>) => void) {
+    this.deposits = DEPOSIT_PLANS.map<Deposit>(plan => {
+      return {
+        plan: plan,
+        fromDate: new Date(`2024-10-${plan.id % 30}`),
+        sum: (plan.id + 1) * 100
+      }
+    })
   }
 }
 

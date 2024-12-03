@@ -30,6 +30,12 @@ export abstract class ReactiveForm {
     if (errors?.['maxlength']) {
       result.push(sprintf(this.localisation.t.maxlengthErr ?? "Maximum length of %s is %s.", name, errors?.['maxlength']['requiredLength']))
     }
+    if (errors?.['min']) {
+      result.push(sprintf(this.localisation.t.minErr ?? "Minimum of %s is %s.", name, errors?.['min']['min']))
+    }
+    if (errors?.['max']) {
+      result.push(sprintf(this.localisation.t.maxErr ?? "Maximum of %s is %s.", name, errors?.['max']['max']))
+    }
     if (errors?.['email']) {
       result.push(sprintf(this.localisation.t.emailErr ?? "%s must be an email address.", name))
     }

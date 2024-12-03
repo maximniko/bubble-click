@@ -1,3 +1,11 @@
-<section class="accent-border accent-border-top accent-bg-shadow card rounded-5 h-100">
-  <main-coin></main-coin>
+<section class="accent-border accent-border-top accent-bg-shadow rounded-5 tg-bg-secondary d-flex h-100">
+  <button (click)="toggleWithSound()" class="btn border-0 position-absolute end-0 m-3" [ngClass]="{
+    'color-accent': coinSoundService.withSound,
+    'opacity-75': !coinSoundService.withSound,
+  }">
+    <svg class="bi" style="width: 2rem; height: 2rem">
+      <use [attr.xlink:href]="'#' + (coinSoundService.withSound ? symbols.volumeUpFill : symbols.volumeMute)"/>
+    </svg>
+  </button>
+  <main-coin/>
 </section>
