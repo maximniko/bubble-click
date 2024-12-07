@@ -15,12 +15,12 @@ import {TurboService} from '../../../domains/coins/services/turbo/turbo.service'
   imports: [CommonModule, FormsModule, ClickAnimationDirective, CoinPressDirective, ClickSoundDirective],
   styleUrl: 'coin.component.scss',
   template: `
-    <div
-      class="clicker-container bubble"
-      style="width:16rem;height:16rem;"
-      (touchend)="onClick($event)"
-      coinPress
-    ></div>
+    <img src="/assets/bubbles/bubble.svg"
+         style="width:16rem;height:16rem;border-radius:50%;"
+         (touchend)="onClick($event)"
+         coinPress
+         alt="bubble"
+    >
     @for (click of clicks; track click.id) {
       <div class="click color-accent"
            [appClickAnimation]="click.id"
@@ -29,7 +29,6 @@ import {TurboService} from '../../../domains/coins/services/turbo/turbo.service'
         {{ turboService.perClickSubject | async }}
       </div>
     }
-
   `,
   host: {class: 'm-auto'},
 })
