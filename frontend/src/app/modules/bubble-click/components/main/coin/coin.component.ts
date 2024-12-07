@@ -8,6 +8,7 @@ import {fromSubscribable} from 'rxjs/internal/observable/fromSubscribable';
 import {ClickSoundDirective} from './click-sound.directive';
 import {CoinPressDirective} from './coin-press.directive';
 import {TurboService} from '../../../domains/coins/services/turbo/turbo.service';
+import {environment} from '../../../../../../environments/environment';
 
 @Component({
   selector: 'main-coin',
@@ -15,21 +16,23 @@ import {TurboService} from '../../../domains/coins/services/turbo/turbo.service'
   imports: [CommonModule, FormsModule, ClickAnimationDirective, CoinPressDirective, ClickSoundDirective, NgOptimizedImage],
   styleUrl: 'coin.component.scss',
   template: `
-    <img ngSrc="assets/bubbles/bubble.svg"
-         style="width:17rem;height:17rem;border-radius:50%;"
-         (touchend)="onClick($event)"
-         coinPress
-         alt="bubble">
-    @for (click of clicks; track click.id) {
-      <div class="click color-accent"
-           [appClickAnimation]="click.id"
-           [appClickSound]="{sound: click.id}"
-           [ngStyle]="{'top.px': click.top, 'left.px': click.left}">
-        {{ turboService.perClickSubject | async }}
-      </div>
-    }
+    <div class="m-auto">
+      <img src="{{ bubbleSrc() }}"
+           style="width:17rem;height:17rem;border-radius:50%;"
+           (touchend)="onClick($event)"
+           coinPress
+           alt="bubble"
+      >
+      @for (click of clicks; track click.id) {
+        <div class="click color-accent"
+             [appClickAnimation]="click.id"
+             [appClickSound]="{sound: click.id}"
+             [ngStyle]="{'top.px': click.top, 'left.px': click.left}">
+          {{ turboService.perClickSubject | async }}
+        </div>
+      }
+    </div>
   `,
-  host: {class: 'm-auto'},
 })
 export class CoinComponent implements OnInit, OnDestroy {
   clicks: Click[] = [];
@@ -44,6 +47,14 @@ export class CoinComponent implements OnInit, OnDestroy {
     protected coinsService: CoinsService,
     protected turboService: TurboService,
   ) {
+  }
+
+  bubbleSrc(): string {
+    let path = '/assets/bubbles/bubble.svg';
+    if (environment.production) {
+      return 'bubble-click' + path
+    }
+    return path
   }
 
   ngOnInit() {

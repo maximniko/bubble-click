@@ -10,6 +10,14 @@ import {CoinSoundService} from '../../domains/coins/coin-sound.service';
   standalone: true,
   imports: [CommonModule, CoinComponent],
   templateUrl: './main.component.html',
+  styles:`
+    .coin-layout {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      background: linear-gradient(220deg, rgba(0,133,255,.3) 0%, rgba(254,200,255,.3) 100%);
+    }
+  `,
   host: {class: 'd-flex flex-column h-100'},
 })
 export class MainComponent implements OnInit {
