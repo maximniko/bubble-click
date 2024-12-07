@@ -16,11 +16,10 @@ import {TurboService} from '../../../domains/coins/services/turbo/turbo.service'
   styleUrl: 'coin.component.scss',
   template: `
     <img ngSrc="assets/bubbles/bubble.svg"
-         style="width:16rem;height:16rem;border-radius:50%;"
+         style="width:17rem;height:17rem;border-radius:50%;"
          (touchend)="onClick($event)"
          coinPress
-         alt="bubble"
-         height="146" width="144">
+         alt="bubble">
     @for (click of clicks; track click.id) {
       <div class="click color-accent"
            [appClickAnimation]="click.id"
