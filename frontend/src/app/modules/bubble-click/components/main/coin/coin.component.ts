@@ -15,7 +15,7 @@ import {TurboService} from '../../../domains/coins/services/turbo/turbo.service'
   imports: [CommonModule, FormsModule, ClickAnimationDirective, CoinPressDirective, ClickSoundDirective, NgOptimizedImage],
   styleUrl: 'coin.component.scss',
   template: `
-    <img ngSrc="/assets/bubbles/bubble.svg"
+    <img ngSrc="assets/bubbles/bubble.svg"
          style="width:16rem;height:16rem;border-radius:50%;"
          (touchend)="onClick($event)"
          coinPress
