@@ -1,5 +1,5 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {CommonModule} from '@angular/common';
+import {CommonModule, NgOptimizedImage} from '@angular/common';
 import {CoinsService} from '../../../domains/coins/services/coins/coins.service';
 import {FormsModule} from '@angular/forms';
 import {ClickAnimationDirective} from './click-animation.directive';
@@ -12,15 +12,15 @@ import {TurboService} from '../../../domains/coins/services/turbo/turbo.service'
 @Component({
   selector: 'main-coin',
   standalone: true,
-  imports: [CommonModule, FormsModule, ClickAnimationDirective, CoinPressDirective, ClickSoundDirective],
+  imports: [CommonModule, FormsModule, ClickAnimationDirective, CoinPressDirective, ClickSoundDirective, NgOptimizedImage],
   styleUrl: 'coin.component.scss',
   template: `
-    <div
-      class="clicker-container bubble"
-      style="width:16rem;height:16rem;"
-      (touchend)="onClick($event)"
-      coinPress
-    ></div>
+    <img ngSrc="/assets/bubbles/bubble.svg"
+         style="width:16rem;height:16rem;border-radius:50%;"
+         (touchend)="onClick($event)"
+         coinPress
+         alt="bubble"
+         height="146" width="144">
     @for (click of clicks; track click.id) {
       <div class="click color-accent"
            [appClickAnimation]="click.id"
@@ -29,7 +29,6 @@ import {TurboService} from '../../../domains/coins/services/turbo/turbo.service'
         {{ turboService.perClickSubject | async }}
       </div>
     }
-
   `,
   host: {class: 'm-auto'},
 })
