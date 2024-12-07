@@ -52,7 +52,7 @@ export class CoinComponent implements OnInit, OnDestroy {
   bubbleSrc(): string {
     let path = '/assets/bubbles/bubble.svg';
     if (environment.production) {
-      return 'bubble-click' + path
+      return `/bubble-click${path}`
     }
     return path
   }
