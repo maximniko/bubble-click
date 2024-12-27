@@ -3,6 +3,7 @@ import {bankProviders} from './domains/bank/bank.provider';
 import {coinsProviders} from './domains/coins/coins.provider';
 import {turboProviders} from './domains/coins/turbo.provider';
 import {Localisation} from '../../common/services/localisation';
+import {TwaService} from '../../common/services/twa.service';
 
 export const bubbleClickProviders: Array<Provider | EnvironmentProviders> = [
   ...coinsProviders,
@@ -12,7 +13,7 @@ export const bubbleClickProviders: Array<Provider | EnvironmentProviders> = [
     provide: APP_INITIALIZER,
     useFactory: initializeTranslations,
     multi: true,
-    deps: [Localisation],
+    deps: [Localisation, TwaService],
   },
 ]
 
