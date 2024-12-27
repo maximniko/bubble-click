@@ -66,6 +66,7 @@ export type Key =
   | "perClick"
   | "Buy"
   | "Bought"
+  | "Plan"
   | "planToLabel"
   | "Date"
   | "errRequired"
