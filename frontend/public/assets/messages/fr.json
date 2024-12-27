@@ -22,11 +22,13 @@
   "Total": "Total",
   "Date": "Date",
   "Title": "Titre",
-  "requiredErr": "%s est requis.",
-  "minlengthErr": "La longueur minimale de %s est %s.",
-  "maxlengthErr": "La longueur maximale de %s est %s.",
-  "emailErr": "%s doit être une adresse e-mail.",
-  "patternErr": "%s n'est pas valide.",
-  "invalidPhoneErr": "%s est un téléphone non valide.",
-  "invalidTypeErr": "%s est un type non valide."
+  "errRequired": "%s est requis.",
+  "errMinlength": "La longueur minimale de %s est %s.",
+  "errMaxlength": "La longueur maximale de %s doit être %s.",
+  "errMin": "Le %s minimum est %s.",
+  "errMax": "Le maximum de %s est %s.",
+  "errEmail": "%s doit être une adresse e-mail.",
+  "errPattern": "%s n'est pas valide.",
+  "errInvalidPhone": "%s est un téléphone non valide.",
+  "errInvalidType": "%s est un type non valide."
 }
