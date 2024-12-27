@@ -5,6 +5,7 @@ import {routeCreator} from '../../bubble-click.routes';
 import {TwaService} from '../../../../common/services/twa.service';
 import {Router} from '@angular/router';
 import {symbols} from '../../../../common/components/symbols/symbols';
+import {Localisation} from '../../../../common/services/localisation';
 
 @Component({
   standalone: true,
@@ -16,6 +17,7 @@ export class BalanceComponent implements OnInit, OnDestroy {
   constructor(
     private twa: TwaService,
     private router: Router,
+    protected localisation: Localisation,
   ) {
   }
 

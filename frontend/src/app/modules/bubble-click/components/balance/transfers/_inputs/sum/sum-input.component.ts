@@ -16,13 +16,13 @@ import {
   imports: [CommonModule, ReactiveFormsModule],
   template: `
     <div class="form-floating mb-3">
-      <input type="number" class="form-control" placeholder="Coins" id="form-sum" formControlName="sum" [ngClass]="{
+      <input type="number" class="form-control" placeholder="{{ localisation.messages.Coins ?? 'Coins' }}" id="form-sum" formControlName="sum" [ngClass]="{
             'is-invalid': isInvalidSum,
             'is-valid': parentForm.valid,
           }">
-      <label for="form-sum">Coins</label>
+      <label for="form-sum">{{ localisation.messages.Coins ?? 'Coins' }}</label>
       <div class="invalid-feedback" *ngIf="isInvalidSum">
-        {{ validationErrors(sumErrors, 'Coins') }}
+        {{ validationErrors(sumErrors, localisation.messages.Coins ?? 'Coins') }}
       </div>
     </div>`,
   viewProviders: [{provide: ControlContainer, useExisting: FormGroupDirective}]
