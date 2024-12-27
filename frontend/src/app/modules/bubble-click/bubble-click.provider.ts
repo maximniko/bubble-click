@@ -18,5 +18,5 @@ export const bubbleClickProviders: Array<Provider | EnvironmentProviders> = [
 ]
 
 export function initializeTranslations(localisation: Localisation) {
-  return localisation.load;
+  return (): Promise<any> => localisation.load();
 }
