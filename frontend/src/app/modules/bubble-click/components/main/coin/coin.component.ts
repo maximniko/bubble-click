@@ -1,5 +1,5 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {CommonModule, NgOptimizedImage} from '@angular/common';
+import {CommonModule} from '@angular/common';
 import {CoinsService} from '../../../domains/coins/services/coins/coins.service';
 import {FormsModule} from '@angular/forms';
 import {ClickAnimationDirective} from './click-animation.directive';
@@ -8,12 +8,12 @@ import {fromSubscribable} from 'rxjs/internal/observable/fromSubscribable';
 import {ClickSoundDirective} from './click-sound.directive';
 import {CoinPressDirective} from './coin-press.directive';
 import {TurboService} from '../../../domains/coins/services/turbo/turbo.service';
-import {environment} from '../../../../../../environments/environment';
+import {makeSrc} from '../../../../../common/extensions/String';
 
 @Component({
   selector: 'main-coin',
   standalone: true,
-  imports: [CommonModule, FormsModule, ClickAnimationDirective, CoinPressDirective, ClickSoundDirective, NgOptimizedImage],
+  imports: [CommonModule, FormsModule, ClickAnimationDirective, CoinPressDirective, ClickSoundDirective],
   styleUrl: 'coin.component.scss',
   template: `
     <div class="m-auto">
@@ -50,11 +50,7 @@ export class CoinComponent implements OnInit, OnDestroy {
   }
 
   bubbleSrc(): string {
-    let path = '/assets/bubbles/bubble.svg';
-    if (environment.production) {
-      return `/bubble-click${path}`
-    }
-    return path
+    return makeSrc('/assets/bubbles/bubble.svg')
   }
 
   ngOnInit() {

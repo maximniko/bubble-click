@@ -45,10 +45,6 @@ export const DEPOSIT_PLANS: DepositPlan[] = [
   },
 ]
 
-export function planToLabel(plan: DepositPlan): string {
-  return `${plan.percents}% per ${plan.days} days`
-}
-
 export function depositToCoefficient(deposit: Deposit): number {
   return daysDiff(deposit.fromDate, new Date()) / deposit.plan.days
 }

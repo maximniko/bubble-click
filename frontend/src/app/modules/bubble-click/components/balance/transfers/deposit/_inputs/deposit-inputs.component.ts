@@ -9,9 +9,10 @@ import {
   ReactiveFormsModule,
   Validators
 } from '@angular/forms';
-import {DEPOSIT_PLANS, DepositPlan, planToLabel} from '../../../../../domains/bank/interfaces/deposit.interface';
+import {DEPOSIT_PLANS, DepositPlan} from '../../../../../domains/bank/interfaces/deposit.interface';
 import {SumInputComponent} from '../../_inputs/sum/sum-input.component';
 import {CoinsService} from '../../../../../domains/coins/services/coins/coins.service';
+import {sprintf} from 'sprintf-js';
 
 @Component({
   selector: 'deposit-inputs',
@@ -71,6 +72,9 @@ export class DepositInputsComponent extends ReactiveForm implements OnInit {
     return this.isInvalid(this.plan)
   }
 
-  protected readonly planToLabel = planToLabel;
+  protected planToLabel(plan: DepositPlan): string {
+    return sprintf(this.localisation.messages.planToLabel ?? '%d% per %d days', plan.percents, plan.days)
+  }
+
   protected readonly planList = DEPOSIT_PLANS;
 }

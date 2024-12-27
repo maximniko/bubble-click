@@ -6,6 +6,8 @@ import {CoinsService} from '../../domains/coins/services/coins/coins.service';
 import {Subscription} from 'rxjs';
 import {Turbo, TURBO_ITEMS} from '../../domains/coins/services/turbo/turbo.interface';
 import {TurboService} from '../../domains/coins/services/turbo/turbo.service';
+import {Localisation} from '../../../../common/services/localisation';
+import {sprintf} from 'sprintf-js';
 
 @Component({
   standalone: true,
@@ -17,7 +19,7 @@ import {TurboService} from '../../domains/coins/services/turbo/turbo.service';
           <svg class="bi">
             <use [attr.xlink:href]="'#' + symbols.rocketTakeoff"/>
           </svg>
-          Турбо
+          {{ localisation.messages.Turbo ?? 'Turbo' }}
         </span>
       </div>
       <div class="overflow-auto" style="max-height: calc(var(--tg-viewport-stable-height, 200) * 0.7)">
@@ -28,8 +30,8 @@ import {TurboService} from '../../domains/coins/services/turbo/turbo.service';
                 'bg-success-subtle': isBought
             }">
               <div class="jcb">
-                <h3 class="h3">Уровень {{ turbo.level }}</h3>
-                <div><span class="color-accent h3">{{ turbo.perClick }}</span> за клик</div>
+                <h3 class="h3">{{ localisation.messages.Level ?? 'Level' }} {{ turbo.level }}</h3>
+                <div><span class="color-accent h3">{{ turbo.perClick }}</span> {{ localisation.messages.perClick ?? 'per click' }}</div>
               </div>
               <div class="jcb gap-2 text-center">
                 <div class="color-accent my-2 h4">
@@ -39,11 +41,11 @@ import {TurboService} from '../../domains/coins/services/turbo/turbo.service';
                   {{ turbo.coins.now }}
                 </div>
                 @if (isBought) {
-                  <span class="btn btn-success disabled">Получено</span>
+                  <span class="btn btn-success disabled">{{ localisation.messages.Bought ?? 'Bought' }}</span>
                 } @else {
                   <button class="btn tg-btn" [ngClass]="{
                     'disabled': !canBuy(turbo)
-                  }" (click)="confirmByCoin(turbo)">Получить</button>
+                  }" (click)="confirmByCoin(turbo)">{{ localisation.messages.Buy ?? 'Buy' }}</button>
                 }
               </div>
             </li>
@@ -65,6 +67,7 @@ export class TurboComponent implements OnInit, OnDestroy {
     protected twa: TwaService,
     protected coinsService: CoinsService,
     protected turboService: TurboService,
+    protected localisation: Localisation,
   ) {
   }
 
@@ -96,10 +99,10 @@ export class TurboComponent implements OnInit, OnDestroy {
 
   confirmByCoin(boost: Turbo) {
     this.twa.showPopup({
-      title: 'Купить турбо?',
-      message: `Купить турбо ${boost.level} уровня за ${boost.level}?`,
+      title: this.localisation.messages.PopupTurboBuyTitle ?? 'Buy a turbo?',
+      message: sprintf(this.localisation.messages.PopupTurboBuyContent ?? 'Buy turbo %d level for %d?', boost.level, boost.coins.now),
       buttons: [
-        {id: 'yes', type: 'default', text: 'Купить'},
+        {id: 'yes', type: 'default', text: this.localisation.messages.Buy ?? 'Buy' },
         {type: 'cancel'},
       ]
     }, (btn) => {
@@ -126,7 +129,7 @@ export class TurboComponent implements OnInit, OnDestroy {
     }
 
     if (balance < price) {
-      this.twa.showAlert('Недостаточно монет.')
+      this.twa.showAlert(this.localisation.messages.AlertBalanceError ?? 'Balance error!')
       return;
     }
 

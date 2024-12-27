@@ -12,6 +12,7 @@ import {TwaService} from '../../../../../../common/services/twa.service';
 import {Router} from '@angular/router';
 import {routeCreator} from '../../../../bubble-click.routes';
 import {CoinsService} from '../../../../domains/coins/services/coins/coins.service';
+import {Localisation} from '../../../../../../common/services/localisation';
 
 @Component({
   standalone: true,
@@ -19,7 +20,7 @@ import {CoinsService} from '../../../../domains/coins/services/coins/coins.servi
   template: `
     <section class="accent-border accent-border-top accent-bg-shadow rounded-5 tg-bg-secondary">
       <div class="hstack p-3 pb-0 color-accent">
-        <span class="m-auto text-center h5">Депозиты</span>
+        <span class="m-auto text-center h5">{{ localisation.messages.Deposits ?? 'Deposits' }}</span>
       </div>
 
       <div class="mb-5">
@@ -33,11 +34,11 @@ import {CoinsService} from '../../../../domains/coins/services/coins/coins.servi
                     @let canTake = _canTake(deposit) ;
                     <div class="d-flex justify-content-around my-2 text-center">
                       <div class="vstack my-auto">
-                        <div>Вклад {{ deposit.sum }}</div>
-                        <div>до {{ toLocalDate(depositToDate(deposit), twa.getUserLanguageCode() ?? 'en') }}</div>
+                        <div>{{ localisation.messages.Contribution ?? 'Contribution' }} {{ deposit.sum }}</div>
+                        <div>{{ localisation.messages.upTo ?? 'up to' }} {{ toLocalDate(depositToDate(deposit), twa.getUserLanguageCode() ?? 'en') }}</div>
                       </div>
                       <div class="vstack my-auto">
-                        <div>доход</div>
+                        <div>{{ localisation.messages.income ?? 'income' }}</div>
                         <div class="h2">{{ deposit.plan.percents }}%</div>
                       </div>
                     </div>
@@ -50,23 +51,23 @@ import {CoinsService} from '../../../../domains/coins/services/coins/coins.servi
                     </div>
                     <div class="d-flex justify-content-between my-2">
                       <div class="m-auto">
-                        Забрать вклад
+                        {{ localisation.messages.WithdrawDeposit ?? 'Withdraw deposit' }}
                         @if (canTake) {
-                          <span class="color-accent">+бонус {{ depositToBonus(deposit) }}</span>
+                          <span class="color-accent">+{{ localisation.messages.bonus ?? 'bonus' }} {{ depositToBonus(deposit) }}</span>
                         }
                       </div>
                       <button class="btn" [ngClass]="{
                       'btn-success': canTake,
                       'btn-secondary': !canTake,
                       }" (click)="take(index)">
-                        Забрать
+                        {{ localisation.messages.Take ?? 'Take' }}
                       </button>
                     </div>
                   </li>
                 }
               </ul>
             } @else {
-              <p>Пока нет депозитов.</p>
+              <p>{{ localisation.messages.NoDepositsYet ?? 'No deposits yet.' }}</p>
             }
           }
         </div>
@@ -81,6 +82,7 @@ export class DepositComponent implements OnInit, OnDestroy {
     private coinsService: CoinsService,
     protected depositService: DepositService,
     protected twa: TwaService,
+    protected localisation: Localisation,
   ) {
     this.add = this.add.bind(this)
     this.goBack = this.goBack.bind(this)
@@ -98,22 +100,22 @@ export class DepositComponent implements OnInit, OnDestroy {
     const deposit = this.depositService.deposits[index]
 
     if (!deposit) {
-      this.twa.showAlert(`Can't find deposit`)
+      this.twa.showAlert(this.localisation.messages.AlertCantFindDeposit ?? `'Can't find deposit'`)
       return
     }
 
-    let message = `Забрать вклад ${deposit.sum}`
+    let message = `${this.localisation.messages.WithdrawDeposit ?? 'Withdraw deposit'} ${deposit.sum}`
 
     if (this._canTake(deposit)) {
-      message += ` +бонус ${depositToBonus(deposit)}`
+      message += ` +${this.localisation.messages.bonus ?? 'bonus'} ${depositToBonus(deposit)}`
     }
 
     const yes = 'yes'
     this.twa.showPopup({
-      title: 'Забрать вклад',
+      title: this.localisation.messages.WithdrawDeposit ?? 'Withdraw deposit',
       message: `${message}?`, // 256
       buttons: [
-        {id: yes, type: 'default', text: 'Да'},
+        {id: yes, type: 'ok'},
         {type: 'cancel'},
       ]
     }, (btn) => {
@@ -146,7 +148,7 @@ export class DepositComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.twa.setMainButton({text: 'Добавить депозит', is_active: true, is_visible: true}, this.add)
+    this.twa.setMainButton({text: this.localisation.messages.AddDeposit ?? 'Add deposit', is_active: true, is_visible: true}, this.add)
     this.twa.backButtonOnClick(this.goBack)
   }
 

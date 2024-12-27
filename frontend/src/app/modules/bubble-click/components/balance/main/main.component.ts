@@ -4,12 +4,12 @@ import {symbols} from '../../../../../common/components/symbols/symbols';
 import {toLocalDate} from '../../../../../common/extensions/Date';
 import {routeCreator} from '../../../bubble-click.routes';
 import {RouterLink} from '@angular/router';
-import {CoinsService} from '../../../domains/coins/services/coins/coins.service';
 import {BankService} from '../../../domains/bank/services/bank/bank.service';
 import {TwaService} from '../../../../../common/services/twa.service';
 import {DepositService} from '../../../domains/bank/services/deposit/deposit.service';
 import {Subscription} from 'rxjs';
 import {Deposit, depositToDate} from '../../../domains/bank/interfaces/deposit.interface';
+import {Localisation} from '../../../../../common/services/localisation';
 
 @Component({
   selector: 'balance-main',
@@ -24,7 +24,7 @@ import {Deposit, depositToDate} from '../../../domains/bank/interfaces/deposit.i
       <section class="tg-bg-secondary p-2 rounded-2">
         <article class="in-bank mb-3">
           <h5 class="h5 color-subtitle jcb">
-            <span class="my-auto mx-0">В банке</span>
+            <span class="my-auto mx-0">{{localisation.messages.InBank ?? 'In bank'}}</span>
             <span class="p-2" (click)="bankInfo()">
               <svg class="bi">
                 <use [attr.xlink:href]="'#' + symbols.infoCircle"/>
@@ -47,7 +47,7 @@ import {Deposit, depositToDate} from '../../../domains/bank/interfaces/deposit.i
                     <use [attr.xlink:href]="'#' + symbols.arrowUp"/>
                   </svg>
                 </div>
-                <div class="m-auto">Пополнить</div>
+                <div class="m-auto">{{ localisation.messages.Replenish ?? 'Replenish' }}</div>
               </a>
             </div>
             <div class="col">
@@ -57,7 +57,7 @@ import {Deposit, depositToDate} from '../../../domains/bank/interfaces/deposit.i
                     <use [attr.xlink:href]="'#' + symbols.arrowDown"/>
                   </svg>
                 </div>
-                <div class="m-auto">Вывести</div>
+                <div class="m-auto">{{ localisation.messages.Withdraw ?? 'Withdraw' }}</div>
               </a>
             </div>
           </div>
@@ -65,7 +65,7 @@ import {Deposit, depositToDate} from '../../../domains/bank/interfaces/deposit.i
         <hr>
         <article class="deposit">
           <h5 class="h5 color-subtitle jcb">
-            <span class="my-auto mx-0">На депозите</span>
+            <span class="my-auto mx-0">{{ localisation.messages.OnDeposit ?? 'On deposit' }}</span>
             <span class="p-2" (click)="depositInfo()">
               <svg class="bi">
                 <use [attr.xlink:href]="'#' + symbols.infoCircle"/>
@@ -81,12 +81,12 @@ import {Deposit, depositToDate} from '../../../domains/bank/interfaces/deposit.i
             <input class="form-control" type="text" value="{{ depositSum }}" aria-label="Баланс депозитов" disabled readonly>
             @if (nearestDeposit) {
               <div class="valid-feedback d-block color-accent">
-                Ближайший бонус {{ toLocalDate(depositToDate(nearestDeposit), twa.getUserLanguageCode() ?? 'en') }}
+                {{ localisation.messages.NearestBonus ?? 'The nearest bonus' }} {{ toLocalDate(depositToDate(nearestDeposit), twa.getUserLanguageCode() ?? 'en') }}
               </div>
             }
           </div>
           <div class="jcc">
-            <a class="btn btn-lg tg-btn w-100" [routerLink]="routeCreator.deposit()">Депозиты</a>
+            <a class="btn btn-lg tg-btn w-100" [routerLink]="routeCreator.deposit()">{{ localisation.messages.Deposits ?? 'Deposits' }}</a>
           </div>
         </article>
       </section>
@@ -99,10 +99,10 @@ export class MainComponent implements OnInit, OnDestroy {
   protected nearestDeposit?: Deposit
 
   constructor(
-    protected coinsService: CoinsService,
     protected bankService: BankService,
     protected depositService: DepositService,
     protected twa: TwaService,
+    protected localisation: Localisation,
   ) {
   }
 
@@ -135,8 +135,8 @@ export class MainComponent implements OnInit, OnDestroy {
 
   bankInfo() {
     this.twa.showPopup({
-      title: 'Зачем нужен Банк?', // 64
-      message: 'Храните монеты в банке! Защити себя от непредвиденных расходов!', // 256
+      title: this.localisation.messages.PopupBankInfoTitle ?? 'Why do you need a Bank?', // 64
+      message: this.localisation.messages.PopupBankInfoContent ?? 'Keep your coins in the bank! Protect yourself from unexpected expenses!', // 256
       buttons: [ // 1-3 items
         {type: 'ok'},
       ]
@@ -145,8 +145,8 @@ export class MainComponent implements OnInit, OnDestroy {
 
   depositInfo() {
     this.twa.showPopup({
-      title: 'Зачем нужен Депозит?', // 64
-      message: 'Положи монеты на депозит и получи больше прибыли по окончании срока!', // 256
+      title: this.localisation.messages.PopupDepositInfoTitle ?? 'Why do you need a Deposit?', // 64
+      message: this.localisation.messages.PopupDepositInfoContent ?? 'Deposit coins and get more profit at the end of the term!', // 256
       buttons: [ // 1-3 items
         {type: 'ok'},
       ]
