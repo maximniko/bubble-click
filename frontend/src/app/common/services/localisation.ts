@@ -1,6 +1,5 @@
 import {Injectable} from "@angular/core";
 import {TwaService} from "./twa.service";
-import {makeSrc} from '../extensions/String';
 
 @Injectable({providedIn: 'root'})
 export class Localisation {
@@ -14,10 +13,10 @@ export class Localisation {
 
     let json: any;
     try {
-      const res = await fetch(makeSrc(`assets/messages/${locale}.json`));
+      const res = await fetch(`assets/messages/${locale}.json`);
       json = await res.json();
     } catch {
-      const res_1 = await fetch(makeSrc(`assets/messages/en.json`));
+      const res_1 = await fetch(`assets/messages/en.json`);
       json = await res_1.json();
     }
     this.messages = json as Messages;
