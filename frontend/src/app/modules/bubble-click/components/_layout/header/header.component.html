@@ -14,7 +14,7 @@
 
 <ng-template #content let-offcanvas>
   <div class="offcanvas-header">
-    <h4 class="offcanvas-title" id="offcanvas-basic-title">{{ localisation.t.Menu ?? 'Menu' }}</h4>
+    <h4 class="offcanvas-title" id="offcanvas-basic-title">{{ localisation.messages.Menu ?? 'Menu' }}</h4>
     <button type="button" class="btn-close" aria-label="Close" (click)="offcanvas.dismiss('Cross click')"></button>
   </div>
   <div class="offcanvas-body">
@@ -26,7 +26,7 @@
               <use [attr.xlink:href]="'#' + symbols.house"/>
             </svg>
           </span>
-          {{ localisation.t.Home ?? 'Home' }}
+          {{ localisation.messages.Home ?? 'Home' }}
         </a>
       </li>
       <li class="nav-item text-center">

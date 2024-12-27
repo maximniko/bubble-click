@@ -3,26 +3,28 @@ import {TwaService} from "./twa.service";
 
 @Injectable({providedIn: 'root'})
 export class Localisation {
-  t: Texts = {}
+  messages: Messages = {}
 
   constructor(private twa: TwaService) {
   }
 
-  load(): Promise<boolean> {
+  async load(): Promise<boolean> {
     const locale = this.twa.getUserLanguageCode() ?? 'en'
 
-    return fetch(`assets/messages/${locale}.json`)
-      .then(res => res.json())
-      .catch(() => fetch(`assets/messages/en.json`)
-        .then(res => res.json()))
-      .then((json: Texts) => {
-        this.t = json as Texts;
-        return true
-      })
+    let json: any;
+    try {
+      const res = await fetch(`assets/messages/${locale}.json`);
+      json = await res.json();
+    } catch {
+      const res_1 = await fetch(`assets/messages/en.json`);
+      json = await res_1.json();
+    }
+    this.messages = json as Messages;
+    return true;
   }
 }
 
-type Texts = {
+type Messages = {
   [key in Key]?: string | undefined;
 }
 
@@ -35,6 +37,7 @@ export type Key = "Transactions"
   | "Chart"
   | "Menu"
   | "Home"
+  | "Wallet"
   | "Setting"
   | "Add"
   | "Others"

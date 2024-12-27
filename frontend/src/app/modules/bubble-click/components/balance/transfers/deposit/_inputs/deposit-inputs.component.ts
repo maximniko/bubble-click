@@ -18,21 +18,21 @@ import {CoinsService} from '../../../../../domains/coins/services/coins/coins.se
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, SumInputComponent],
   template: `
-    <div class="form-floating mb-3">
-      <select type="text" class="form-select" id="form-plan" formControlName="plan" [ngClass]="{
+      <div class="form-floating mb-3">
+          <select type="text" class="form-select" id="form-plan" formControlName="plan" [ngClass]="{
             'is-invalid': isInvalidPlan,
             'is-valid': parentForm.valid,
           }" [compareWith]="comparePlan">
-        @for (plan of planList; track plan.id) {
-          <option [ngValue]="plan">{{ planToLabel(plan) }}</option>
-        }
-      </select>
-      <label for="form-plan">{{ localisation.t.Plan ?? 'Plan' }}</label>
-      <div class="invalid-feedback" *ngIf="isInvalidPlan">
-        {{ validationErrors(planErrors, localisation.t.Plan ?? 'Plan') }}
+              @for (plan of planList; track plan.id) {
+                  <option [ngValue]="plan">{{ planToLabel(plan) }}</option>
+              }
+          </select>
+          <label for="form-plan">{{ localisation.messages.Plan ?? 'Plan' }}</label>
+          <div class="invalid-feedback" *ngIf="isInvalidPlan">
+              {{ validationErrors(planErrors, localisation.messages.Plan ?? 'Plan') }}
+          </div>
       </div>
-    </div>
-    <sum-input [parentForm]="parentForm" [max]="maxSum"></sum-input>
+      <sum-input [parentForm]="parentForm" [max]="maxSum"></sum-input>
   `,
   viewProviders: [{provide: ControlContainer, useExisting: FormGroupDirective}]
 })

@@ -20,25 +20,25 @@ import {DateValidator} from "../../../../../../../common/extensions/Validators";
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, NgbInputDatepicker],
   template: `
-    <div class="form-floating mb-3">
-      <input
-        id="form-date"
-        class="form-control"
-        placeholder="{{localisation.t.Date ?? 'Date'}}"
-        formControlName="fromDate"
-        ngbDatepicker
-        (click)="d.toggle()"
-        #d="ngbDatepicker"
-        [ngClass]="{
+      <div class="form-floating mb-3">
+          <input
+                  id="form-date"
+                  class="form-control"
+                  placeholder="{{localisation.messages.Date ?? 'Date'}}"
+                  formControlName="fromDate"
+                  ngbDatepicker
+                  (click)="d.toggle()"
+                  #d="ngbDatepicker"
+                  [ngClass]="{
             'is-invalid': isInvalidDate,
             'is-valid': parentForm.valid,
           }"
-      />
-      <label for="form-date">{{ localisation.t.Date ?? 'Date' }}</label>
-      <div class="invalid-feedback" *ngIf="isInvalidDate">
-        {{ validationErrors(dateErrors, localisation.t.Date ?? 'Date') }}
-      </div>
-    </div>`,
+          />
+          <label for="form-date">{{ localisation.messages.Date ?? 'Date' }}</label>
+          <div class="invalid-feedback" *ngIf="isInvalidDate">
+              {{ validationErrors(dateErrors, localisation.messages.Date ?? 'Date') }}
+          </div>
+      </div>`,
   viewProviders: [{provide: ControlContainer, useExisting: FormGroupDirective}]
 })
 export class DateInputComponent extends ReactiveForm implements OnInit {
