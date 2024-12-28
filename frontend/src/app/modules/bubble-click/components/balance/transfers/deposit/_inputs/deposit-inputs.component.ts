@@ -73,7 +73,7 @@ export class DepositInputsComponent extends ReactiveForm implements OnInit {
   }
 
   protected planToLabel(plan: DepositPlan): string {
-    return sprintf(this.localisation.messages.planToLabel ?? '%d% per %d days', plan.percents, plan.days)
+    return sprintf(this.localisation.messages.planToLabel ?? '%d%% per %d days', plan.percents, plan.days)
   }
 
   protected readonly planList = DEPOSIT_PLANS;
