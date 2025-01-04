@@ -8,6 +8,7 @@ import {fromSubscribable} from 'rxjs/internal/observable/fromSubscribable';
 import {ClickSoundDirective} from './click-sound.directive';
 import {CoinPressDirective} from './coin-press.directive';
 import {TurboService} from '../../../domains/coins/services/turbo/turbo.service';
+import {DeviceDetectorService} from 'ngx-device-detector';
 import {makeSrc} from '../../../../../common/extensions/String';
 
 @Component({
@@ -16,13 +17,22 @@ import {makeSrc} from '../../../../../common/extensions/String';
   imports: [CommonModule, FormsModule, ClickAnimationDirective, CoinPressDirective, ClickSoundDirective],
   styleUrl: 'coin.component.scss',
   template: `
-    <div class="m-auto">
+    @if (deviceDetector.isDesktop()) {
+      <img ngSrc="/assets/bubbles/bubble.svg"
+           style="width:16rem;height:16rem;border-radius:50%;"
+           (click)="onClick($event)"
+           coinPress
+           alt="bubble"
+           height="146" width="144">
+    } @else {
+      <div class="m-auto">
       <img src="{{ bubbleSrc() }}"
            style="width:17rem;height:17rem;border-radius:50%;"
-           (touchend)="onClick($event)"
+           (touchend)="onTouch($event)"
            coinPress
            alt="bubble"
       >
+    }
       @for (click of clicks; track click.id) {
         <div class="click color-accent"
              [appClickAnimation]="click.id"
@@ -45,6 +55,7 @@ export class CoinComponent implements OnInit, OnDestroy {
 
   constructor(
     protected coinsService: CoinsService,
+    protected deviceDetector: DeviceDetectorService,
     protected turboService: TurboService,
   ) {
   }
@@ -71,30 +82,37 @@ export class CoinComponent implements OnInit, OnDestroy {
     this.turboSubscription?.unsubscribe()
   }
 
-  // Обрабатываем событие клика и передаем в Subject
-  onClick(event: TouchEvent) {
-    // Генерируем случайные значения для поворота
-
+  onTouch(event: TouchEvent) {
     for (let i = 0; i < event.changedTouches.length; i++) {
-      let touch: Touch = event.changedTouches[i]
-      let rotation: number = Math.random() * 360 - 180
-      // Создаем новый объект клика с координатами
-      const newClick = {
-        id: this.clickCounter++,
-        top: touch.clientY,   // Координата Y клика
-        left: touch.clientX,  // Координата X клика
-        rotation
-      };
-
-      this.clicks.push(newClick);
-
-      this.clickSubject.next()
-
-      // Удаляем элемент через 1.5 секунды после анимации
-      setTimeout(() => {
-        this.clicks = this.clicks.filter(click => click.id !== newClick.id);
-      }, 1500);
+      this.onClick(event.changedTouches[i])
     }
+  }
+
+  onClick(event: MouseEvent|Touch) {
+    // Генерируем случайные значения для поворота
+    this.click(event.clientX, event.clientY)
+  }
+
+  private click(clientX: number, clientY: number) {
+    // Генерируем случайные значения для поворота
+    let rotation: number = Math.random() * 360 - 180
+
+    // Создаем новый объект клика с координатами
+    const newClick = {
+      id: this.clickCounter++,
+      top: clientY,   // Координата Y клика
+      left: clientX,  // Координата X клика
+      rotation
+    };
+
+    this.clicks.push(newClick);
+
+    this.clickSubject.next()
+
+    // Удаляем элемент через 1.5 секунды после анимации
+    setTimeout(() => {
+      this.clicks = this.clicks.filter(click => click.id !== newClick.id);
+    }, 1500);
   }
 }
 
