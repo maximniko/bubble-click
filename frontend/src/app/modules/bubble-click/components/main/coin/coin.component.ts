@@ -17,22 +17,20 @@ import {makeSrc} from '../../../../../common/extensions/String';
   imports: [CommonModule, FormsModule, ClickAnimationDirective, CoinPressDirective, ClickSoundDirective],
   styleUrl: 'coin.component.scss',
   template: `
-    @if (deviceDetector.isDesktop()) {
-      <img ngSrc="/assets/bubbles/bubble.svg"
-           style="width:16rem;height:16rem;border-radius:50%;"
-           (click)="onClick($event)"
-           coinPress
-           alt="bubble"
-           height="146" width="144">
-    } @else {
-      <div class="m-auto">
-      <img src="{{ bubbleSrc() }}"
-           style="width:17rem;height:17rem;border-radius:50%;"
-           (touchend)="onTouch($event)"
-           coinPress
-           alt="bubble"
-      >
-    }
+    <div class="m-auto">
+      @if (deviceDetector.isDesktop()) {
+        <img src="{{ bubbleSrc() }}"
+             style="width:17rem;height:17rem;border-radius:50%;"
+             (click)="onClick($event)"
+             coinPress
+             alt="bubble">
+      } @else {
+        <img src="{{ bubbleSrc() }}"
+             style="width:17rem;height:17rem;border-radius:50%;"
+             (touchend)="onTouch($event)"
+             coinPress
+             alt="bubble">
+      }
       @for (click of clicks; track click.id) {
         <div class="click color-accent"
              [appClickAnimation]="click.id"
