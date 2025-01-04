@@ -3,58 +3,77 @@ import {TwaService} from "./twa.service";
 
 @Injectable({providedIn: 'root'})
 export class Localisation {
-  t: Texts = {}
+  messages: Messages = {}
 
   constructor(private twa: TwaService) {
   }
 
-  load(): Promise<boolean> {
+  async load(): Promise<boolean> {
     const locale = this.twa.getUserLanguageCode() ?? 'en'
 
-    return fetch(`assets/messages/${locale}.json`)
-      .then(res => res.json())
-      .catch(() => fetch(`assets/messages/en.json`)
-        .then(res => res.json()))
-      .then((json: Texts) => {
-        this.t = json as Texts;
-        return true
-      })
+    let json: any;
+    try {
+      const res = await fetch(`assets/messages/${locale}.json`);
+      json = await res.json();
+    } catch {
+      const res_1 = await fetch(`assets/messages/en.json`);
+      json = await res_1.json();
+    }
+    this.messages = json as Messages;
+    return true;
   }
 }
 
-type Texts = {
+type Messages = {
   [key in Key]?: string | undefined;
 }
 
-export type Key = "Transactions"
-  | "Calculations"
-  | "Period"
-  | "Day"
-  | "Week"
-  | "Month"
-  | "Chart"
+export type Key =
+  "AlertCantFindDeposit"
+  | "AlertBalanceError"
   | "Menu"
   | "Home"
-  | "Setting"
-  | "Add"
-  | "Others"
-  | "sum"
-  | "Spent"
-  | "Available"
-  | "Settings"
-  | "MaxPerMonth"
-  | "Edit"
-  | "Save"
+  | "Wallet" // new
+  | "BalanceManagement"
+  | "InBank"
+  | "Replenish"
+  | "Withdraw"
+  | "OnDeposit"
+  | "NearestBonus"
+  | "Deposits"
+  | "PopupBankInfoTitle"
+  | "PopupBankInfoContent"
+  | "PopupDepositInfoTitle"
+  | "PopupDepositInfoContent"
+  | "PopupTurboBuyTitle"
+  | "PopupTurboBuyContent"
+  | "Coins"
+  | "Contribution"
+  | "upTo"
+  | "income"
+  | "AddDeposit"
+  | "NewDeposit"
+  | "WithdrawDeposit"
+  | "bonus"
+  | "Take"
+  | "NoDepositsYet"
+  | "max"
+  | "Create"
+  | "Transfer"
+  | "Turbo"
+  | "Level"
+  | "perClick"
+  | "Buy"
+  | "Bought"
   | "Plan"
-  | "Total"
+  | "planToLabel"
   | "Date"
-  | "Title"
-  | "requiredErr"
-  | "minlengthErr"
-  | "maxlengthErr"
-  | "minErr"
-  | "maxErr"
-  | "emailErr"
-  | "patternErr"
-  | "invalidPhoneErr"
-  | "invalidTypeErr"
+  | "errRequired"
+  | "errMinlength"
+  | "errMaxlength"
+  | "errMin"
+  | "errMax"
+  | "errEmail"
+  | "errPattern"
+  | "errInvalidPhone"
+  | "errInvalidType"

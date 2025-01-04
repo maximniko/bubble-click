@@ -22,31 +22,31 @@ export abstract class ReactiveForm {
     let result: string[] = []
 
     if (errors?.['required']) {
-      result.push(sprintf(this.localisation.t.requiredErr ?? "%s is required.", name))
+      result.push(sprintf(this.localisation.messages.errRequired ?? "%s is required.", name))
     }
     if (errors?.['minlength']) {
-      result.push(sprintf(this.localisation.t.minlengthErr ?? "Minimum length of %s is %s.", name, errors?.['minlength']['requiredLength']))
+      result.push(sprintf(this.localisation.messages.errMinlength ?? "Minimum length of %s is %s.", name, errors?.['minlength']['requiredLength']))
     }
     if (errors?.['maxlength']) {
-      result.push(sprintf(this.localisation.t.maxlengthErr ?? "Maximum length of %s is %s.", name, errors?.['maxlength']['requiredLength']))
+      result.push(sprintf(this.localisation.messages.errMaxlength ?? "Maximum length of %s is %s.", name, errors?.['maxlength']['requiredLength']))
     }
     if (errors?.['min']) {
-      result.push(sprintf(this.localisation.t.minErr ?? "Minimum of %s is %s.", name, errors?.['min']['min']))
+      result.push(sprintf(this.localisation.messages.errMin ?? "Minimum of %s is %s.", name, errors?.['min']['min']))
     }
     if (errors?.['max']) {
-      result.push(sprintf(this.localisation.t.maxErr ?? "Maximum of %s is %s.", name, errors?.['max']['max']))
+      result.push(sprintf(this.localisation.messages.errMax ?? "Maximum of %s is %s.", name, errors?.['max']['max']))
     }
     if (errors?.['email']) {
-      result.push(sprintf(this.localisation.t.emailErr ?? "%s must be an email address.", name))
+      result.push(sprintf(this.localisation.messages.errEmail ?? "%s must be an email address.", name))
     }
     if (errors?.['pattern']) {
-      result.push(sprintf(this.localisation.t.patternErr ?? "%s is not valid.", name))
+      result.push(sprintf(this.localisation.messages.errPattern ?? "%s is not valid.", name))
     }
     if (errors?.['invalidPhone']) {
-      result.push(sprintf(this.localisation.t.invalidPhoneErr ?? "%s is invalid phone.", name))
+      result.push(sprintf(this.localisation.messages.errInvalidPhone ?? "%s is invalid phone.", name))
     }
     if (errors?.['invalidType']) {
-      result.push(sprintf(this.localisation.t.invalidTypeErr ?? "%s is invalid type.", name))
+      result.push(sprintf(this.localisation.messages.errInvalidType ?? "%s is invalid type.", name))
     }
 
     return result.join('\n')

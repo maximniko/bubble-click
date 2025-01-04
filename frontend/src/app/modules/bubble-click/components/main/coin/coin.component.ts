@@ -1,5 +1,5 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {CommonModule, NgOptimizedImage} from '@angular/common';
+import {CommonModule} from '@angular/common';
 import {CoinsService} from '../../../domains/coins/services/coins/coins.service';
 import {FormsModule} from '@angular/forms';
 import {ClickAnimationDirective} from './click-animation.directive';
@@ -9,38 +9,38 @@ import {ClickSoundDirective} from './click-sound.directive';
 import {CoinPressDirective} from './coin-press.directive';
 import {TurboService} from '../../../domains/coins/services/turbo/turbo.service';
 import {DeviceDetectorService} from 'ngx-device-detector';
+import {makeSrc} from '../../../../../common/extensions/String';
 
 @Component({
   selector: 'main-coin',
   standalone: true,
-  imports: [CommonModule, FormsModule, ClickAnimationDirective, CoinPressDirective, ClickSoundDirective, NgOptimizedImage],
+  imports: [CommonModule, FormsModule, ClickAnimationDirective, CoinPressDirective, ClickSoundDirective],
   styleUrl: 'coin.component.scss',
   template: `
-    @if (deviceDetector.isDesktop()) {
-      <img ngSrc="/assets/bubbles/bubble.svg"
-           style="width:16rem;height:16rem;border-radius:50%;"
-           (click)="onClick($event)"
-           coinPress
-           alt="bubble"
-           height="146" width="144">
-    } @else {
-      <img ngSrc="/assets/bubbles/bubble.svg"
-           style="width:16rem;height:16rem;border-radius:50%;"
-           (touchend)="onTouch($event)"
-           coinPress
-           alt="bubble"
-           height="146" width="144">
-    }
-    @for (click of clicks; track click.id) {
-      <div class="click color-accent"
-           [appClickAnimation]="click.id"
-           [appClickSound]="{sound: click.id}"
-           [ngStyle]="{'top.px': click.top, 'left.px': click.left}">
-        {{ turboService.perClickSubject | async }}
-      </div>
-    }
+    <div class="m-auto">
+      @if (deviceDetector.isDesktop()) {
+        <img src="{{ bubbleSrc() }}"
+             style="width:17rem;height:17rem;border-radius:50%;"
+             (click)="onClick($event)"
+             coinPress
+             alt="bubble">
+      } @else {
+        <img src="{{ bubbleSrc() }}"
+             style="width:17rem;height:17rem;border-radius:50%;"
+             (touchend)="onTouch($event)"
+             coinPress
+             alt="bubble">
+      }
+      @for (click of clicks; track click.id) {
+        <div class="click color-accent"
+             [appClickAnimation]="click.id"
+             [appClickSound]="{sound: click.id}"
+             [ngStyle]="{'top.px': click.top, 'left.px': click.left}">
+          {{ turboService.perClickSubject | async }}
+        </div>
+      }
+    </div>
   `,
-  host: {class: 'm-auto'},
 })
 export class CoinComponent implements OnInit, OnDestroy {
   clicks: Click[] = [];
@@ -56,6 +56,10 @@ export class CoinComponent implements OnInit, OnDestroy {
     protected deviceDetector: DeviceDetectorService,
     protected turboService: TurboService,
   ) {
+  }
+
+  bubbleSrc(): string {
+    return makeSrc('/assets/bubbles/bubble.svg')
   }
 
   ngOnInit() {

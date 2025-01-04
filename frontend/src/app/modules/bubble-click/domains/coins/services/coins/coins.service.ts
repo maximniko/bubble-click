@@ -44,7 +44,6 @@ export class CoinsService implements CoinsInterface {
             subscriber.next()
             subscriber.complete()
           }))
-          console.log('balance loaded');
         },
       })
   }
@@ -74,7 +73,6 @@ export class CoinsService implements CoinsInterface {
             return
           }
           onComplete(new Observable(subscriber => subscriber.next()))
-          console.log('Balance saved');
         },
       })
   }

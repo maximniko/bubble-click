@@ -17,7 +17,7 @@ import {DepositInputsComponent} from './_inputs/deposit-inputs.component';
   template: `
     <section class="accent-border accent-border-top accent-bg-shadow rounded-5 tg-bg-secondary">
       <div class="hstack p-3 pb-0 color-accent">
-        <span class="m-auto text-center h5">Новый депозит (макс. {{ coinsService.balanceSubject | async }}):</span>
+        <span class="m-auto text-center h5">{{ localisation.messages.NewDeposit ?? 'New deposit' }} ({{localisation.messages.max ?? 'max.'}} {{ coinsService.balanceSubject | async }}):</span>
       </div>
       <div class="d-flex flex-column h-100 mb-5">
         <div class="mx-2 my-4">
@@ -60,7 +60,7 @@ export class DepositAddComponent extends ReactiveForm implements OnInit, OnDestr
         this.twa.showAlert(err.toString())
       },
     })
-    this.twa.setMainButton({text: 'Создать', is_active: true, is_visible: true}, this.addDeposit)
+    this.twa.setMainButton({text: this.localisation.messages.Create ?? 'Create', is_active: true, is_visible: true}, this.addDeposit)
     this.twa.backButtonOnClick(this.goBack)
   }
 
@@ -92,7 +92,7 @@ export class DepositAddComponent extends ReactiveForm implements OnInit, OnDestr
       coins: number = this.coinsService.balance
 
     if (formDeposit.sum > coins) {
-      this.twa.showAlert('Ошибка баланса')
+      this.twa.showAlert(this.localisation.messages.AlertBalanceError ?? 'Balance error!')
       return;
     }
 
